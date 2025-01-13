@@ -21,9 +21,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
+/**
+ * Simulation implementation of {@link SwerveDrive} using maple-sim
+ */
 public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     private final SelfControlledSwerveDriveSimulation m_simulatedSwerve;
     private final Field2d field2d;
@@ -32,16 +35,16 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
 
     public MapleSimSwerve() {
         final DriveTrainSimulationConfig config = new DriveTrainSimulationConfig(
-            Pounds.of(100),
-            Inches.of(32),
-            Inches.of(32),
-            Inches.of(30),
-            Inches.of(30),
+            Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
+            Inches.of(Constants.PhysicalConstants.kBumperLength),
+            Inches.of(Constants.PhysicalConstants.kBumperLength),
+            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getX() * 2),
+            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getY() * 2),
             () -> COTS.ofMark4i(DCMotor.getNEO(1), DCMotor.getNEO(1), 1, 1).get(),
             () -> COTS.ofNav2X().get());
         
         this.m_simulatedSwerve = new SelfControlledSwerveDriveSimulation(
-            new SwerveDriveSimulation(config, new Pose2d(9, 3, new Rotation2d())));
+            new SwerveDriveSimulation(config, new Pose2d(8, 3, new Rotation2d())));
         
         SimulatedArena.getInstance().addDriveTrainSimulation(m_simulatedSwerve.getDriveTrainSimulation());
 
@@ -52,14 +55,12 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     }
 
     @Override
-    public Command driveCommand(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented, double periodSeconds) {
-        return run(() -> {
-            this.m_simulatedSwerve.runChassisSpeeds(
-                new ChassisSpeeds(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rot.getAsDouble()),
-                new Translation2d(),
-                fieldOriented.getAsBoolean(),
-                true);
-        });
+    public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented) {
+        this.m_simulatedSwerve.runChassisSpeeds(
+            new ChassisSpeeds(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rot.getAsDouble()),
+            new Translation2d(),
+            fieldOriented.getAsBoolean(),
+            true);
     }
 
     @Override

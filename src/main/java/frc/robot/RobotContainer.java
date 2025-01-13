@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.NeoSwerve;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.MapleSimSwerve;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -33,12 +34,13 @@ public class RobotContainer {
   private void configureBindings() {
     Trigger fieldOrientedTrigger = new Trigger(m_driverJoystick.button(17));
 
-    m_swerveSubsystem.setDefaultCommand(m_swerveSubsystem.driveCommand(
-      () -> -m_driverJoystick.getY() * 3,
-      () -> -m_driverJoystick.getX() * 3,
-      () -> -m_driverJoystick.getZ() / 4,
-      () -> fieldOrientedTrigger.getAsBoolean(),
-      0.0));
+
+    m_swerveSubsystem.setDefaultCommand(new DriveCommand(
+      m_swerveSubsystem,
+      () -> -m_driverJoystick.getY(),
+      () -> -m_driverJoystick.getX(),
+      () -> -m_driverJoystick.getZ(),
+      () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
   }
 
   public Command getAutonomousCommand() {
