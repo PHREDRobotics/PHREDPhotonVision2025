@@ -57,7 +57,7 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     @Override
     public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented) {
         this.m_simulatedSwerve.runChassisSpeeds(
-            new ChassisSpeeds(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rot.getAsDouble()),
+            new ChassisSpeeds(-xSpeed.getAsDouble(), -ySpeed.getAsDouble(), -rot.getAsDouble()),
             new Translation2d(),
             fieldOriented.getAsBoolean(),
             true);
