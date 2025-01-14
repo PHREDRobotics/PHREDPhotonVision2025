@@ -27,7 +27,7 @@ public class RobotContainer {
     JOYSTICK
   };
 
-  ControlMode setControlMode = ControlMode.XBOX;
+  ControlMode setControlMode = ControlMode.JOYSTICK;
 
   public RobotContainer() {
     if (RobotBase.isReal()) {
@@ -65,7 +65,7 @@ public class RobotContainer {
   }
   
   private void configureBindingsJoystick() {
-    Trigger fieldOrientedTrigger = new Trigger(m_driverJoystick.button(17));
+    Trigger fieldOrientedTrigger = new Trigger(m_driverJoystick.button(12));
 
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(
       m_swerveSubsystem,
