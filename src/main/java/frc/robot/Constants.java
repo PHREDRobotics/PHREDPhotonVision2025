@@ -27,7 +27,7 @@ public class Constants {
   }
   public static final class SwerveConstants {
     public static final PIDController kDrivePIDController = new PIDController(1, 0, 0); // CHANGE THIS --------------------------------------------------
-    public static final ProfiledPIDController kTurningPIDController = new ProfiledPIDController(1, 0, 0, 
+    public static final ProfiledPIDController kTurningPIDController = new ProfiledPIDController(1, 0, 0,
       new TrapezoidProfile.Constraints(
         PhysicalConstants.kModuleMaxAngularVelocity, PhysicalConstants.kModuleMaxAngularAcceleration
       ));
@@ -39,12 +39,22 @@ public class Constants {
     public static final int kEncoderResolution = 4096;
 
     public static final double kDtSeconds = 0.02;
+
+    public static final int kBackLeftDriveMotorCANId = 21;
+    public static final int kFrontLeftDriveMotorCANId = 11;
+    public static final int kFrontRightDriveMotorCANId = 16;
+    public static final int kBackRightDriveMotorCANId = 26;
+
+    public static final int kBackLeftTurnMotorCANId = 22;
+    public static final int kFrontLeftTurnMotorCANId = 12;
+    public static final int kFrontRightTurnMotorCANId = 17;
+    public static final int kBackRightTurnMotorCANId = 27;
   }
 
   public static final class GyroConstants {
-    public static final NavXComType kComType = NavXComType.kI2C; // CHANGE IF NECCESARY --------------------------------------------------------------------------
+    public static final NavXComType kComType = NavXComType.kMXP_SPI;
   }
-  
+
   public static final class ControllerConstants {
     public static final double kFlightStickDeadband = 0.05;
   }
