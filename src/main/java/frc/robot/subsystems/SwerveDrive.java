@@ -14,4 +14,3 @@ public interface SwerveDrive extends Subsystem {
                         DoubleSupplier rot, 
                         BooleanSupplier fieldOriented);
 }
-

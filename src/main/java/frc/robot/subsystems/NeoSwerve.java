@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -10,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,10 +30,17 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getX()),
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getY()));
 
-    private final SwerveModule m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
-    private final SwerveModule m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
-    private final SwerveModule m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
-    private final SwerveModule m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+    private final SparkMax m_frontLeftDriveDataCollector = new SparkMax(
+        Constants.SwerveConstants.kFrontLeftDriveMotorCANId, MotorType.kBrushless); // This is specifically to get information like temperature from the motors
+
+    private final SwerveModule m_frontLeft = new SwerveModule(
+        Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
+    private final SwerveModule m_frontRight = new SwerveModule(
+        Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
+    private final SwerveModule m_backLeft = new SwerveModule(
+        Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
+    private final SwerveModule m_backRight = new SwerveModule(
+        Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
 
     private final AHRS m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
@@ -90,5 +100,7 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
     @Override
     public void simulationPeriodic() {
         updateOdometry();
+
+        SmartDashboard.putNumber("F.R. Drive motor temp", m_frontLeftDriveDataCollector.getMotorTemperature());
     }
 }
