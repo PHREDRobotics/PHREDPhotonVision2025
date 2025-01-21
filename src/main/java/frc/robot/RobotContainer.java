@@ -27,7 +27,7 @@ public class RobotContainer {
     JOYSTICK
   };
 
-  public ControlMode setControlMode = ControlMode.TWO_PLAYER;
+  public ControlMode setControlMode = ControlMode.JOYSTICK;
 
   public RobotContainer() {
     if (RobotBase.isReal()) {

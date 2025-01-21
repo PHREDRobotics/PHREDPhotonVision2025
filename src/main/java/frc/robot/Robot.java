@@ -5,9 +5,14 @@
 package frc.robot;
 
 import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnField;
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralAlgaeStack;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -16,18 +21,23 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  private double controlModeSwitcher = 0; // Value for smartdashboard to jankily switch control modes :P
+  StructArrayPublisher<Pose3d> notePoses = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("MyPoseArray", Pose3d.struct)
+    .publish();
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+
+    if (!Robot.isReal()) {
+      SimulatedArena.getInstance().addGamePiece(new ReefscapeAlgaeOnField(new Translation2d(2, 2)));
+      SimulatedArena.getInstance().addGamePiece(new ReefscapeAlgaeOnField(new Translation2d(2, 3)));
+      SimulatedArena.getInstance().addGamePiece(new ReefscapeCoralAlgaeStack(new Translation2d(3, 2)));
+    }
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-    SmartDashboard.putNumber("Control mode", controlModeSwitcher);
-    controlModeSwitcher = SmartDashboard.getNumber("Control mode", controlModeSwitcher);
   }
 
   @Override
@@ -67,6 +77,11 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {
     SimulatedArena.getInstance().simulationPeriodic();
+
+    Pose3d[] notesPoses = SimulatedArena.getInstance()
+      .getGamePiecesArrayByType("Algae");
+    notePoses.accept(SimulatedArena.getInstance()
+      .getGamePiecesArrayByType("Algae"));
   }
 
   @Override
