@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
@@ -13,4 +14,7 @@ public interface SwerveDrive extends Subsystem {
                         DoubleSupplier ySpeed, 
                         DoubleSupplier rot, 
                         BooleanSupplier fieldOriented);
+    Pose2d getPose();
+    void updateOdometry();
+    void resetOdometry();
 }

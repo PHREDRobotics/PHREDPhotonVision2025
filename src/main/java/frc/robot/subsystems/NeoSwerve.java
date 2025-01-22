@@ -6,6 +6,8 @@ import java.util.function.DoubleSupplier;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -80,7 +82,17 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         m_backRight.setDesiredState(swerveModuleStates[3]);
     }
 
+    @Override
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
 
+    @Override
+    public void resetOdometry() {
+        m_odometry.resetPose(new Pose2d());
+    }
+
+    @Override
     public void updateOdometry() {
         m_odometry.update(
             m_gyro.getRotation2d(),

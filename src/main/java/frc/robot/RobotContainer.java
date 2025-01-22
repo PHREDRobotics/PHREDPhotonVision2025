@@ -13,6 +13,9 @@ import frc.robot.subsystems.NeoSwerve;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.MapleSimSwerve;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class RobotContainer {
@@ -27,7 +30,7 @@ public class RobotContainer {
     JOYSTICK
   };
 
-  public ControlMode setControlMode = ControlMode.TWO_PLAYER;
+  public ControlMode setControlMode = ControlMode.JOYSTICK;
 
   public RobotContainer() {
     if (RobotBase.isReal()) {
@@ -87,6 +90,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return new PathPlannerAuto("Basic off-the-line auto");
   }
 }
