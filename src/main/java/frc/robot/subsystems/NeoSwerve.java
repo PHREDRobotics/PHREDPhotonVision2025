@@ -83,13 +83,30 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
     }
 
     @Override
+    public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
+        var swerveModuleStates =
+            m_kinematics.toSwerveModuleStates(
+                ChassisSpeeds.discretize(
+                    fieldOriented.getAsBoolean()
+                        ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_gyro.getRotation2d())
+                        : speeds,
+                    Constants.SwerveConstants.kDtSeconds));
+        
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
+        m_frontLeft.setDesiredState(swerveModuleStates[0]);
+        m_frontRight.setDesiredState(swerveModuleStates[1]);
+        m_backLeft.setDesiredState(swerveModuleStates[2]);
+        m_backRight.setDesiredState(swerveModuleStates[3]);
+    }
+
+    @Override
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 
     @Override
-    public void resetOdometry() {
-        m_odometry.resetPose(new Pose2d());
+    public void resetOdometry(Pose2d pose) {
+        m_odometry.resetPose(pose);
     }
 
     @Override

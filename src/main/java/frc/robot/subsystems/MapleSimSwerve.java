@@ -40,6 +40,8 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     private final SelfControlledSwerveDriveSimulation m_simulatedSwerve;
     private final Field2d field2d;
 
+    private final Field2d odometry_field2d;
+
     private final StructArrayPublisher<SwerveModuleState> publisher;
 
     private final SwerveDriveOdometry m_odometry;
@@ -71,7 +73,7 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
             () -> COTS.ofNav2X().get());
 
         this.m_simulatedSwerve = new SelfControlledSwerveDriveSimulation(
-            new SwerveDriveSimulation(drivetrainConfig, new Pose2d(8, 3, new Rotation2d())));
+            new SwerveDriveSimulation(drivetrainConfig, new Pose2d(8.1, 7, new Rotation2d(Math.PI))));
         
         m_kinematics = new SwerveDriveKinematics(
             m_frontLeftLocationMeters, m_frontRightLocationMeters, m_backLeftLocationMeters, m_backRightLocationMeters);  
@@ -84,8 +86,12 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
 
         field2d = new Field2d();
         SmartDashboard.putData("Sim field", field2d);
+
+        odometry_field2d = new Field2d();
+        SmartDashboard.putData("Odometry readings", odometry_field2d);
+
         publisher = NetworkTableInstance.getDefault()
-            .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+            .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();     
 
         try{
             config = RobotConfig.fromGUISettings();
@@ -95,22 +101,20 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
 
         AutoBuilder.configure(
             () -> getPose(),
-            (skib) -> resetOdometry(),
+            (pose) -> resetOdometry(pose),
             () -> m_simulatedSwerve.getActualSpeedsRobotRelative(),
             (speeds, feedforwards) -> drive(
-                () -> speeds.vxMetersPerSecond,
-                () -> speeds.vyMetersPerSecond,
-                () -> speeds.omegaRadiansPerSecond,
+                speeds,
                 () -> false),
             new PPHolonomicDriveController(
-                    new PIDConstants(5.0, 0.0, 0.0),
-                    new PIDConstants(5.0, 0.0, 0.0)
+                    new PIDConstants(0.6, 0.2, 0.0),
+                    new PIDConstants(1.0, 0.0, 0.0)
             ),
             config,
             () -> {
               var alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
+                return alliance.get() == DriverStation.Alliance.Blue;
               }
               return false;
             },
@@ -128,13 +132,22 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     }
 
     @Override
-    public Pose2d getPose() {
-        return this.m_simulatedSwerve.getActualPoseInSimulationWorld();
+    public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
+        this.m_simulatedSwerve.runChassisSpeeds(
+            speeds,
+            new Translation2d(),
+            fieldOriented.getAsBoolean(),
+            true);
     }
 
     @Override
-    public void resetOdometry() {
-        m_odometry.resetPose(new Pose2d());
+    public Pose2d getPose() {
+        return m_odometry.getPoseMeters();
+    }
+
+    @Override
+    public void resetOdometry(Pose2d pose) {
+        m_odometry.resetPose(pose);
     }
 
     @Override
@@ -148,7 +161,10 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     public void simulationPeriodic() {
         m_simulatedSwerve.periodic();
 
+        updateOdometry();
+
         field2d.setRobotPose(m_simulatedSwerve.getActualPoseInSimulationWorld());
+        odometry_field2d.setRobotPose(getPose());
 
         publisher.set(new SwerveModuleState[] {
             m_simulatedSwerve.getMeasuredStates()[0],
