@@ -23,13 +23,13 @@ public class RobotContainer {
   CommandJoystick m_driverJoystick;
   CommandXboxController m_xboxController;
 
-  enum ControlMode{// enum to switch between two player, and one player on the joystick and xbox controller
+  public enum ControlModeSwitcher{// enum to switch between two player, and one player on the joystick and xbox controller
     TWO_PLAYER,
     XBOX,
     JOYSTICK
   };
 
-  public ControlMode setControlMode = ControlMode.JOYSTICK;
+  public ControlModeSwitcher setControlMode = ControlModeSwitcher.JOYSTICK;
 
   public RobotContainer() {
     if (RobotBase.isReal()) {

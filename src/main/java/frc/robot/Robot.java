@@ -20,6 +20,8 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -27,6 +29,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+
+  private final SendableChooser<RobotContainer.ControlModeSwitcher> controlChooser = new SendableChooser<>();
 
   String trajectoryJSON = "pathplanner/paths/offtheline.json";
   Trajectory trajectory = new Trajectory();
@@ -52,8 +56,18 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void robotInit() {
+    controlChooser.setDefaultOption("Joystick mode", RobotContainer.ControlModeSwitcher.JOYSTICK);
+    controlChooser.addOption("Xbox mode", RobotContainer.ControlModeSwitcher.XBOX);
+    controlChooser.addOption("Two-player mode", RobotContainer.ControlModeSwitcher.TWO_PLAYER);
+    SmartDashboard.putData("Control mode", controlChooser);
+  }
+
+  @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    m_robotContainer.setControlMode = controlChooser.getSelected();
   }
 
   @Override
