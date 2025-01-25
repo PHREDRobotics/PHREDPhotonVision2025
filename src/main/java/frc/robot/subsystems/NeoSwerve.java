@@ -159,12 +159,18 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
 
     @Override
     public ChassisSpeeds getSpeeds(boolean fieldRelative) {
-        return m_kinematics.toChassisSpeeds(new SwerveModuleState[] {
+        ChassisSpeeds robotRelativeSpeeds = m_kinematics.toChassisSpeeds(new SwerveModuleState[] {
             m_frontLeft.getState(),
             m_frontRight.getState(),
             m_backLeft.getState(),
-            m_backRight.getState()
-        });
+            m_backRight.getState()});
+
+        if (fieldRelative) {
+            return robotRelativeSpeeds;
+        }
+
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
+                robotRelativeSpeeds, getPose().getRotation());
     }
 
     @Override

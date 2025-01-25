@@ -153,7 +153,7 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
     @Override
     public void updateOdometry() {
         m_odometry.update(
-            m_simulatedSwerve.getActualPoseInSimulationWorld().getRotation(),
+            m_simulatedSwerve.getOdometryEstimatedPose().getRotation(),
             m_simulatedSwerve.getLatestModulePositions());
     }
 

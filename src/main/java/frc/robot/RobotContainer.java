@@ -13,6 +13,8 @@ import frc.robot.subsystems.SwerveDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.MapleSimSwerve;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -23,13 +25,9 @@ public class RobotContainer {
   CommandJoystick m_driverJoystick;
   CommandXboxController m_xboxController;
 
-  public enum ControlModeSwitcher{// enum to switch between two player, and one player on the joystick and xbox controller
-    TWO_PLAYER,
-    XBOX,
-    JOYSTICK
-  };
-
-  public ControlModeSwitcher setControlMode = ControlModeSwitcher.JOYSTICK;
+  public enum AutoSwitcher { // enum to switch between different auto modes
+    OFF_THE_LINE
+  }
 
   public RobotContainer() {
     if (RobotBase.isReal()) {
@@ -42,53 +40,31 @@ public class RobotContainer {
 
     m_xboxController = new CommandXboxController(1); 
 
-    switch (setControlMode) {
-      case TWO_PLAYER: {
-        configureBindingsTwoPlayer();
-      }
-      case XBOX: {
-        configureBindingsXboxController();
-      }
-      case JOYSTICK: {
-        configureBindingsJoystick();
-      }
-    }
+    configureBindings();
   }
 
-  private void configureBindingsXboxController() {
-    Trigger fieldOrientedTrigger = new Trigger(m_xboxController.start());
+  private void configureBindings() {
+    // Triggers
+    Trigger fieldOrientedTrigger = m_driverJoystick.button(2);
+
+    // Axes
+    DoubleSupplier driveAxis = () -> m_driverJoystick.getY();
+    DoubleSupplier strafeAxis = () -> m_driverJoystick.getX();
+    DoubleSupplier turnAxis = () -> m_driverJoystick.getZ();
 
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(
       m_swerveSubsystem,
-      () -> m_xboxController.getLeftY(),
-      () -> m_xboxController.getLeftX(),
-      () -> m_xboxController.getRightTriggerAxis(),
+      driveAxis,
+      strafeAxis,
+      turnAxis,
       () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
   }
   
-  private void configureBindingsJoystick() {
-    Trigger fieldOrientedTrigger = new Trigger(m_driverJoystick.button(12));
-
-    m_swerveSubsystem.setDefaultCommand(new DriveCommand(
-      m_swerveSubsystem,
-      () -> m_driverJoystick.getY(),
-      () -> m_driverJoystick.getX(),
-      () -> m_driverJoystick.getZ(),
-      () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
-  }
-
-  private void configureBindingsTwoPlayer() {
-    Trigger fieldOrientedTrigger = new Trigger(m_driverJoystick.button(17));
-
-    m_swerveSubsystem.setDefaultCommand(new DriveCommand(
-      m_swerveSubsystem,
-      () -> m_driverJoystick.getY(),
-      () -> m_driverJoystick.getX(),
-      () -> m_driverJoystick.getZ(),
-      () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
-  }
-
-  public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Basic off-the-line auto");
+  public Command getAutonomousCommand(AutoSwitcher autoMode) {
+    switch (autoMode) {
+      default: case OFF_THE_LINE: {
+        return new PathPlannerAuto("Basic off-the-line auto");
+      }
+    }
   }
 }

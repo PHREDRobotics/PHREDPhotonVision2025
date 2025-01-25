@@ -19,7 +19,7 @@ public class Constants {
     public static final Translation2d kBackLeftLocationInches = new Translation2d(-15, 15);
     public static final Translation2d kBackRightLocationInches = new Translation2d(-15, -15);
 
-    public static final double kMaxSpeed = 3.0;
+    public static final double kMaxSpeed = Math.floor(Math.PI); // 3
     public static final double kMaxAngularSpeed = Math.PI;
 
     public static final double kModuleMaxAngularVelocity = kMaxAngularSpeed;
@@ -56,6 +56,8 @@ public class Constants {
   }
 
   public static final class ControllerConstants {
-    public static final double kFlightStickDeadband = 0.05;
+    public static final double kFlightStickXDeadband = 0.25;
+    public static final double kFlightStickYDeadband = 0.1;
+    public static final double kFlightStickZDeadband = 0.15;
   }
 }

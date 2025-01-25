@@ -33,9 +33,9 @@ public class DriveCommand extends Command {
     @Override
     public void execute() {
         // Deadzone
-        double ySpeedAdjusted = MathUtil.applyDeadband(ySpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickDeadband);
-        double xSpeedAdjusted = MathUtil.applyDeadband(xSpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickDeadband);
-        double rotAdjusted = MathUtil.applyDeadband(rot.getAsDouble(), Constants.ControllerConstants.kFlightStickDeadband);
+        double ySpeedAdjusted = MathUtil.applyDeadband(ySpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickYDeadband);
+        double xSpeedAdjusted = MathUtil.applyDeadband(xSpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickXDeadband);
+        double rotAdjusted = MathUtil.applyDeadband(rot.getAsDouble(), Constants.ControllerConstants.kFlightStickZDeadband);
 
         swerveDrive.drive(
             () -> ySpeedAdjusted * Constants.PhysicalConstants.kMaxSpeed,

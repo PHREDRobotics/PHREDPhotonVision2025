@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-  private final SendableChooser<RobotContainer.ControlModeSwitcher> controlChooser = new SendableChooser<>();
+  private final SendableChooser<RobotContainer.AutoSwitcher> autoChooser = new SendableChooser<>();
 
   String trajectoryJSON = "pathplanner/paths/offtheline.json";
   Trajectory trajectory = new Trajectory();
@@ -57,17 +57,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    controlChooser.setDefaultOption("Joystick mode", RobotContainer.ControlModeSwitcher.JOYSTICK);
-    controlChooser.addOption("Xbox mode", RobotContainer.ControlModeSwitcher.XBOX);
-    controlChooser.addOption("Two-player mode", RobotContainer.ControlModeSwitcher.TWO_PLAYER);
-    SmartDashboard.putData("Control mode", controlChooser);
+    autoChooser.setDefaultOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
+    SmartDashboard.putData("Auto mode", autoChooser);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-
-    m_robotContainer.setControlMode = controlChooser.getSelected();
   }
 
   @Override
@@ -81,7 +77,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(autoChooser.getSelected());
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -104,6 +100,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {}
 
+  @SuppressWarnings("unused")
   @Override
   public void simulationPeriodic() {
     SimulatedArena.getInstance().simulationPeriodic();
