@@ -19,4 +19,5 @@ public interface SwerveDrive extends Subsystem {
     Pose2d getPose();
     void updateOdometry();
     void resetOdometry(Pose2d pose);
+    ChassisSpeeds getSpeeds(boolean fieldRelative);
 }

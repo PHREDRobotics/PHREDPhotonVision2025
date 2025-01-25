@@ -4,6 +4,10 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.spark.SparkMax;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 
@@ -13,7 +17,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -49,7 +55,7 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
     private final SwerveDriveKinematics m_kinematics =
         new SwerveDriveKinematics(
             m_frontLeftLocationMeters, m_frontRightLocationMeters, m_backLeftLocationMeters, m_backRightLocationMeters);
-
+    
     private final SwerveDriveOdometry m_odometry =
         new SwerveDriveOdometry(
             m_kinematics,
@@ -60,8 +66,38 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()});
 
+    RobotConfig config;
+
     public NeoSwerve() {
         m_gyro.reset();
+
+        try{
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AutoBuilder.configure(
+            () -> getPose(),
+            (pose) -> resetOdometry(pose),
+            () -> getSpeeds(false),
+            (speeds, feedforwards) -> drive(
+                speeds,
+                () -> false),
+            new PPHolonomicDriveController(
+                new PIDConstants(0.6, 0.2, 0),
+                new PIDConstants(1.0, 0, 0)
+            ),
+            config,
+            () -> {
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Blue;
+              }
+              return false;
+            },
+            this
+        );
     }
 
     @Override
@@ -119,6 +155,16 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
                 m_backLeft.getPosition(),
                 m_backRight.getPosition()
             });
+    }
+
+    @Override
+    public ChassisSpeeds getSpeeds(boolean fieldRelative) {
+        return m_kinematics.toChassisSpeeds(new SwerveModuleState[] {
+            m_frontLeft.getState(),
+            m_frontRight.getState(),
+            m_backLeft.getState(),
+            m_backRight.getState()
+        });
     }
 
     @Override

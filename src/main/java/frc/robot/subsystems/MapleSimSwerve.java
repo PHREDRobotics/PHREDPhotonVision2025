@@ -102,7 +102,7 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
         AutoBuilder.configure(
             () -> getPose(),
             (pose) -> resetOdometry(pose),
-            () -> m_simulatedSwerve.getActualSpeedsRobotRelative(),
+            () -> getSpeeds(false),
             (speeds, feedforwards) -> drive(
                 speeds,
                 () -> false),
@@ -155,6 +155,15 @@ public class MapleSimSwerve extends SubsystemBase implements SwerveDrive {
         m_odometry.update(
             m_simulatedSwerve.getActualPoseInSimulationWorld().getRotation(),
             m_simulatedSwerve.getLatestModulePositions());
+    }
+
+    @Override
+    public ChassisSpeeds getSpeeds(boolean fieldRelative) {
+        if (fieldRelative) {
+            return m_simulatedSwerve.getMeasuredSpeedsFieldRelative(true);
+        }
+
+        return m_simulatedSwerve.getMeasuredSpeedsRobotRelative(true);
     }
 
     @Override
