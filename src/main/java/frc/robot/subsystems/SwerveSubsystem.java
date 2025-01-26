@@ -1,14 +1,20 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Pounds;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.revrobotics.spark.SparkMax;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,13 +25,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class NeoSwerve extends SubsystemBase implements SwerveDrive {
+public class SwerveSubsystem extends SubsystemBase {
+    private final SwerveDriveSimulation m_simulatedSwerve;
+    private final Field2d m_field;
+
     private final Translation2d m_frontLeftLocationMeters = new Translation2d(
         Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getX()),
         Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getY()));
@@ -38,18 +50,11 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
     private final Translation2d m_backRightLocationMeters = new Translation2d(
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getX()),
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getY()));
-
-    //private final SparkMax m_frontLeftDriveDataCollector = new SparkMax(
-    //    Constants.SwerveConstants.kFrontLeftDriveMotorCANId, MotorType.kBrushless); // This is specifically to get information like temperature from the motors
-
-    private final SwerveModule m_frontLeft = new SwerveModule(
-        Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
-    private final SwerveModule m_frontRight = new SwerveModule(
-        Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
-    private final SwerveModule m_backLeft = new SwerveModule(
-        Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
-    private final SwerveModule m_backRight = new SwerveModule(
-        Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+    
+    private final SwerveModule m_frontLeft;
+    private final SwerveModule m_frontRight;
+    private final SwerveModule m_backLeft;
+    private final SwerveModule m_backRight;
 
     private final AHRS m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
@@ -57,20 +62,48 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         new SwerveDriveKinematics(
             m_frontLeftLocationMeters, m_frontRightLocationMeters, m_backLeftLocationMeters, m_backRightLocationMeters);
     
-    private final SwerveDriveOdometry m_odometry =
-        new SwerveDriveOdometry(
-            m_kinematics,
-            m_gyro.getRotation2d(),
-            new SwerveModulePosition[] {
-                m_frontLeft.getPosition(),
-                m_frontRight.getPosition(),
-                m_backLeft.getPosition(),
-                m_backRight.getPosition()});
+    private final SwerveDriveOdometry m_odometry;
 
     RobotConfig config;
 
-    public NeoSwerve() {
+    public SwerveSubsystem() {
+        if (RobotBase.isReal()) {
+            m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
+            m_frontRight = new SparkSwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
+            m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+            m_backRight = new SparkSwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+        } else {
+            m_frontLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
+            m_frontRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
+            m_backLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
+            m_backRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+        }
+
+        final DriveTrainSimulationConfig drivetrainConfig = new DriveTrainSimulationConfig(
+            Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
+            Inches.of(Constants.PhysicalConstants.kBumperLength),
+            Inches.of(Constants.PhysicalConstants.kBumperLength),
+            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getX() * 2),
+            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getY() * 2),
+            () -> COTS.ofMark4i(DCMotor.getNEO(1), DCMotor.getNEO(1), 1, 1).get(),
+            () -> COTS.ofNav2X().get());
+
+        this.m_simulatedSwerve = new SwerveDriveSimulation(drivetrainConfig, new Pose2d(8.1, 7, new Rotation2d(Math.PI)));
+        
+        m_field = new Field2d();
+        SmartDashboard.putData("Sim field", m_field);
+
         m_gyro.reset();
+
+        m_odometry = 
+            new SwerveDriveOdometry(
+                m_kinematics,
+                m_gyro.getRotation2d(),
+                new SwerveModulePosition[] {
+                    m_frontLeft.getPosition(),
+                    m_frontRight.getPosition(),
+                    m_backLeft.getPosition(),
+                    m_backRight.getPosition()});
 
         try{
             config = RobotConfig.fromGUISettings();
@@ -99,34 +132,36 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
             },
             this
         );
+
+        SimulatedArena.getInstance().addDriveTrainSimulation(m_simulatedSwerve);
     }
 
-    @Override
     public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented) {
-        var swerveModuleStates =
-            m_kinematics.toSwerveModuleStates(
-                ChassisSpeeds.discretize(
-                    fieldOriented.getAsBoolean()
-                        ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                            xSpeed.getAsDouble(), ySpeed.getAsDouble(), rot.getAsDouble(), m_gyro.getRotation2d())
-                        : new ChassisSpeeds(xSpeed.getAsDouble(), ySpeed.getAsDouble(), rot.getAsDouble()),
-                    Constants.SwerveConstants.kDtSeconds));
+        var swerveModuleSpeeds =
+            ChassisSpeeds.discretize(
+                fieldOriented.getAsBoolean()
+                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                        xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                        ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                        rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
+                        m_gyro.getRotation2d())
+                    : new ChassisSpeeds(
+                    xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                    ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                    rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed),
+                Constants.SwerveConstants.kDtSeconds);
+        
+        var swerveModuleStates = m_kinematics.toSwerveModuleStates(swerveModuleSpeeds);
 
+        m_simulatedSwerve.setRobotSpeeds(swerveModuleSpeeds);
+        
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
-        
-        //m_frontLeft.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
-        //m_frontRight.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
-        //m_backLeft.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
-        //m_backRight.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
-        
-        
     }
 
-    @Override
     public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
         var swerveModuleStates =
             m_kinematics.toSwerveModuleStates(
@@ -143,17 +178,14 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         m_backRight.setDesiredState(swerveModuleStates[3]);
     }
 
-    @Override
     public Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 
-    @Override
     public void resetOdometry(Pose2d pose) {
         m_odometry.resetPose(pose);
     }
 
-    @Override
     public void updateOdometry() {
         m_odometry.update(
             m_gyro.getRotation2d(),
@@ -165,7 +197,6 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
             });
     }
 
-    @Override
     public ChassisSpeeds getSpeeds(boolean fieldRelative) {
         ChassisSpeeds robotRelativeSpeeds = m_kinematics.toChassisSpeeds(new SwerveModuleState[] {
             m_frontLeft.getState(),
@@ -181,20 +212,29 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
                 robotRelativeSpeeds, getPose().getRotation());
     }
 
-    @Override
     public void periodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("Front left encoder", m_frontLeft.getPosition().angle.getRadians());
-        SmartDashboard.putNumber("Front right encoder", m_frontRight.getPosition().angle.getRadians());
-        SmartDashboard.putNumber("Back left encoder", m_backLeft.getPosition().angle.getRadians());
-        SmartDashboard.putNumber("Back right encoder", m_backRight.getPosition().angle.getRadians());
+        m_simulatedSwerve.simulationSubTick();
+
+        SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
+
+        SmartDashboard.putNumber("Swerve/FrontLeft/Speed", m_frontLeft.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/FrontLeft/Angle", m_frontLeft.getPosition().angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/FrontRight/Speed", m_frontRight.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/FrontRight/Angle", m_frontRight.getPosition().angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/BackLeft/Speed", m_backLeft.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/BackLeft/Angle", m_backLeft.getPosition().angle.getDegrees());
+        SmartDashboard.putNumber("Swerve/BackRight/Speed", m_backRight.getState().speedMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/BackRight/Angle", m_backRight.getPosition().angle.getDegrees());
+
+        SmartDashboard.updateValues();
+
+        m_field.setRobotPose(m_simulatedSwerve.getSimulatedDriveTrainPose());
     }
 
     @Override
     public void simulationPeriodic() {
         updateOdometry();
-
-        //SmartDashboard.putNumber("F.R. Drive motor temp", m_frontLeftDriveDataCollector.getMotorTemperature());
     }
 }

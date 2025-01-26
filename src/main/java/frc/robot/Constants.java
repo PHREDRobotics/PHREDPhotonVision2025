@@ -1,13 +1,10 @@
 package frc.robot;
 
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class Constants {
   public static final class PhysicalConstants {
