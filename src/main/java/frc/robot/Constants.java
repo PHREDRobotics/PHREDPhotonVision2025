@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,18 +20,19 @@ public class Constants {
     public static final Translation2d kBackLeftLocationInches = new Translation2d(-15, 15);
     public static final Translation2d kBackRightLocationInches = new Translation2d(-15, -15);
 
-    public static final double kMaxSpeed = Math.floor(Math.PI); // 3
-    public static final double kMaxAngularSpeed = Math.PI;
+    public static final double kMaxSpeed = 6; // 3
+    public static final double kMaxAngularSpeed = 6;
 
     public static final double kModuleMaxAngularVelocity = kMaxAngularSpeed;
-    public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+    public static final double kModuleMaxAngularAcceleration = kModuleMaxAngularVelocity * kModuleMaxAngularVelocity; // radians per second squared
   }
   public static final class SwerveConstants {
     public static final PIDController kDrivePIDController = new PIDController(1, 0, 0); // CHANGE THIS --------------------------------------------------
-    public static final ProfiledPIDController kTurningPIDController = new ProfiledPIDController(1, 0, 0,
-      new TrapezoidProfile.Constraints(
-        PhysicalConstants.kModuleMaxAngularVelocity, PhysicalConstants.kModuleMaxAngularAcceleration
-      ));
+    //public static final PIDController kTurningPIDController = new PIDController(1, 0, 0);
+    //public static final ProfiledPIDController kTurningPIDController = new ProfiledPIDController(0.9, 0.6, 0.5,
+    //  new TrapezoidProfile.Constraints(
+    //    PhysicalConstants.kModuleMaxAngularVelocity, PhysicalConstants.kModuleMaxAngularAcceleration
+    //  ));
 
     public static final SimpleMotorFeedforward kDriveFeedforward = new SimpleMotorFeedforward(1, 3);
     public static final SimpleMotorFeedforward kTurnFeedforward = new SimpleMotorFeedforward(1, 0.5);
@@ -40,15 +42,17 @@ public class Constants {
 
     public static final double kDtSeconds = 0.02;
 
-    public static final int kBackLeftDriveMotorCANId = 21;
-    public static final int kFrontLeftDriveMotorCANId = 11;
-    public static final int kFrontRightDriveMotorCANId = 16;
-    public static final int kBackRightDriveMotorCANId = 26;
+    public static final int kBackLeftDriveMotorCANId = 26;
+    public static final int kFrontLeftDriveMotorCANId = 21;
+    public static final int kFrontRightDriveMotorCANId = 11;
+    public static final int kBackRightDriveMotorCANId = 16;
 
-    public static final int kBackLeftTurnMotorCANId = 22;
-    public static final int kFrontLeftTurnMotorCANId = 12;
-    public static final int kFrontRightTurnMotorCANId = 17;
-    public static final int kBackRightTurnMotorCANId = 27;
+    public static final int kBackLeftTurnMotorCANId = 27;
+    public static final int kFrontLeftTurnMotorCANId = 22;
+    public static final int kFrontRightTurnMotorCANId = 12;
+    public static final int kBackRightTurnMotorCANId = 17;
+
+    public static final double kDrivingMotorReduction = 4;
   }
 
   public static final class GyroConstants {

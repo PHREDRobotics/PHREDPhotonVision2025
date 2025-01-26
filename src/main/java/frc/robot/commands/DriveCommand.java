@@ -39,7 +39,7 @@ public class DriveCommand extends Command {
 
         swerveDrive.drive(
             () -> ySpeedAdjusted * Constants.PhysicalConstants.kMaxSpeed,
-            () -> xSpeedAdjusted * Constants.PhysicalConstants.kMaxSpeed,
+            () -> -xSpeedAdjusted * Constants.PhysicalConstants.kMaxSpeed,
             () -> rotAdjusted * Constants.PhysicalConstants.kMaxAngularSpeed,
             fieldOriented);
     }

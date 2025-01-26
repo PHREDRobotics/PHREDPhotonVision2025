@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -38,8 +39,8 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getX()),
         Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getY()));
 
-    private final SparkMax m_frontLeftDriveDataCollector = new SparkMax(
-        Constants.SwerveConstants.kFrontLeftDriveMotorCANId, MotorType.kBrushless); // This is specifically to get information like temperature from the motors
+    //private final SparkMax m_frontLeftDriveDataCollector = new SparkMax(
+    //    Constants.SwerveConstants.kFrontLeftDriveMotorCANId, MotorType.kBrushless); // This is specifically to get information like temperature from the motors
 
     private final SwerveModule m_frontLeft = new SwerveModule(
         Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
@@ -116,6 +117,13 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
+        
+        //m_frontLeft.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
+        //m_frontRight.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
+        //m_backLeft.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
+        //m_backRight.setDesiredState(new SwerveModuleState(1, new Rotation2d(0)));
+        
+        
     }
 
     @Override
@@ -176,12 +184,17 @@ public class NeoSwerve extends SubsystemBase implements SwerveDrive {
     @Override
     public void periodic() {
         updateOdometry();
+
+        SmartDashboard.putNumber("Front left encoder", m_frontLeft.getPosition().angle.getRadians());
+        SmartDashboard.putNumber("Front right encoder", m_frontRight.getPosition().angle.getRadians());
+        SmartDashboard.putNumber("Back left encoder", m_backLeft.getPosition().angle.getRadians());
+        SmartDashboard.putNumber("Back right encoder", m_backRight.getPosition().angle.getRadians());
     }
 
     @Override
     public void simulationPeriodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("F.R. Drive motor temp", m_frontLeftDriveDataCollector.getMotorTemperature());
+        //SmartDashboard.putNumber("F.R. Drive motor temp", m_frontLeftDriveDataCollector.getMotorTemperature());
     }
 }

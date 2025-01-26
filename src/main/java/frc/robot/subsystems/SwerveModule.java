@@ -4,9 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -14,24 +22,22 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Configs;
 import frc.robot.Constants;
 
 public class SwerveModule {
   private final SparkMax m_driveMotor;
   private final SparkMax m_turnMotor;
 
-  private final SparkAbsoluteEncoder m_driveEncoder;
+  private final RelativeEncoder m_driveEncoder;
   private final SparkAbsoluteEncoder m_turnEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = Constants.SwerveConstants.kDrivePIDController;
+  private final SparkClosedLoopController m_drivePIDController;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_turnPIDController = Constants.SwerveConstants.kTurningPIDController;
-
-  // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = Constants.SwerveConstants.kDriveFeedforward;
-  private final SimpleMotorFeedforward m_turnFeedforward = Constants.SwerveConstants.kTurnFeedforward;
+  private final SparkClosedLoopController m_turnPIDController;
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
@@ -49,12 +55,15 @@ public class SwerveModule {
     m_driveMotor = new SparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turnMotor = new SparkMax(turnMotorChannel, MotorType.kBrushless);
 
-    m_driveEncoder = m_driveMotor.getAbsoluteEncoder();
+    m_driveEncoder = m_driveMotor.getEncoder();
     m_turnEncoder = m_turnMotor.getAbsoluteEncoder();
 
-    // Limit the PID Controller's input range between -pi and pi and set the input
-    // to be continuous.
-    m_turnPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    m_drivePIDController = m_driveMotor.getClosedLoopController();
+    m_turnPIDController = m_turnMotor.getClosedLoopController();
+
+    m_driveMotor.configure(Configs.MAXSwerveModule.drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_turnMotor.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
   }
 
   /**
@@ -93,22 +102,12 @@ public class SwerveModule {
     // driving.
     desiredState.cosineScale(encoderRotation);
 
-    // Calculate the drive output from the drive PID controller.
+    m_drivePIDController.setReference(desiredState.speedMetersPerSecond, ControlType.kVelocity);
+    //m_turnPIDController.setReference(desiredState.angle.getRadians(), ControlType.kPosition);
 
-    final double driveOutput =
-        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+    m_turnPIDController.setReference(desiredState.angle.getRadians(), ControlType.kPosition);
 
-    final double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
-
-    // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        m_turnPIDController.calculate(
-            m_turnEncoder.getPosition(), desiredState.angle.getRadians());
-
-    final double turnFeedforward =
-        m_turnFeedforward.calculate(m_turnPIDController.getSetpoint().velocity);
-
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
-    m_turnMotor.setVoltage(turnOutput + turnFeedforward);
+    //m_driveMotor.setVoltage(5);
+    //m_turnMotor.setVoltage(0);
   }
 }

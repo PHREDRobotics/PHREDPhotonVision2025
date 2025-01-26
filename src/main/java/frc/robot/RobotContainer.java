@@ -50,7 +50,7 @@ public class RobotContainer {
     // Axes
     DoubleSupplier driveAxis = () -> m_driverJoystick.getY();
     DoubleSupplier strafeAxis = () -> m_driverJoystick.getX();
-    DoubleSupplier turnAxis = () -> m_driverJoystick.getZ();
+    DoubleSupplier turnAxis = () -> -m_driverJoystick.getZ();
 
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(
       m_swerveSubsystem,
