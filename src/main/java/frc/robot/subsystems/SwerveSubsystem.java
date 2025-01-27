@@ -1,15 +1,7 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Pounds;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.drivesims.COTS;
-import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
-import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -18,26 +10,20 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class SwerveSubsystem extends SubsystemBase {
-    private final SwerveDriveSimulation m_simulatedSwerve;
-    private final Field2d m_field;
-
     private final Translation2d m_frontLeftLocationMeters = new Translation2d(
         Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getX()),
         Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getY()));
@@ -55,6 +41,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule m_frontRight;
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
+
+    private final SwerveSimulation m_swerveSimulation;
 
     private final AHRS m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
@@ -79,19 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
             m_backRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
         }
 
-        final DriveTrainSimulationConfig drivetrainConfig = new DriveTrainSimulationConfig(
-            Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
-            Inches.of(Constants.PhysicalConstants.kBumperLength),
-            Inches.of(Constants.PhysicalConstants.kBumperLength),
-            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getX() * 2),
-            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getY() * 2),
-            () -> COTS.ofMark4i(DCMotor.getNEO(1), DCMotor.getNEO(1), 1, 1).get(),
-            () -> COTS.ofNav2X().get());
-
-        this.m_simulatedSwerve = new SwerveDriveSimulation(drivetrainConfig, new Pose2d(8.1, 7, new Rotation2d(Math.PI)));
-        
-        m_field = new Field2d();
-        SmartDashboard.putData("Sim field", m_field);
+        m_swerveSimulation = new SwerveSimulation();
 
         m_gyro.reset();
 
@@ -133,33 +109,33 @@ public class SwerveSubsystem extends SubsystemBase {
             this
         );
 
-        SimulatedArena.getInstance().addDriveTrainSimulation(m_simulatedSwerve);
     }
 
     public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented) {
-        var swerveModuleSpeeds =
-            ChassisSpeeds.discretize(
-                fieldOriented.getAsBoolean()
-                    ? ChassisSpeeds.fromFieldRelativeSpeeds(
+        var swerveModuleStates =
+            m_kinematics.toSwerveModuleStates(
+                ChassisSpeeds.discretize(
+                    fieldOriented.getAsBoolean()
+                        ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                            xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                            ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+                            rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
+                            m_gyro.getRotation2d())
+                        : new ChassisSpeeds(
                         xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
                         ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
-                        rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
-                        m_gyro.getRotation2d())
-                    : new ChassisSpeeds(
-                    xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
-                    rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed),
-                Constants.SwerveConstants.kDtSeconds);
-        
-        var swerveModuleStates = m_kinematics.toSwerveModuleStates(swerveModuleSpeeds);
+                        rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed),
+                    Constants.SwerveConstants.kDtSeconds));
 
-        m_simulatedSwerve.setRobotSpeeds(swerveModuleSpeeds);
-        
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
+
+        if (RobotBase.isSimulation()) {
+            m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
+        }
     }
 
     public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
@@ -176,6 +152,10 @@ public class SwerveSubsystem extends SubsystemBase {
         m_frontRight.setDesiredState(swerveModuleStates[1]);
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
+
+        if (RobotBase.isSimulation()) {
+            m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
+        }
     }
 
     public Pose2d getPose() {
@@ -215,8 +195,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         updateOdometry();
 
-        m_simulatedSwerve.simulationSubTick();
-
         SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
 
         SmartDashboard.putNumber("Swerve/FrontLeft/Speed", m_frontLeft.getState().speedMetersPerSecond);
@@ -228,13 +206,14 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Swerve/BackRight/Speed", m_backRight.getState().speedMetersPerSecond);
         SmartDashboard.putNumber("Swerve/BackRight/Angle", m_backRight.getPosition().angle.getDegrees());
 
-        SmartDashboard.updateValues();
+        SmartDashboard.putString("Speeds", getSpeeds(true).toString());
 
-        m_field.setRobotPose(m_simulatedSwerve.getSimulatedDriveTrainPose());
+        SmartDashboard.updateValues();
     }
 
     @Override
     public void simulationPeriodic() {
         updateOdometry();
+
     }
 }

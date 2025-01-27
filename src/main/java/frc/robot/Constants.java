@@ -50,6 +50,7 @@ public class Constants {
     public static final int kBackRightTurnMotorCANId = 17;
 
     public static final double kDrivingMotorReduction = 4;
+    public static final double kTurningMotorReduction = 4;
   }
 
   public static final class GyroConstants {

@@ -18,6 +18,7 @@ public class SparkSwerveModuleSim implements SwerveModule {
   private final SparkMaxSim m_driveMotor;
   private final SparkMaxSim m_turnMotor;
 
+
   private final SparkRelativeEncoderSim m_driveEncoder;
   private final SparkAbsoluteEncoderSim m_turnEncoder;
 
@@ -36,6 +37,7 @@ public class SparkSwerveModuleSim implements SwerveModule {
       int turnMotorChannel) {
     m_driveMotor = new SparkMaxSim(new SparkMax(driveMotorChannel, MotorType.kBrushless), DCMotor.getNEO(1));
     m_turnMotor = new SparkMaxSim(new SparkMax(turnMotorChannel, MotorType.kBrushless), DCMotor.getNEO(1));
+
 
     m_driveEncoder = m_driveMotor.getRelativeEncoderSim();
     m_turnEncoder = m_turnMotor.getAbsoluteEncoderSim();
