@@ -5,6 +5,8 @@ import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 
 public class Constants {
   public static final class PhysicalConstants {
@@ -51,6 +53,23 @@ public class Constants {
 
     public static final double kDrivingMotorReduction = 4;
     public static final double kTurningMotorReduction = 4;
+
+    public static final Translation2d kFrontLeftLocationMeters = new Translation2d(
+            Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getX()),
+            Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getY()));
+    public static final Translation2d kFrontRightLocationMeters = new Translation2d(
+            Units.inchesToMeters(Constants.PhysicalConstants.kFrontRightLocationInches.getX()),
+            Units.inchesToMeters(Constants.PhysicalConstants.kFrontRightLocationInches.getY()));
+    public static final Translation2d kBackLeftLocationMeters = new Translation2d(
+            Units.inchesToMeters(Constants.PhysicalConstants.kBackLeftLocationInches.getX()),
+            Units.inchesToMeters(Constants.PhysicalConstants.kBackLeftLocationInches.getY()));
+    public static final Translation2d kBackRightLocationMeters = new Translation2d(
+            Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getX()),
+            Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getY()));
+    
+    public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(
+            Constants.SwerveConstants.kFrontLeftLocationMeters, Constants.SwerveConstants.kFrontRightLocationMeters, 
+            Constants.SwerveConstants.kBackLeftLocationMeters, Constants.SwerveConstants.kFrontLeftLocationMeters);
   }
 
   public static final class GyroConstants {

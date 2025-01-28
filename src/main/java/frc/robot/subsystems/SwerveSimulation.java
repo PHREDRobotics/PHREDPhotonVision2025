@@ -27,39 +27,44 @@ public class SwerveSimulation {
     private final SelfControlledSwerveDriveSimulation m_swerveSimulation;
     private final Field2d m_field;
 
-    public SwerveSimulation() {
+    private final GyroIO m_gyro;
+
+    public SwerveSimulation(GyroIO gyroSim) {
+        m_gyro = gyroSim;
+
         SwerveModuleSimulationConfig moduleConfig = new SwerveModuleSimulationConfig(
-            DCMotor.getNEO(1),
-            DCMotor.getNEO(1),
-            Constants.SwerveConstants.kDrivingMotorReduction,
-            Constants.SwerveConstants.kTurningMotorReduction,
-            Volts.of(5), 
-            Volts.of(5),
-            Meters.of(Constants.SwerveConstants.kWheelRadius),
-            KilogramSquareMeters.of(0.2),
-            2);
+                DCMotor.getNEO(1),
+                DCMotor.getNEO(1),
+                Constants.SwerveConstants.kDrivingMotorReduction,
+                Constants.SwerveConstants.kTurningMotorReduction,
+                Volts.of(2),
+                Volts.of(2),
+                Meters.of(Constants.SwerveConstants.kWheelRadius),
+                KilogramSquareMeters.of(0.2),
+                1.2);
 
         DriveTrainSimulationConfig driveTrainConfig = new DriveTrainSimulationConfig(
-            Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
-            Inches.of(Constants.PhysicalConstants.kBumperLength), Inches.of(Constants.PhysicalConstants.kBumperLength),
-            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getX() * 2),
-            Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getY() * 2),
-            () -> new SwerveModuleSimulation(moduleConfig),
-            () -> new GyroSimulation(1, 1));
+                Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
+                Inches.of(Constants.PhysicalConstants.kBumperLength),
+                Inches.of(Constants.PhysicalConstants.kBumperLength),
+                Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getX() * 2),
+                Inches.of(Constants.PhysicalConstants.kFrontLeftLocationInches.getY() * 2),
+                () -> new SwerveModuleSimulation(moduleConfig),
+                () -> new GyroSimulation(2, 2));
 
         m_swerveSimulation = new SelfControlledSwerveDriveSimulation(
-            new SwerveDriveSimulation(driveTrainConfig, new Pose2d(0, 0, new Rotation2d())));
+                new SwerveDriveSimulation(driveTrainConfig, new Pose2d(0, 0, new Rotation2d())));
 
         m_field = new Field2d();
         SmartDashboard.putData("Sim Robot", m_field);
 
         SimulatedArena.getInstance().addDriveTrainSimulation(m_swerveSimulation.getDriveTrainSimulation());
-    } 
+    }
 
-    public void update(ChassisSpeeds moduleSpeeds, boolean fieldOriented) {
+    public void update(ChassisSpeeds moduleSpeeds) {
         m_swerveSimulation.runChassisSpeeds(moduleSpeeds,
-        new Translation2d(),
-        fieldOriented, false);
+                new Translation2d(),
+                false, false);
         m_swerveSimulation.periodic();
         m_field.setRobotPose(this.m_swerveSimulation.getActualPoseInSimulationWorld());
     }
