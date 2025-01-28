@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.commands.DriveCommand;
+import frc.robot.controls.LogitechPro;
+
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -17,7 +19,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
 
-  CommandJoystick m_driverJoystick;
+  LogitechPro m_driverJoystick;
   CommandXboxController m_xboxController;
 
   public enum AutoSwitcher { // enum to switch between different auto modes
@@ -28,7 +30,7 @@ public class RobotContainer {
     //m_swerveSubsystem = new MapleSimSwerve();
     m_swerveSubsystem = new SwerveSubsystem();
 
-    m_driverJoystick = new CommandJoystick(0);
+    m_driverJoystick = new LogitechPro(0);
 
     m_xboxController = new CommandXboxController(1); 
 
@@ -37,18 +39,20 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Triggers
-    Trigger fieldOrientedTrigger = m_driverJoystick.button(2);
+    Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
 
     // Axes
-    DoubleSupplier driveAxis = () -> m_driverJoystick.getY();
-    DoubleSupplier strafeAxis = () -> m_driverJoystick.getX();
-    DoubleSupplier turnAxis = () -> m_driverJoystick.getZ();
+    DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
+    DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
+    DoubleSupplier turnAxis = () -> m_driverJoystick.getYaw();
+    DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
 
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(
       m_swerveSubsystem,
       driveAxis,
       strafeAxis,
       turnAxis,
+      throttleAxis,
       () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
   }
   

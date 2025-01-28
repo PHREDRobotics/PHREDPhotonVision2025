@@ -14,6 +14,7 @@ public class DriveCommand extends Command {
     private DoubleSupplier ySpeed;
     private DoubleSupplier xSpeed;
     private DoubleSupplier rot;
+    private DoubleSupplier throttle;
     private BooleanSupplier fieldOriented;
 
     public DriveCommand(
@@ -21,11 +22,13 @@ public class DriveCommand extends Command {
             DoubleSupplier ySpeed,
             DoubleSupplier xSpeed,
             DoubleSupplier rot,
+            DoubleSupplier throttle,
             BooleanSupplier fieldOriented) {
         this.swerveDrive = swerveDrive;
         this.ySpeed = ySpeed;
         this.xSpeed = xSpeed;
         this.rot = rot;
+        this.throttle = throttle;
         this.fieldOriented = fieldOriented;
 
         addRequirements(swerveDrive);
@@ -33,10 +36,12 @@ public class DriveCommand extends Command {
 
     @Override
     public void execute() {
+        double adjustedThrottle = Math.pow(throttle.getAsDouble(), 2) * Constants.ControllerConstants.kThrottleMultiplier;
+
         // Deadzone
-        double ySpeedAdjusted = MathUtil.applyDeadband(ySpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickYDeadband);
-        double xSpeedAdjusted = MathUtil.applyDeadband(xSpeed.getAsDouble(), Constants.ControllerConstants.kFlightStickXDeadband);
-        double rotAdjusted = MathUtil.applyDeadband(rot.getAsDouble(), Constants.ControllerConstants.kFlightStickZDeadband);
+        double ySpeedAdjusted = MathUtil.applyDeadband(ySpeed.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickYDeadband);
+        double xSpeedAdjusted = MathUtil.applyDeadband(xSpeed.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickXDeadband);
+        double rotAdjusted = MathUtil.applyDeadband(rot.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickZDeadband);
 
         swerveDrive.drive(
             () -> ySpeedAdjusted,
@@ -47,5 +52,6 @@ public class DriveCommand extends Command {
         SmartDashboard.putNumber("Joystick/Y", ySpeedAdjusted);
         SmartDashboard.putNumber("Joystick/X", xSpeedAdjusted);
         SmartDashboard.putNumber("Joystick/Z", rotAdjusted);
+        SmartDashboard.putNumber("Joystick/T", adjustedThrottle);
     }
 }

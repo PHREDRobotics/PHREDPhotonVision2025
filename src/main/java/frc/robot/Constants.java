@@ -61,5 +61,17 @@ public class Constants {
     public static final double kFlightStickXDeadband = 0.25;
     public static final double kFlightStickYDeadband = 0.1;
     public static final double kFlightStickZDeadband = 0.15;
+
+    public static final double kThrottleMultiplier = 1;
   }
+
+  public static final class VisionConstants {
+    public static final double kLimelightMountAngleDegrees = 0.0; // 33.0?
+    public static final double kLimelightLensHeightInches = 0.0; // 32.0? - last year
+    public static final double kAmpOrSourceHeightInches = 48.5;
+    public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
+    public static final double kStageHeightInches = 47.5;
+  }
+
+    public static final double kAreaToCentimeters = 150;
 }
