@@ -42,8 +42,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveModule m_backLeft;
     private final SwerveModule m_backRight;
 
-    private final SwerveSimulation m_swerveSimulation;
-
     private final AHRS m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
     private final SwerveDriveKinematics m_kinematics =
@@ -58,16 +56,16 @@ public class SwerveSubsystem extends SubsystemBase {
         if (RobotBase.isReal()) {
             m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
             m_frontRight = new SparkSwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
-            m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+            m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
             m_backRight = new SparkSwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
         } else {
             m_frontLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontLeftDriveMotorCANId, Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
             m_frontRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontRightDriveMotorCANId, Constants.SwerveConstants.kFrontRightTurnMotorCANId);
             m_backLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackLeftDriveMotorCANId, Constants.SwerveConstants.kBackLeftTurnMotorCANId);
             m_backRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackRightDriveMotorCANId, Constants.SwerveConstants.kBackRightTurnMotorCANId);
+            
+            //public final SwerveSimulation m_swerveSimulation = new SwerveSimulation();
         }
-
-        m_swerveSimulation = new SwerveSimulation();
 
         m_gyro.reset();
 
@@ -134,7 +132,7 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(swerveModuleStates[3]);
 
         if (RobotBase.isSimulation()) {
-            m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
+            //m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
         }
     }
 
@@ -154,7 +152,7 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(swerveModuleStates[3]);
 
         if (RobotBase.isSimulation()) {
-            m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
+            //m_swerveSimulation.update(getSpeeds(false), fieldOriented.getAsBoolean());
         }
     }
 
