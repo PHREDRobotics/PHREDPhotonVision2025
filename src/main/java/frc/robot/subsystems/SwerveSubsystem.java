@@ -141,6 +141,11 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backLeft.setDesiredState(swerveModuleStates[2]);
         m_backRight.setDesiredState(swerveModuleStates[3]);
 
+        SmartDashboard.putString("Input/FL", swerveModuleStates[0].toString());
+        SmartDashboard.putString("Input/FR", swerveModuleStates[1].toString());
+        SmartDashboard.putString("Input/BL", swerveModuleStates[2].toString());
+        SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
+
         if (RobotBase.isSimulation()) {
             m_swerveSimulation.update(getSpeeds(fieldOriented.getAsBoolean()));
         }
@@ -249,6 +254,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Swerve/BackRight/Angle", m_backRight.getPosition().angle.getDegrees());
 
         SmartDashboard.putString("Speeds", getSpeeds(true).toString());
+        SmartDashboard.putString("States/FL", getModuleStates()[0].toString());
+        SmartDashboard.putString("States/FR", getModuleStates()[1].toString());
+        SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
+        SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
         SmartDashboard.updateValues();
     }
