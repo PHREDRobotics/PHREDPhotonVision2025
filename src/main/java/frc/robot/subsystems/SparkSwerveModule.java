@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -39,7 +40,9 @@ public class SparkSwerveModule implements SwerveModule {
    */
   public SparkSwerveModule(
       int driveMotorChannel,
-      int turnMotorChannel) {
+      int turnMotorChannel,
+      SparkMaxConfig driveConfig,
+      SparkMaxConfig turnConfig) {
     m_driveMotor = new SparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turnMotor = new SparkMax(turnMotorChannel, MotorType.kBrushless);
 
@@ -49,8 +52,8 @@ public class SparkSwerveModule implements SwerveModule {
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turnPIDController = m_turnMotor.getClosedLoopController();
 
-    m_driveMotor.configure(Configs.MAXSwerveModule.drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_turnMotor.configure(Configs.MAXSwerveModule.turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     m_driveEncoder.setPosition(0);
   }
