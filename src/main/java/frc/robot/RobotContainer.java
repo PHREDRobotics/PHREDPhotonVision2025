@@ -31,6 +31,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_swerveSubsystem = new SwerveSubsystem();
+        m_algaeSubsystem = new AlgaeSubsystem();
+        m_coralSubsystem = new CoralSubsystem();
+        m_climbSubsystem = new ClimbSubsystem();
 
         m_driverJoystick = new LogitechPro(0);
         m_xboxController = new CommandXboxController(1);
