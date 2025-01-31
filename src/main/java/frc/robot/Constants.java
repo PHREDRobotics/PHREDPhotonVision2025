@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.XboxController.Button;
 
 public class Constants {
   public static final class PhysicalConstants {
@@ -69,7 +70,7 @@ public class Constants {
     
     public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(
             Constants.SwerveConstants.kFrontLeftLocationMeters, Constants.SwerveConstants.kFrontRightLocationMeters, 
-            Constants.SwerveConstants.kBackLeftLocationMeters, Constants.SwerveConstants.kFrontLeftLocationMeters);
+            Constants.SwerveConstants.kBackLeftLocationMeters, Constants.SwerveConstants.kBackRightLocationMeters);
   }
 
   public static final class GyroConstants {
@@ -90,7 +91,30 @@ public class Constants {
     public static final double kAmpOrSourceHeightInches = 48.5;
     public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
     public static final double kStageHeightInches = 47.5;
+    public static final double kAreaToCentimeters = 150;
   }
 
-    public static final double kAreaToCentimeters = 150;
+    public static final class CoralConstants {
+    
+      public static final int kCoralSparkMaxCanID = 6;
+      public static final double kCoralIntakeSpeed = -0.5;
+      public static final double kCoralIntakeTime = 1.0;
+      public static final double kCoralOuttakeSpeed = 0.5;
+      public static final double kCoralOuttakeTime = 1.0;
+      public static final boolean test = false;
+      }    
+
+      public static final class AlgaeConstants {
+        public static final int kLeftAlgaeControllerPort = 8;
+        public static final int kRightAlgaeControllerPort = 9;
+        public static final int kXBtn = Button.kX.value;
+        public static final double kAlgaeSpeed = 0.75;
+        public static final double kAlgaeTime = 2;
+      }
+
+      public static final class PneumaticsConstants {
+        public static final int kPneumaticsCANID = 40;
+        public static final int kSolenoidInput = 14;
+        public static final int kSolenoidOutput = 13;
+      }
 }

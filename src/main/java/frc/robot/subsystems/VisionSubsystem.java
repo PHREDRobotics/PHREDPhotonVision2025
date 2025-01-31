@@ -77,7 +77,7 @@ public class VisionSubsystem extends SubsystemBase {
   public double getRoughTargetDistance() {
     double angleToGoalDegrees = Constants.VisionConstants.kLimelightMountAngleDegrees + ty;
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-    double hyp = Constants.kAreaToCentimeters / ta;
+    double hyp = Constants.VisionConstants.kAreaToCentimeters / ta;
     double d = hyp * Math.cos(angleToGoalRadians);
     return d;
   }
