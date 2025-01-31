@@ -8,14 +8,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.commands.DriveCommand;
 import frc.robot.controls.LogitechPro;
 import java.util.function.DoubleSupplier;
+
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 public class RobotContainer {
     SwerveSubsystem m_swerveSubsystem;
+    AlgaeSubsystem m_algaeSubsystem;
+    CoralSubsystem m_coralSubsystem;
+    ClimbSubsystem m_climbSubsystem;
 
     LogitechPro m_driverJoystick;
     CommandXboxController m_xboxController;
@@ -37,11 +42,23 @@ public class RobotContainer {
         // Triggers
         Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
 
+        Trigger bButton = m_xboxController.b();
+        Trigger aButton = m_xboxController.a();
+        Trigger yButton = m_xboxController.y();
+        Trigger xButton = m_xboxController.x();
+        Trigger startButton = m_xboxController.start();
+
         // Axes
         DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
         DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
         DoubleSupplier turnAxis = () -> m_driverJoystick.getYaw();
         DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
+
+        bButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
+        aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
+        xButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
+        yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
+        startButton.onTrue(new ExtendLift(m_climbSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
@@ -50,6 +67,8 @@ public class RobotContainer {
                 turnAxis,
                 throttleAxis,
                 () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
+
+        
     }
 
     public Command getAutonomousCommand(AutoSwitcher autoMode) {
