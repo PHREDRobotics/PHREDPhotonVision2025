@@ -56,6 +56,7 @@ public class RobotContainer {
         Trigger yButton = m_xboxController.y();
         Trigger xButton = m_xboxController.x();
         Trigger startButton = m_xboxController.start();
+        Trigger backButton = m_xboxController.back();
 
         // Axes
         DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
@@ -68,6 +69,7 @@ public class RobotContainer {
         xButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
         yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
         startButton.onTrue(new ExtendLift(m_climbSubsystem));
+        backButton.onTrue(new RetractLift(m_climbSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
