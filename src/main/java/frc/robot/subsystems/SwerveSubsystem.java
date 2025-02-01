@@ -207,7 +207,7 @@ public class SwerveSubsystem extends SubsystemBase {
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per
                                                 // second,
-                                                // ignore vision updates 👍
+                                                // ignore vision updates
             doRejectUpdate = true;
         }
         if (mt2.tagCount == 0) {
