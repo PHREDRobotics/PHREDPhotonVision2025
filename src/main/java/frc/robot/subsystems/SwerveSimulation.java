@@ -78,12 +78,32 @@ public class SwerveSimulation {
     SimulatedArena.getInstance().addDriveTrainSimulation(m_swerveSimulation.getDriveTrainSimulation());
   }
 
-  public void update(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented,
+  public void update(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented, Rotation2d gyroRotation) {
+    m_gyro.setRotation(gyroRotation);
+
+    ChassisSpeeds speeds = ChassisSpeeds.discretize(
+        xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+        ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
+        rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
+        Constants.SwerveConstants.kDtSeconds
+    );
+
+    m_swerveSimulation.runChassisSpeeds(speeds, new Translation2d(), fieldOriented.getAsBoolean(), true);
+    m_swerveSimulation.periodic();
+    m_field.setRobotPose(m_swerveSimulation.getActualPoseInSimulationWorld());
+
+    SmartDashboard.putString("moduleStatessim", speeds.toString());
+    SmartDashboard.putString("Speeds in sim", m_swerveSimulation.getActualSpeedsRobotRelative().toString());
+
+    publisher.set(m_swerveSimulation.getMeasuredStates());
+  }
+
+  /*public void update(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented,
       Rotation2d gyroRotation) {
 
     m_gyro.setRotation(gyroRotation);
 
-    ChassisSpeeds moduleSpeeds = ChassisSpeeds.discretize(
+    SwerveModuleState[] swerveStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(ChassisSpeeds.discretize(
         fieldOriented.getAsBoolean()
             ? ChassisSpeeds.fromFieldRelativeSpeeds(
                 xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
@@ -94,14 +114,13 @@ public class SwerveSimulation {
                 xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
                 ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
                 -rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed),
-        Constants.SwerveConstants.kDtSeconds);
-    m_swerveSimulation.runChassisSpeeds(moduleSpeeds,
-        new Translation2d(),
-        false, true);
+        Constants.SwerveConstants.kDtSeconds));
+    m_swerveSimulation.runSwerveStates(
+        swerveStates);
     m_swerveSimulation.periodic();
     m_field.setRobotPose(m_swerveSimulation.getActualPoseInSimulationWorld());
 
-    SmartDashboard.putString("moduleSpeedsSwerveSim", moduleSpeeds.toString());
+    SmartDashboard.putString("moduleStatessim", swerveStates.toString());
     SmartDashboard.putString("poseinsim", m_swerveSimulation.getActualPoseInSimulationWorld().toString());
     SmartDashboard.putString("simspeeds", m_swerveSimulation.getActualSpeedsFieldRelative().toString());
     SmartDashboard.putString("Latest module positions", m_swerveSimulation.getLatestModulePositions().toString());
@@ -112,5 +131,5 @@ public class SwerveSimulation {
         m_swerveSimulation.getMeasuredStates()[2],
         m_swerveSimulation.getMeasuredStates()[3],
     });
-  }
+  }*/
 }
