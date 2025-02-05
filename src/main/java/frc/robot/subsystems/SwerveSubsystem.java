@@ -59,7 +59,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     Constants.SwerveConstants.kBackRightTurnMotorCANId,
                     Configs.BackRightConfig.drivingConfig,
                     Configs.BackRightConfig.turningConfig);
-            
+
             m_swerveSimulation = null;
 
             m_gyro = new AHRSGyroIO(Constants.GyroConstants.kComType);
@@ -85,12 +85,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 getModulePositions());
 
         m_poseEstimator = new SwerveDrivePoseEstimator(
-            Constants.SwerveConstants.kKinematics,
-            m_gyro.getRotation2d(),
-            getModulePositions(),
-            new Pose2d(),
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+                Constants.SwerveConstants.kKinematics,
+                m_gyro.getRotation2d(),
+                getModulePositions(),
+                new Pose2d(),
+                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
         try {
             config = RobotConfig.fromGUISettings();
@@ -156,7 +156,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
 
         if (RobotBase.isSimulation()) {
-            m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
+            //m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
+            m_swerveSimulation.update(new ChassisSpeeds(1, 0, 1));
         }
     }
 
@@ -176,10 +177,10 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(swerveModuleStates[3]);
 
         if (RobotBase.isSimulation()) {
-            m_swerveSimulation.update(() -> speeds.vxMetersPerSecond, 
-            () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
-            fieldOriented, 
-            m_gyro.getRotation2d());
+            //m_swerveSimulation.update(() -> speeds.vxMetersPerSecond,
+            //        () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
+            //        fieldOriented,
+            //        m_gyro.getRotation2d());
         }
     }
 
@@ -250,7 +251,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void periodic() {
-        //updateOdometry();
+        // updateOdometry();
 
         m_poseEstimatorField.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
@@ -276,6 +277,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        //updateOdometry();
+        // updateOdometry();
     }
 }
