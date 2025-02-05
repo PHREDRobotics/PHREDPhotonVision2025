@@ -12,17 +12,15 @@
  import edu.wpi.first.math.kinematics.SwerveModuleState;
  import edu.wpi.first.wpilibj2.command.Command;
  import frc.robot.Constants.SwerveConstants;
- import frc.robot.Constants.OIConstants;
- import frc.robot.Constants.limelightConstants;
- import frc.robot.Constants.limelightConstants.aprilTag;
- import frc.robot.subsystems.LimeLightObject;
- import frc.robot.subsystems.PhotonLL;
- import frc.robot.subsystems.swerveSusbsystem;
+ import frc.lib.util.LimelightOffsets;
+ import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
  
- public class AutoAlign extends CommandBase {
+ public class AutoAlign extends Command {
  
-    private final swerveSusbsystem swerve;
-     private final PhotonLL limelight;
+    private final SwerveSubsystem swerve;
+     private final VisionSubsystem visionSubsystem;
      private final SlewRateLimiter xLimiter, yLimiter, giroLimiter;
      private final PIDController drivePID, strafePID, rotationPID;
      private final double driveOffset, strafeOffset, rotationOffset;
