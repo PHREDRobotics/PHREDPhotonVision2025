@@ -156,8 +156,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
 
         if (RobotBase.isSimulation()) {
-            //m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
-            m_swerveSimulation.update(new ChassisSpeeds(1, 0, 1));
+            m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
         }
     }
 
@@ -177,10 +176,10 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.setDesiredState(swerveModuleStates[3]);
 
         if (RobotBase.isSimulation()) {
-            //m_swerveSimulation.update(() -> speeds.vxMetersPerSecond,
-            //        () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
-            //        fieldOriented,
-            //        m_gyro.getRotation2d());
+            m_swerveSimulation.update(() -> speeds.vxMetersPerSecond,
+                    () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
+                    fieldOriented,
+                    m_gyro.getRotation2d());
         }
     }
 

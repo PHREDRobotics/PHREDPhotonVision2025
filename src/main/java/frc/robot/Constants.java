@@ -2,8 +2,6 @@ package frc.robot;
 
 import com.studica.frc.AHRS.NavXComType;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -14,6 +12,7 @@ public class Constants {
     public static final double kRobotMassPounds = 100;
 
     public static final double kBumperLength = 32;
+    public static final double kTrackLength = 24;
 
     public static final Translation2d kFrontLeftLocationInches = new Translation2d(-21, 13.5);
     public static final Translation2d kFrontRightLocationInches = new Translation2d(3, 13.5);
@@ -42,8 +41,8 @@ public class Constants {
     public static final int kFrontRightTurnMotorCANId = 12;
     public static final int kBackRightTurnMotorCANId = 17;
 
-    public static final double kDrivingMotorReduction = 0.4;
-    public static final double kTurningMotorReduction = 0.4;
+    public static final double kDrivingMotorReduction = 8;
+    public static final double kTurningMotorReduction = 8;
 
     public static final Translation2d kFrontLeftLocationMeters = new Translation2d(
             Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getX()),
