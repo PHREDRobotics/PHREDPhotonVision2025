@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -50,8 +49,8 @@ public class SwerveSimulation {
         DCMotor.getNEO(1),
         Constants.SwerveConstants.kDrivingMotorReduction,
         Constants.SwerveConstants.kTurningMotorReduction,
-        Volts.of(0.2),
-        Volts.of(0.2),
+        Constants.SimConstants.kDrivingFrictionVolts,
+        Constants.SimConstants.kTurningFrictionVolts,
         Meters.of(Constants.SwerveConstants.kWheelRadius),
         KilogramSquareMeters.of(0.02),
         1.2);
@@ -106,5 +105,12 @@ public class SwerveSimulation {
     SmartDashboard.putString("poseinsim", m_swerveSimulation.getActualPoseInSimulationWorld().toString());
     SmartDashboard.putString("simspeeds", m_swerveSimulation.getActualSpeedsFieldRelative().toString());
     SmartDashboard.putString("Latest module positions", m_swerveSimulation.getLatestModulePositions().toString());
+
+    publisher.set(new SwerveModuleState[] {
+        m_swerveSimulation.getMeasuredStates()[0],
+        m_swerveSimulation.getMeasuredStates()[1],
+        m_swerveSimulation.getMeasuredStates()[2],
+        m_swerveSimulation.getMeasuredStates()[3],
+    });
   }
 }
