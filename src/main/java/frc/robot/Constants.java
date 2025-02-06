@@ -95,6 +95,10 @@ public class Constants {
     public static final double kIstrafe = 0;
     public static final double kDstrafe = 0;
 
+    public static final double kProtation = 0.04;
+    public static final double kIrotation = 0;
+    public static final double kDrotation = 0;
+
 
   }
 

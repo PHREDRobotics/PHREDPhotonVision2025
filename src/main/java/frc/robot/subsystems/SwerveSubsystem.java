@@ -41,6 +41,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public final SwerveSimulation m_swerveSimulation;
 
+        //Instance of the swerve
+        private static SwerveSubsystem instance;
+
     public SwerveSubsystem() {
         if (RobotBase.isReal()) {
             m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
@@ -248,6 +251,15 @@ public class SwerveSubsystem extends SubsystemBase {
         return ChassisSpeeds.fromRobotRelativeSpeeds(
                 robotRelativeSpeeds, getPose().getRotation());
     }
+
+
+    public static SwerveSubsystem getInstance() {
+        if(instance == null){
+            instance = new SwerveSubsystem();
+        }
+        return instance;
+    }
+
 
     public void periodic() {
         // updateOdometry();

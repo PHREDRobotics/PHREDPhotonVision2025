@@ -13,64 +13,62 @@ import frc.robot.Constants;
 public class VisionSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public boolean m_LimelightHasValidTarget = false;
-    public boolean m_IsLimeLightCentered = false;
-    NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
-    // double tv = m_table.getEntry("tv").getDouble(0);
-    double tx = m_table.getEntry("tx").getDouble(0);
-    double ty = m_table.getEntry("ty").getDouble(0);
-    double ta = m_table.getEntry("ta").getDouble(0);
-    double tid = m_table.getEntry("tid").getDouble(0);
-  
-    double kP = 0.9;
-    double kI = 0.01;
-    double kD = 0.01;
+  public boolean m_IsLimeLightCentered = false;
+  private static VisionSubsystem instance; //Instance for the limelight
 
-  
-    public VisionSubsystem() {
-    }
-  
-    /**
-     * Example command factory method.
-     *
-     * @return a command
-     */
-    // public Command VisionCommand() {
-  
-    // // Inline construction of command goes here.
-    // // Subsystem::RunOnce implicitly requires `this` subsystem.
-    // return runOnce(
-    // () -> {
-    // /* one-time action goes here */
-    // });
-    // }
-    // We will need to move accordingly but I think that will go elsewhere
-  
-    // public void vision() {
-    // m_table = NetworkTableInstance.getDefault().getTable("limelight-phred");
-    // tv = m_table.getEntry("tv").getDouble(0);
-    // tx = m_table.getEntry("tx").getDouble(0);
-    // ty = m_table.getEntry("ty").getDouble(0);
-    // ta = m_table.getEntry("ta").getDouble(0);
-    // tid = m_table.getEntry("tid").getDouble(0);
-    // SmartDashboard.putBoolean("Sees target?", !(tid == -1.0));
-    // SmartDashboard.putNumber("Target:", tid);
-    // SmartDashboard.putNumber("Limelight a value.", ta);
-    // SmartDashboard.putNumber("Limelight y value.", ty);
-    // SmartDashboard.putNumber("Limelight x value.", tx);
-    // SmartDashboard.putNumber("Limelight v value.", tv);
-    // SmartDashboard.putBoolean("Is the target in range?",
-    // m_LimelightHasValidTarget);
-    // SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);
-    // }
-  
-  
-    
+  NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
+  // double tv = m_table.getEntry("tv").getDouble(0);
+  double tx = m_table.getEntry("tx").getDouble(0);
+  double ty = m_table.getEntry("ty").getDouble(0);
+  double ta = m_table.getEntry("ta").getDouble(0);
+  double tid = m_table.getEntry("tid").getDouble(0);
 
+  double kP = 0.9;
+  double kI = 0.01;
+  double kD = 0.01;
+
+  public VisionSubsystem() {
+  }
+
+  /**
+   * Example command factory method.
+   *
+   * @return a command
+   */
+  // public Command VisionCommand() {
+
+  // // Inline construction of command goes here.
+  // // Subsystem::RunOnce implicitly requires `this` subsystem.
+  // return runOnce(
+  // () -> {
+  // /* one-time action goes here */
+  // });
+  // }
+  // We will need to move accordingly but I think that will go elsewhere
+
+  // public void vision() {
+  // m_table = NetworkTableInstance.getDefault().getTable("limelight-phred");
+  // tv = m_table.getEntry("tv").getDouble(0);
+  // tx = m_table.getEntry("tx").getDouble(0);
+  // ty = m_table.getEntry("ty").getDouble(0);
+  // ta = m_table.getEntry("ta").getDouble(0);
+  // tid = m_table.getEntry("tid").getDouble(0);
+  // SmartDashboard.putBoolean("Sees target?", !(tid == -1.0));
+  // SmartDashboard.putNumber("Target:", tid);
+  // SmartDashboard.putNumber("Limelight a value.", ta);
+  // SmartDashboard.putNumber("Limelight y value.", ty);
+  // SmartDashboard.putNumber("Limelight x value.", tx);
+  // SmartDashboard.putNumber("Limelight v value.", tv);
+  // SmartDashboard.putBoolean("Is the target in range?",
+  // m_LimelightHasValidTarget);
+  // SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);
+  // }
 
   public double getTargetDistance() {
     double angleToGoalDegrees = Constants.VisionConstants.kLimelightMountAngleDegrees + ty;
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-    double d = (Constants.VisionConstants.kAmpOrSourceHeightInches - Constants.VisionConstants.kLimelightLensHeightInches)
+    double d = (Constants.VisionConstants.kAmpOrSourceHeightInches
+        - Constants.VisionConstants.kLimelightLensHeightInches)
         / Math.tan(angleToGoalRadians);
     return d;
     // 14.75 against amp
@@ -99,8 +97,12 @@ public class VisionSubsystem extends SubsystemBase {
 
   }
 
+
   public double getTargetID() {
     return m_table.getEntry("tid").getDouble(0);
+  }
+  public boolean hasValidTarget(){
+    return getTargetID() != -1;
   }
 
   public double getTargetX() {
@@ -115,8 +117,6 @@ public class VisionSubsystem extends SubsystemBase {
     return m_table.getEntry("ta").getDouble(0);
   }
 
-
- 
   /**
    * An example method querying a boolean state of the subsystem (for example, a
    * digital sensor).
@@ -126,6 +126,13 @@ public class VisionSubsystem extends SubsystemBase {
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
     return false;
+  }
+
+  public static VisionSubsystem getInstance() {
+    if (instance == null) {
+      instance = new VisionSubsystem();
+    }
+    return instance;
   }
 
   @Override
