@@ -32,15 +32,9 @@ public class SwerveSimulation {
   private final SelfControlledSwerveDriveSimulation m_swerveSimulation;
   private final Field2d m_field;
 
-  private final GyroSimulation m_gyro;
-
-  private final SwerveModuleSimulation m_moduleSim;
-
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
   public SwerveSimulation(GyroIO gyroSim) {
-    m_gyro = new GyroSimulation(2, 2);
-
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
@@ -55,8 +49,6 @@ public class SwerveSimulation {
         KilogramSquareMeters.of(0.02),
         1.2);
       
-    m_moduleSim = new SwerveModuleSimulation(moduleConfig);
-
     @SuppressWarnings("unchecked")
     DriveTrainSimulationConfig driveTrainConfig = new DriveTrainSimulationConfig(
         Pounds.of(Constants.PhysicalConstants.kRobotMassPounds),
@@ -64,8 +56,8 @@ public class SwerveSimulation {
         Inches.of(Constants.PhysicalConstants.kBumperLength),
         Inches.of(Constants.PhysicalConstants.kTrackLength),
         Inches.of(Constants.PhysicalConstants.kTrackLength),
-        () -> m_gyro,
-        () -> m_moduleSim);
+        () -> new GyroSimulation(0, 0),
+        () -> new SwerveModuleSimulation(moduleConfig));
 
     m_swerveSimulation = new SelfControlledSwerveDriveSimulation(
       new SwerveDriveSimulation(
@@ -79,12 +71,12 @@ public class SwerveSimulation {
   }
 
   public void update(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented, Rotation2d gyroRotation) {
-    m_gyro.setRotation(gyroRotation);
+    //m_gyro.setRotation(gyroRotation);
 
     ChassisSpeeds speeds = ChassisSpeeds.discretize(
         xSpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
         ySpeed.getAsDouble() * Constants.PhysicalConstants.kMaxSpeed,
-        rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
+        -rot.getAsDouble() * Constants.PhysicalConstants.kMaxAngularSpeed,
         Constants.SwerveConstants.kDtSeconds
     );
 
@@ -94,6 +86,7 @@ public class SwerveSimulation {
 
     SmartDashboard.putString("moduleStatessim", speeds.toString());
     SmartDashboard.putString("Speeds in sim", m_swerveSimulation.getActualSpeedsRobotRelative().toString());
+    SmartDashboard.putNumber("Sim Gyro", m_swerveSimulation.getOdometryEstimatedPose().getRotation().getDegrees());
 
     publisher.set(m_swerveSimulation.getMeasuredStates());
   }
