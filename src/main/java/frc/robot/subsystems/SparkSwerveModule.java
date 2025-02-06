@@ -16,7 +16,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Configs;
 
 public class SparkSwerveModule implements SwerveModule {
   private final SparkMax m_driveMotor;
