@@ -17,6 +17,7 @@ import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendLift;
+import frc.robot.commands.RetractLift;
 import frc.robot.controls.LogitechPro;
 import java.util.function.DoubleSupplier;
 
@@ -57,6 +58,8 @@ public class RobotContainer {
         Trigger xButton = m_xboxController.x();
         Trigger startButton = m_xboxController.start();
         Trigger backButton = m_xboxController.back();
+        Trigger Button3 = m_driverJoystick.button(3);
+        trigger Button2 = m_driverJoystick.button(2);
 
         // Axes
         DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
