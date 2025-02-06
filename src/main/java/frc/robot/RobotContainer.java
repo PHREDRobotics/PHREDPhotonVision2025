@@ -61,9 +61,8 @@ public class RobotContainer {
         Trigger xButton = m_xboxController.x();
         Trigger startButton = m_xboxController.start();
         Trigger backButton = m_xboxController.back();
-        Trigger Button3 = m_driverJoystick.button(3);
-        trigger Button2 = m_driverJoystick.button(2);
-
+        // Trigger Button3 = m_driverJoystick.buttons[3];
+        // Trigger Button2 = m_driverJoystick.buttons[2];
         // Axes
         DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
         DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
