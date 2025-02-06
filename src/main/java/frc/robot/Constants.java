@@ -1,12 +1,13 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.studica.frc.AHRS.NavXComType;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.XboxController.Button;
 
 public class Constants {
@@ -14,29 +15,16 @@ public class Constants {
     public static final double kRobotMassPounds = 100;
 
     public static final double kBumperLength = 32;
+    public static final double kTrackLength = 24;
 
-    public static final Translation2d kFrontLeftLocationInches = new Translation2d(15, 15);
-    public static final Translation2d kFrontRightLocationInches = new Translation2d(15, -15);
-    public static final Translation2d kBackLeftLocationInches = new Translation2d(-15, 15);
-    public static final Translation2d kBackRightLocationInches = new Translation2d(-15, -15);
-
-    public static final double kMaxSpeed = 6; // 3
+    public static final double kMaxSpeed = 2 * Math.floor(Math.PI); // 6
     public static final double kMaxAngularSpeed = 6;
 
     public static final double kModuleMaxAngularVelocity = kMaxAngularSpeed;
     public static final double kModuleMaxAngularAcceleration = kModuleMaxAngularVelocity * kModuleMaxAngularVelocity; // radians per second squared
   }
+
   public static final class SwerveConstants {
-    public static final PIDController kDrivePIDController = new PIDController(1, 0, 0); // CHANGE THIS --------------------------------------------------
-    //public static final PIDController kTurningPIDController = new PIDController(1, 0, 0);
-    //public static final ProfiledPIDController kTurningPIDController = new ProfiledPIDController(0.9, 0.6, 0.5,
-    //  new TrapezoidProfile.Constraints(
-    //    PhysicalConstants.kModuleMaxAngularVelocity, PhysicalConstants.kModuleMaxAngularAcceleration
-    //  ));
-
-    public static final SimpleMotorFeedforward kDriveFeedforward = new SimpleMotorFeedforward(1, 3);
-    public static final SimpleMotorFeedforward kTurnFeedforward = new SimpleMotorFeedforward(1, 0.5);
-
     public static final double kWheelRadius = 0.0508;
     public static final int kEncoderResolution = 4096;
 
@@ -52,25 +40,39 @@ public class Constants {
     public static final int kFrontRightTurnMotorCANId = 12;
     public static final int kBackRightTurnMotorCANId = 17;
 
-    public static final double kDrivingMotorReduction = 4;
-    public static final double kTurningMotorReduction = 4;
+    public static final double kDrivingMotorReduction = 8;
+    public static final double kTurningMotorReduction = 21;
+
+    public static final Translation2d kFrontLeftLocationInches = new Translation2d(-21, 13.5);
+    public static final Translation2d kFrontRightLocationInches = new Translation2d(3, 13.5);
+    public static final Translation2d kBackLeftLocationInches = new Translation2d(-21, -10.5);
+    public static final Translation2d kBackRightLocationInches = new Translation2d(3, -10.5);
+
+    public static final double kDriveAccelerationLimiter = 5;
+    public static final double kRotationAccelerationLimiter = 7.5;
+
 
     public static final Translation2d kFrontLeftLocationMeters = new Translation2d(
-            Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getX()),
-            Units.inchesToMeters(Constants.PhysicalConstants.kFrontLeftLocationInches.getY()));
+            Units.inchesToMeters(Constants.SwerveConstants.kFrontLeftLocationInches.getX()),
+            Units.inchesToMeters(Constants.SwerveConstants.kFrontLeftLocationInches.getY()));
     public static final Translation2d kFrontRightLocationMeters = new Translation2d(
-            Units.inchesToMeters(Constants.PhysicalConstants.kFrontRightLocationInches.getX()),
-            Units.inchesToMeters(Constants.PhysicalConstants.kFrontRightLocationInches.getY()));
+            Units.inchesToMeters(Constants.SwerveConstants.kFrontRightLocationInches.getX()),
+            Units.inchesToMeters(Constants.SwerveConstants.kFrontRightLocationInches.getY()));
     public static final Translation2d kBackLeftLocationMeters = new Translation2d(
-            Units.inchesToMeters(Constants.PhysicalConstants.kBackLeftLocationInches.getX()),
-            Units.inchesToMeters(Constants.PhysicalConstants.kBackLeftLocationInches.getY()));
+            Units.inchesToMeters(Constants.SwerveConstants.kBackLeftLocationInches.getX()),
+            Units.inchesToMeters(Constants.SwerveConstants.kBackLeftLocationInches.getY()));
     public static final Translation2d kBackRightLocationMeters = new Translation2d(
-            Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getX()),
-            Units.inchesToMeters(Constants.PhysicalConstants.kBackRightLocationInches.getY()));
+            Units.inchesToMeters(Constants.SwerveConstants.kBackRightLocationInches.getX()),
+            Units.inchesToMeters(Constants.SwerveConstants.kBackRightLocationInches.getY()));
     
     public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(
             Constants.SwerveConstants.kFrontLeftLocationMeters, Constants.SwerveConstants.kFrontRightLocationMeters, 
             Constants.SwerveConstants.kBackLeftLocationMeters, Constants.SwerveConstants.kBackRightLocationMeters);
+  }
+
+  public static final class SimConstants {
+    public static final Voltage kDrivingFrictionVolts = Volts.of(0.2);
+    public static final Voltage kTurningFrictionVolts = Volts.of(0.2);
   }
 
   public static final class GyroConstants {
@@ -92,6 +94,17 @@ public class Constants {
     public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
     public static final double kStageHeightInches = 47.5;
     public static final double kAreaToCentimeters = 150;
+
+
+    public static final double kPdrive = 0.1;
+    public static final double kIdrive = 0;
+    public static final double kDdrive = 0;
+
+    public static final double kPstrafe = 0.08;
+    public static final double kIstrafe = 0;
+    public static final double kDstrafe = 0;
+
+
   }
 
     public static final class CoralConstants {

@@ -4,13 +4,14 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.AlgaeSubsystem;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.AlgaeOuttakeCommand;
 import frc.robot.commands.CoralIntakeCommand;
@@ -19,9 +20,11 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendLift;
 import frc.robot.commands.RetractLift;
 import frc.robot.controls.LogitechPro;
-import java.util.function.DoubleSupplier;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class RobotContainer {
     SwerveSubsystem m_swerveSubsystem;
@@ -66,6 +69,11 @@ public class RobotContainer {
         DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
         DoubleSupplier turnAxis = () -> m_driverJoystick.getYaw();
         DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
+
+        // D-Pad Buttons
+        // ...
+
+        // Assign Commands
 
         bButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
         aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
