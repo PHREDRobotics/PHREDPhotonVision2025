@@ -43,10 +43,14 @@ public class Constants {
     public static final double kDrivingMotorReduction = 8;
     public static final double kTurningMotorReduction = 21;
 
-    public static final Translation2d kFrontLeftLocationInches = new Translation2d(-21, 13.5);
-    public static final Translation2d kFrontRightLocationInches = new Translation2d(3, 13.5);
-    public static final Translation2d kBackLeftLocationInches = new Translation2d(-21, -10.5);
-    public static final Translation2d kBackRightLocationInches = new Translation2d(3, -10.5);
+    //public static final Translation2d kFrontLeftLocationInches = new Translation2d(21, 14.5);
+    //public static final Translation2d kFrontRightLocationInches = new Translation2d(-3.5, 14.5);
+    //public static final Translation2d kBackLeftLocationInches = new Translation2d(21, -10);
+    //public static final Translation2d kBackRightLocationInches = new Translation2d(-3.5, -10);
+    public static final Translation2d kFrontLeftLocationInches = new Translation2d(12.25, 12.25);
+    public static final Translation2d kFrontRightLocationInches = new Translation2d(12.25, -12.25);
+    public static final Translation2d kBackLeftLocationInches = new Translation2d(-12.25, 12.25);
+    public static final Translation2d kBackRightLocationInches = new Translation2d(-12.25, -12.25);
 
     public static final double kDriveAccelerationLimiter = 5;
     public static final double kRotationAccelerationLimiter = 7.5;
