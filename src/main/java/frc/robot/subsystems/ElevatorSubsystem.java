@@ -39,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         //topForwardLimit = elevator.getReverseLimitSwitch();
        // bottomForwardLimit = elevator.();
 
+       moveToPosition(Constants.ElevatorConstants.kCoralLevel2);
     }
 
     public boolean isLimitSwitchPressed() {
@@ -48,11 +49,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         //     return false;
         // }
         if(bottomForwardLimit.get()){
+            resetEncoders();
+
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
 
