@@ -19,7 +19,7 @@ public final class Configs {
             drivingConfig
                 .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(50)
-                .inverted(false);
+                .inverted(true);
             drivingConfig.encoder
                 .positionConversionFactor(drivingFactor)
                 .velocityConversionFactor(drivingFactor / 60);
@@ -59,7 +59,7 @@ public final class Configs {
             drivingConfig
                 .idleMode(IdleMode.kBrake)
                 .smartCurrentLimit(50)
-                .inverted(true);
+                .inverted(false);
             drivingConfig.encoder
                 .positionConversionFactor(drivingFactor)
                 .velocityConversionFactor(drivingFactor / 60);

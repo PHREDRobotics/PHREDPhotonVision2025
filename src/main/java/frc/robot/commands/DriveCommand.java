@@ -46,7 +46,7 @@ public class DriveCommand extends Command {
         swerveDrive.drive(
             () -> ySpeedAdjusted,
             () -> -xSpeedAdjusted,
-            () -> rotAdjusted,
+            () -> -rotAdjusted,
             fieldOriented);
         
         SmartDashboard.putNumber("Joystick/Y", ySpeedAdjusted);

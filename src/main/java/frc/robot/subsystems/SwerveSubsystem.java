@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -40,6 +42,11 @@ public class SwerveSubsystem extends SubsystemBase {
     private final Field2d m_poseEstimatorField;
 
     public final SwerveSimulation m_swerveSimulation;
+
+    private final StructArrayPublisher<SwerveModuleState> publisher;
+
+        //Instance of the swerve
+        private static SwerveSubsystem instance;
 
     public SwerveSubsystem() {
         if (RobotBase.isReal()) {
@@ -78,6 +85,9 @@ public class SwerveSubsystem extends SubsystemBase {
         }
 
         m_gyro.reset();
+
+        publisher = NetworkTableInstance.getDefault()
+         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
         m_odometry = new SwerveDriveOdometry(
                 Constants.SwerveConstants.kKinematics,
@@ -142,7 +152,8 @@ public class SwerveSubsystem extends SubsystemBase {
                                                 * Constants.PhysicalConstants.kMaxSpeed,
                                         rot.getAsDouble()
                                                 * Constants.PhysicalConstants.kMaxAngularSpeed),
-                        Constants.SwerveConstants.kDtSeconds));
+                        Constants.SwerveConstants.kDtSeconds)
+        );     
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.PhysicalConstants.kMaxSpeed);
         m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -154,6 +165,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Input/FR", swerveModuleStates[1].toString());
         SmartDashboard.putString("Input/BL", swerveModuleStates[2].toString());
         SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
+
+        SmartDashboard.putNumber("Rot", rot.getAsDouble());
+
+        publisher.set(swerveModuleStates);
 
         if (RobotBase.isSimulation()) {
             m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
@@ -249,6 +264,15 @@ public class SwerveSubsystem extends SubsystemBase {
                 robotRelativeSpeeds, getPose().getRotation());
     }
 
+
+    public static SwerveSubsystem getInstance() {
+        if(instance == null){
+            instance = new SwerveSubsystem();
+        }
+        return instance;
+    }
+
+
     public void periodic() {
         // updateOdometry();
 
@@ -270,6 +294,8 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("States/FR", getModuleStates()[1].toString());
         SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
         SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
+
+        
 
         SmartDashboard.updateValues();
     }

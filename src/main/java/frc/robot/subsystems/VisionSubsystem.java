@@ -29,7 +29,8 @@ public class VisionSubsystem extends SubsystemBase {
   public double getTargetDistance() {
     double angleToGoalDegrees = Constants.VisionConstants.kLimelightMountAngleDegrees + ty;
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-    double d = (Constants.VisionConstants.kAmpOrSourceHeightInches - Constants.VisionConstants.kLimelightLensHeightInches)
+    double d = (Constants.VisionConstants.kAmpOrSourceHeightInches
+        - Constants.VisionConstants.kLimelightLensHeightInches)
         / Math.tan(angleToGoalRadians);
     return d;
     // 14.75 against amp
@@ -58,8 +59,12 @@ public class VisionSubsystem extends SubsystemBase {
 
   }
 
+
   public double getTargetID() {
     return m_table.getEntry("tid").getDouble(0);
+  }
+  public boolean hasValidTarget(){
+    return getTargetID() != -1;
   }
 
   public double getTargetX() {
