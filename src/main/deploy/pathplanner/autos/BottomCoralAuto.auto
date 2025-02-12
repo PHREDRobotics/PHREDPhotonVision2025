@@ -5,28 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "BottomCoral"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "ElevatorCommand"
+                  "pathName": "BottomCoral"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "CoralOuttakeCommand"
+                  "name": "ElevatorCommand"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttakeCommand"
           }
         }
       ]

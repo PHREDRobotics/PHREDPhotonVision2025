@@ -36,7 +36,8 @@ public class RobotContainer {
     CommandXboxController m_xboxController;
 
     public enum AutoSwitcher { // enum to switch between different auto modes
-        OFF_THE_LINE
+        OFF_THE_LINE,
+        BottomCoral
     }
 
     public RobotContainer() {
@@ -97,6 +98,9 @@ public class RobotContainer {
             default:
             case OFF_THE_LINE: {
                 return new PathPlannerAuto("Basic off-the-line auto");
+            }
+            case BottomCoral: {
+                return new PathPlannerAuto("BottomCoralAuto");
             }
         }
     }
