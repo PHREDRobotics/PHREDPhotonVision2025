@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -17,6 +18,9 @@ import frc.robot.commands.AlgaeOuttakeCommand;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ElevatorManualLift;
+import frc.robot.commands.ResetElevator;
+import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
 import frc.robot.commands.RetractLift;
 import frc.robot.controls.LogitechPro;
@@ -25,12 +29,14 @@ import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 public class RobotContainer {
     SwerveSubsystem m_swerveSubsystem;
     AlgaeSubsystem m_algaeSubsystem;
     ClimbSubsystem m_climbSubsystem;
     CoralSubsystem m_coralSubsystem;
+    ElevatorSubsystem m_elevatorSubsystem;
 
     LogitechPro m_driverJoystick;
     CommandXboxController m_xboxController;
@@ -44,6 +50,7 @@ public class RobotContainer {
         m_algaeSubsystem = new AlgaeSubsystem();
         m_coralSubsystem = new CoralSubsystem();
         m_climbSubsystem = new ClimbSubsystem();
+        m_elevatorSubsystem = new ElevatorSubsystem();
 
         m_driverJoystick = new LogitechPro(0);
         m_xboxController = new CommandXboxController(1);
@@ -61,6 +68,10 @@ public class RobotContainer {
         Trigger xButton = m_xboxController.x();
         Trigger startButton = m_xboxController.start();
         Trigger backButton = m_xboxController.back();
+        Trigger leftBumper = m_xboxController.leftBumper();
+        Trigger rightBumper = m_xboxController.rightBumper();
+        Trigger leftStickButton = m_xboxController.leftStick();
+        Trigger rightStickButton = m_xboxController.rightStick();
         // Trigger Button3 = m_driverJoystick.buttons[3];
         // Trigger Button2 = m_driverJoystick.buttons[2];
         // Axes
@@ -71,6 +82,10 @@ public class RobotContainer {
 
         // D-Pad Buttons
         // ...
+        Trigger dPadDown = m_xboxController.povDown();
+        Trigger dPadUp = m_xboxController.povUp();
+        Trigger dPadLeft = m_xboxController.povLeft();
+        Trigger dPadRight = m_xboxController.povRight();
 
         // Assign Commands
 
@@ -80,6 +95,9 @@ public class RobotContainer {
         yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
         startButton.onTrue(new ExtendLift(m_climbSubsystem));
         backButton.onTrue(new RetractLift(m_climbSubsystem));
+        leftBumper.whileTrue(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
+        leftStickButton.onTrue(new ResetElevator(m_elevatorSubsystem));
+        rightStickButton.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
@@ -89,8 +107,8 @@ public class RobotContainer {
                 throttleAxis,
                 () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
 
-        
-    }
+        m_elevatorSubsystem.setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
+    } 
 
     public Command getAutonomousCommand(AutoSwitcher autoMode) {
         switch (autoMode) {

@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 public class Constants {
   public static final class PhysicalConstants {
@@ -130,4 +131,77 @@ public class Constants {
         public static final int kSolenoidInput = 14;
         public static final int kSolenoidOutput = 13;
       }
+
+      public static final class OIConstants {
+        public static final int kDriverControllerPort = 0;
+    
+        public static final int kDriverYAxis = Axis.kLeftY.value;
+        public static final int kDriverXAxis = Axis.kLeftX.value;
+        public static final int kDriverRotAxis = Axis.kRightX.value;
+        public static final int kDriverFieldOrientedButtonIdx = Button.kB.value;
+        public static final int kLeftTriggerAxis = Axis.kLeftTrigger.value;
+        public static final int kRightTriggerAxis = Axis.kRightTrigger.value;
+    
+        public static final int kStartButton = Button.kStart.value;
+        public static final int kLeftBumper = Button.kLeftBumper.value;
+        public static final int kRightBumper = Button.kRightBumper.value;
+        public static final int kXButton = Button.kX.value;
+        public static final int kYButton = Button.kY.value;
+        public static final int kAButton = Button.kA.value;
+        public static final int kBButton = Button.kB.value;
+        public static final int kBackButton = Button.kBack.value;
+        // public static final int pov = XboxController.getPOV();
+        // if (pov == 90){}
+    
+        public static final double kDeadband = 0.15;
+        public static final double kHighDeadband = 0.25;
+    
+      }
+
+      public static final class ElevatorConstants {
+        // Will need to play with these number some more
+        public static final double kP = 0.6;
+        public static final double kI = 0.0;
+        public static final double kD = 0.0;
+        
+        // Need to change these values later
+        //Correct 0 is actually 0
+        //10 inches is 6.28 from 0
+        //0 is 27 inches from the bottom
+        //Level 2 is 32 inches
+        //Also 3.23
+        //Need to go to 48 inches
+        //Need to go to 72 inches
+        public static final int kElevatorSparkMaxCanID = 32;
+        public static final double kCoralLevel1 = 0;
+        public static final double kCoralLevel2 = 3.23;
+        public static final double kCoralLevel3 = 13.4;
+        public static final double kCoralLevel4 = 28;
+        public static final double kHumanPlayerStationLevel = 0;
+    
+        public static final double kElevatorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 100;
+    
+        // Physical constants
+        public static final double kEncoderTicksPerRotation = 42;
+        public static final double kElevatorGearRatio = 4;
+        public static final double kChainDistancePerRevolution = 4;
+        public static final double kElevatorDistancePerChainDistance = 2/3;
+    
+        //The final calculation of encoder ticks to centimeters
+        public static final double kEncoderTicksToCentimeters = 
+        kEncoderTicksPerRotation
+        * kElevatorGearRatio
+        / kChainDistancePerRevolution 
+        / kElevatorDistancePerChainDistance //Convert from inches to centimeters
+        / 2.54;
+    
+        // Need to double check this value
+        public static final double kVoltageMultiplier = 1.5;
+      }
+
+       public final static class NeoMotorConstants {
+        static final double kFreeSpeedRpm = 5676;
+       }
+
+    
 }

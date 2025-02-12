@@ -10,7 +10,8 @@ public final class Configs {
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
-            double drivingFactor = Constants.SwerveConstants.kWheelRadius * 2 * Math.PI / Constants.SwerveConstants.kDrivingMotorReduction;
+            double drivingFactor = Constants.SwerveConstants.kWheelRadius * 2 * Math.PI
+             / Constants.SwerveConstants.kDrivingMotorReduction;
             double turningFactor = 2 * Math.PI;
 
             double drivingVelocityFeedForward = 1 / 6;
@@ -162,6 +163,25 @@ public final class Configs {
                 .outputRange(-1, 1)
                 .positionWrappingEnabled(true)
                 .positionWrappingInputRange(0, turningFactor);
+        }
+    }
+    public static final class ElevatorMotor {
+        public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
+
+        static {
+            // Use module constants to calculate conversion factors and feed forward gain.
+            double elevatorFF = 1 / Constants.ElevatorConstants.kElevatorFreeSpeedRps;
+
+            motorConfig
+                    .idleMode(IdleMode.kBrake)
+                    .smartCurrentLimit(50)
+                    .inverted(true);
+            motorConfig.closedLoop
+                    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                    // These are example gains you may need to them for your own robot!
+                    .pid(1.0, 0, 0)
+                    .velocityFF(elevatorFF)
+                    .outputRange(-1, 1);
         }
     }
 }
