@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,11 +56,18 @@ public class RobotContainer {
         m_driverJoystick = new LogitechPro(0);
         m_xboxController = new CommandXboxController(1);
 
+        NamedCommands.registerCommand("ElevatorL1Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL2Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL3Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL4Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+
+        NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
+
         configureBindings();
     }
 
     @SuppressWarnings("unused")
-private void configureBindings() {
+    private void configureBindings() {
         // Triggers
         Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
 

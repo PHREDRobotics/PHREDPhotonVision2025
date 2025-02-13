@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorCommand"
+                  "name": "ElevatorL1Command"
                 }
               }
             ]
