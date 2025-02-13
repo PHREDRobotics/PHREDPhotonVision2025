@@ -35,8 +35,8 @@ public class Robot extends TimedRobot {
   String trajectoryJSON = "pathplanner/paths/offtheline.json";
   Trajectory trajectory = new Trajectory();
   StructArrayPublisher<Pose3d> notePoses = NetworkTableInstance.getDefault()
-    .getStructArrayTopic("MyPoseArray", Pose3d.struct)
-    .publish();
+      .getStructArrayTopic("MyPoseArray", Pose3d.struct)
+      .publish();
 
   public Robot() {
     m_robotContainer = new RobotContainer();
@@ -57,8 +57,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    autoChooser.addOption("Bottom Coral", RobotContainer.AutoSwitcher.BottomCoral);
-    autoChooser.setDefaultOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);;
+    autoChooser.setDefaultOption("Bottom Coral Left", RobotContainer.AutoSwitcher.BottomCoralLeft);
+    autoChooser.addOption("Bottom Coral Center", RobotContainer.AutoSwitcher.BottomCoralCenter);
+    autoChooser.addOption("Bottom Coral Right", RobotContainer.AutoSwitcher.BottomCoralRight);
+    autoChooser.addOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
     SmartDashboard.putData("Auto mode", autoChooser);
   }
 
@@ -68,13 +70,16 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledExit() {}
+  public void disabledExit() {
+  }
 
   @Override
   public void autonomousInit() {
@@ -86,10 +91,12 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+  }
 
   @Override
   public void teleopInit() {
@@ -99,7 +106,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   @SuppressWarnings("unused")
   @Override
@@ -107,13 +115,14 @@ public class Robot extends TimedRobot {
     SimulatedArena.getInstance().simulationPeriodic();
 
     Pose3d[] notesPoses = SimulatedArena.getInstance()
-      .getGamePiecesArrayByType("Algae");
+        .getGamePiecesArrayByType("Algae");
     notePoses.accept(SimulatedArena.getInstance()
-      .getGamePiecesArrayByType("Algae"));
+        .getGamePiecesArrayByType("Algae"));
   }
 
   @Override
-  public void teleopExit() {}
+  public void teleopExit() {
+  }
 
   @Override
   public void testInit() {
@@ -121,8 +130,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   @Override
-  public void testExit() {}
+  public void testExit() {
+  }
 }

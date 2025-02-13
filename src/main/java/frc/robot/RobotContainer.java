@@ -45,7 +45,9 @@ public class RobotContainer {
 
     public enum AutoSwitcher { // enum to switch between different auto modes
         OFF_THE_LINE,
-        BottomCoral
+        BottomCoralLeft,
+        BottomCoralCenter,
+        BottomCoralRight
     }
 
     public RobotContainer() {
@@ -127,8 +129,14 @@ public class RobotContainer {
             case OFF_THE_LINE: {
                 return new PathPlannerAuto("Basic off-the-line auto");
             }
-            case BottomCoral: {
-                return new PathPlannerAuto("BottomCoralAuto");
+            case BottomCoralLeft: {
+                return new PathPlannerAuto("BottomCoralAutoLeft");
+            }
+            case BottomCoralCenter: {
+                return new PathPlannerAuto("BottomCoralAutoCenter");
+            }
+            case BottomCoralRight: {
+                return new PathPlannerAuto("BottomCoralAutoRight");
             }
         }
     }
