@@ -4,8 +4,11 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -90,30 +93,6 @@ public class Constants {
     public static final double kFlightStickZDeadband = 0.15;
 
     public static final double kThrottleMultiplier = 1;
-  }
-
-  public static final class VisionConstants {
-    public static final double kLimelightMountAngleDegrees = 0.0; // 33.0?
-    public static final double kLimelightLensHeightInches = 0.0; // 32.0? - last year
-    public static final double kAmpOrSourceHeightInches = 48.5;
-    public static final double kSpeakerHeightInches = 51.0 + 7.0 / 8.0;
-    public static final double kStageHeightInches = 47.5;
-    public static final double kAreaToCentimeters = 150;
-
-
-    public static final double kPdrive = 0.1;
-    public static final double kIdrive = 0;
-    public static final double kDdrive = 0;
-
-    public static final double kPstrafe = 0.08;
-    public static final double kIstrafe = 0;
-    public static final double kDstrafe = 0;
-
-    public static final double kProtation = 0.04;
-    public static final double kIrotation = 0;
-    public static final double kDrotation = 0;
-
-
   }
 
     public static final class CoralConstants {
@@ -211,5 +190,40 @@ public class Constants {
         static final double kFreeSpeedRpm = 5676;
        }
 
+  public static final class VisionConstants {
+    public static final double kLimelightMountAngleDegrees = 0.0;
+    public static final double kLimelightLensHeightInches = 0.0;
+    public static final double kAreaToCentimeters = 150;
+    public static final double kMetersFromAprilTag = 2;
+    // placeholder comments'
+    public static final double k2pi = Math.PI * 2;
+    public static final Pose2d kAprilTag1 = new Pose2d(657.37*0.0254, 25.80*0.0254, new Rotation2d(126*k2pi/360));
+    public static final Pose2d kAprilTag2 = new Pose2d(657.37*0.0254, 291.20*0.0254, new Rotation2d(234*k2pi/360));
+    public static final Pose2d kAprilTag3 = new Pose2d(455.15*0.0254, 317.15*0.0254, new Rotation2d(270*k2pi/360));
+    public static final Pose2d kAprilTag4 = new Pose2d(365.20*0.0254, 241.64*0.0254, new Rotation2d(0*k2pi/360));
+    public static final Pose2d kAprilTag5 = new Pose2d(365.20*0.0254, 75.39*0.0254, new Rotation2d(0*k2pi/360));
+    public static final Pose2d kAprilTag6 = new Pose2d(530.49*0.0254, 130.17*0.0254, new Rotation2d(300*k2pi/360));
+    public static final Pose2d kAprilTag7 = new Pose2d(546.87*0.0254, 158.50*0.0254, new Rotation2d(0*k2pi/360));
+    public static final Pose2d kAprilTag8 = new Pose2d(530.49*0.0254, 186.83*0.0254, new Rotation2d(60*k2pi/360));
+    public static final Pose2d kAprilTag9 = new Pose2d(497.77*0.0254, 186.83*0.0254, new Rotation2d(120*k2pi/360));
+    public static final Pose2d kAprilTag10 = new Pose2d(481.39*0.0254, 158.50*0.0254, new Rotation2d(180*k2pi/360));
+    public static final Pose2d kAprilTag11 = new Pose2d(497.77*0.0254, 130.17*0.0254, new Rotation2d(240*k2pi/360));
+
+    // THE ONLY ACTUALLY IMPLEMENTED APRILTAG OF CURRENT DATE (2/8/2025, 10:32AM)
+    public static final Pose2d kAprilTag12 = new Pose2d(33.51*0.0254, 25.80*0.0254, new Rotation2d(54*k2pi/360));// apriltag 12, in meters and radians
+  
+    //cheese
+    public static final Pose2d kAprilTag13 = new Pose2d(33.51*0.0254, 291.20*0.0254, new Rotation2d(306*k2pi/360));
+    public static final Pose2d kAprilTag14 = new Pose2d(325.68*0.0254, 241.64*0.0254, new Rotation2d(180*k2pi/360));
+    public static final Pose2d kAprilTag15 = new Pose2d(325.68*0.0254, 75.39*0.0254, new Rotation2d(180*k2pi/360));
+    public static final Pose2d kAprilTag16 = new Pose2d(235.73*0.0254, -0.15*0.0254, new Rotation2d(90*k2pi/360));
+    public static final Pose2d kAprilTag17 = new Pose2d(160.39*0.0254, 130.17*0.0254, new Rotation2d(240*k2pi/360));
+    public static final Pose2d kAprilTag18 = new Pose2d(144.00*0.0254, 158.50*0.0254, new Rotation2d(180*k2pi/360));
+    public static final Pose2d kAprilTag19 = new Pose2d(160.39*0.0254, 186.83*0.0254, new Rotation2d(120*k2pi/360));
+    public static final Pose2d kAprilTag20 = new Pose2d(193.10*0.0254, 186.83*0.0254, new Rotation2d(60*k2pi/360));
+    public static final Pose2d kAprilTag21 = new Pose2d(209.49*0.0254, 158.50*0.0254, new Rotation2d(0*k2pi/360));
+    public static final Pose2d kAprilTag22 = new Pose2d(193.10*0.0254, 130.17*0.0254, new Rotation2d(300*k2pi/360));
     
+  
+  }
 }

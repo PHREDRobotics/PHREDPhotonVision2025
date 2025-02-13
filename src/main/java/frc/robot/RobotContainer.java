@@ -29,6 +29,7 @@ import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class RobotContainer {
@@ -37,6 +38,7 @@ public class RobotContainer {
     ClimbSubsystem m_climbSubsystem;
     CoralSubsystem m_coralSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
+    VisionSubsystem m_visionSubsystem;
 
     LogitechPro m_driverJoystick;
     CommandXboxController m_xboxController;
@@ -52,6 +54,7 @@ public class RobotContainer {
         m_coralSubsystem = new CoralSubsystem();
         m_climbSubsystem = new ClimbSubsystem();
         m_elevatorSubsystem = new ElevatorSubsystem();
+        m_visionSubsystem = new VisionSubsystem();
 
         m_driverJoystick = new LogitechPro(0);
         m_xboxController = new CommandXboxController(1);
@@ -66,7 +69,6 @@ public class RobotContainer {
         configureBindings();
     }
 
-    @SuppressWarnings("unused")
     private void configureBindings() {
         // Triggers
         Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
