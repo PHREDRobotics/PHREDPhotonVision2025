@@ -80,7 +80,7 @@ public class RobotContainer {
         Trigger leftBumper = m_xboxController.leftBumper();
         Trigger rightBumper = m_xboxController.rightBumper();
         Trigger leftStickButton = m_xboxController.leftStick();
-        Trigger rightStickButton = m_xboxController.rightStick();
+        //Trigger rightStickButton = m_xboxController.rightStick();
         // Trigger Button3 = m_driverJoystick.buttons[3];
         // Trigger Button2 = m_driverJoystick.buttons[2];
         // Axes
@@ -91,10 +91,10 @@ public class RobotContainer {
 
         // D-Pad Buttons
         // ...
-        Trigger dPadDown = m_xboxController.povDown();
-        Trigger dPadUp = m_xboxController.povUp();
-        Trigger dPadLeft = m_xboxController.povLeft();
-        Trigger dPadRight = m_xboxController.povRight();
+        // Trigger dPadDown = m_xboxController.povDown();
+        // Trigger dPadUp = m_xboxController.povUp();
+        // Trigger dPadLeft = m_xboxController.povLeft();
+        // Trigger dPadRight = m_xboxController.povRight();
 
         // Assign Commands
 
@@ -106,7 +106,7 @@ public class RobotContainer {
         backButton.onTrue(new RetractLift(m_climbSubsystem));
         leftBumper.whileTrue(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
         leftStickButton.onTrue(new ResetElevator(m_elevatorSubsystem));
-        rightStickButton.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+        rightBumper.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
