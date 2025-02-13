@@ -8,7 +8,6 @@ import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -69,7 +68,7 @@ public class RobotContainer {
         Trigger startButton = m_xboxController.start();
         Trigger backButton = m_xboxController.back();
         Trigger leftBumper = m_xboxController.leftBumper();
-        Trigger rightBumper = m_xboxController.rightBumper();
+        // Trigger rightBumper = m_xboxController.rightBumper();
         Trigger leftStickButton = m_xboxController.leftStick();
         Trigger rightStickButton = m_xboxController.rightStick();
         // Trigger Button3 = m_driverJoystick.buttons[3];
@@ -82,10 +81,10 @@ public class RobotContainer {
 
         // D-Pad Buttons
         // ...
-        Trigger dPadDown = m_xboxController.povDown();
-        Trigger dPadUp = m_xboxController.povUp();
-        Trigger dPadLeft = m_xboxController.povLeft();
-        Trigger dPadRight = m_xboxController.povRight();
+        // Trigger dPadDown = m_xboxController.povDown();
+        // Trigger dPadUp = m_xboxController.povUp();
+        // Trigger dPadLeft = m_xboxController.povLeft();
+        // Trigger dPadRight = m_xboxController.povRight();
 
         // Assign Commands
 
