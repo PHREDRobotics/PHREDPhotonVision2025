@@ -70,9 +70,9 @@ private void configureBindings() {
         Trigger startButton = m_xboxController.start();
         Trigger backButton = m_xboxController.back();
         Trigger leftBumper = m_xboxController.leftBumper();
-        // Trigger rightBumper = m_xboxController.rightBumper();
+        Trigger rightBumper = m_xboxController.rightBumper();
         Trigger leftStickButton = m_xboxController.leftStick();
-        Trigger rightStickButton = m_xboxController.rightStick();
+        //Trigger rightStickButton = m_xboxController.rightStick();
         // Trigger Button3 = m_driverJoystick.buttons[3];
         // Trigger Button2 = m_driverJoystick.buttons[2];
         // Axes
@@ -98,7 +98,7 @@ private void configureBindings() {
         backButton.onTrue(new RetractLift(m_climbSubsystem));
         leftBumper.whileTrue(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
         leftStickButton.onTrue(new ResetElevator(m_elevatorSubsystem));
-        rightStickButton.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+        rightBumper.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
