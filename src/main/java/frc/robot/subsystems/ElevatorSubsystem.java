@@ -9,19 +9,10 @@ import java.util.function.DoubleSupplier;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.ClosedLoopConfigAccessor;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,21 +24,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private SparkClosedLoopController m_pidController;
     // private SparkLimitSwitch bottomForwardLimit;
     private DigitalInput bottomForwardLimit = new DigitalInput(1);
-    // private SparkLimitSwitch topForwardLimit;
-    private double kS;
-    private double kG;
-    private double kV;
-    private double kA;
-    private double kDt;
-    private MotorType m_motor_type;
-    private DigitalInput m_limit_switch;
-    private double max_velocity;
-    private double max_acceleration;
+
     private double voltage;
-    private SparkBase sparkClosedLoopController;
-    private TrapezoidProfile profile;
-    private TrapezoidProfile.State goal;
-    private TrapezoidProfile.State setpoint;
 
     public ElevatorSubsystem() {
         elevator = new SparkMax(Constants.ElevatorConstants.kElevatorSparkMaxCanID, MotorType.kBrushless);
@@ -61,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         //topForwardLimit = elevator.getReverseLimitSwitch();
        // bottomForwardLimit = elevator.();
 
+       moveToPosition(Constants.ElevatorConstants.kCoralLevel2);
     }
 
     public boolean isLimitSwitchPressed() {
@@ -70,11 +49,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         //     return false;
         // }
         if(bottomForwardLimit.get()){
+            resetEncoders();
+
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
 
