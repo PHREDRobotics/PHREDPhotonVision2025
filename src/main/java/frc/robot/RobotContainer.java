@@ -23,6 +23,7 @@ import frc.robot.commands.ResetElevator;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
 import frc.robot.commands.RetractLift;
+import frc.robot.commands.SwerveReset;
 import frc.robot.controls.LogitechPro;
 
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -61,10 +62,14 @@ public class RobotContainer {
         m_driverJoystick = new LogitechPro(0);
         m_xboxController = new CommandXboxController(1);
 
-        NamedCommands.registerCommand("ElevatorL1Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
-        NamedCommands.registerCommand("ElevatorL2Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
-        NamedCommands.registerCommand("ElevatorL3Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
-        NamedCommands.registerCommand("ElevatorL4Command", new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL1Command",
+                new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL2Command",
+                new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL3Command",
+                new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
+        NamedCommands.registerCommand("ElevatorL4Command",
+                new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
         NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
 
@@ -74,6 +79,7 @@ public class RobotContainer {
     private void configureBindings() {
         // Triggers
         Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
+        Trigger resetTrigger = new Trigger(() -> m_driverJoystick.getRawButton(1));
 
         Trigger bButton = m_xboxController.b();
         Trigger aButton = m_xboxController.a();
@@ -83,10 +89,7 @@ public class RobotContainer {
         Trigger backButton = m_xboxController.back();
         Trigger leftBumper = m_xboxController.leftBumper();
         Trigger rightBumper = m_xboxController.rightBumper();
-        Trigger leftStickButton = m_xboxController.leftStick();
-        //Trigger rightStickButton = m_xboxController.rightStick();
-        // Trigger Button3 = m_driverJoystick.buttons[3];
-        // Trigger Button2 = m_driverJoystick.buttons[2];
+
         // Axes
         DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
         DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
@@ -94,24 +97,29 @@ public class RobotContainer {
         DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
 
         // D-Pad Buttons
-        // ...
-        // Trigger dPadDown = m_xboxController.povDown();
-        // Trigger dPadUp = m_xboxController.povUp();
-        // Trigger dPadLeft = m_xboxController.povLeft();
-        // Trigger dPadRight = m_xboxController.povRight();
+        Trigger dPadDown = m_xboxController.povDown();
+        Trigger dPadUp = m_xboxController.povUp();
+        Trigger dPadLeft = m_xboxController.povLeft();
+        Trigger dPadRight = m_xboxController.povRight();
 
         // Assign Commands
 
+        // Xbox
         bButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
         aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
         xButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
         yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
         startButton.onTrue(new ExtendLift(m_climbSubsystem));
         backButton.onTrue(new RetractLift(m_climbSubsystem));
-        leftBumper.whileTrue(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
-        leftStickButton.onTrue(new ResetElevator(m_elevatorSubsystem));
-        rightBumper.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+        leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));
+        dPadDown.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
+        dPadRight.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
+        dPadLeft.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
+        dPadUp.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+        rightBumper.onTrue(
+                new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
 
+        // Joystick
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(
                 m_swerveSubsystem,
                 driveAxis,
@@ -120,8 +128,8 @@ public class RobotContainer {
                 throttleAxis,
                 () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
 
-        m_elevatorSubsystem.setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
-    } 
+        resetTrigger.onTrue(new SwerveReset(m_swerveSubsystem));
+    }
 
     public Command getAutonomousCommand(AutoSwitcher autoMode) {
         switch (autoMode) {

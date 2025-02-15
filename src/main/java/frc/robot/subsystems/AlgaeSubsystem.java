@@ -27,6 +27,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         timer.reset();
         leftAlgaeSparkMax.set(speedConvert(-algaeSpeed));
         rightAlgaeSparkMax.set(speedConvert(algaeSpeed));
+        timer.start();
     }
 
     public double speedConvert(double inSpeed) {
@@ -54,6 +55,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         // Slider variables
         algaeSpeed = SmartDashboard.getNumber("Algae Speed", algaeSpeed);
         SmartDashboard.putNumber("Algae Speed", algaeSpeed);
+        SmartDashboard.putBoolean("Algae Limit Switch Pressed: ", forwardLimit.isPressed());
 
         // This will be called once per scheduler run
     }

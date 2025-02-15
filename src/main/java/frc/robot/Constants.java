@@ -164,9 +164,9 @@ public class Constants {
         public static final double kCoralLevel2 = 3.23;
         public static final double kCoralLevel3 = 13.4;
         public static final double kCoralLevel4 = 28;
-        public static final double kHumanPlayerStationLevel = 0;
+        public static final double kHumanPlayerStationLevel = 3.23;
     
-        public static final double kElevatorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 100;
+        public static final double kElevatorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 1000;
     
         // Physical constants
         public static final double kEncoderTicksPerRotation = 42;
