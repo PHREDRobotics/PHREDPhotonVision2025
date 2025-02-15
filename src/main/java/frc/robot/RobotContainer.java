@@ -112,8 +112,8 @@ public class RobotContainer {
         backButton.onTrue(new RetractLift(m_climbSubsystem));
         leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));
         dPadDown.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
-        dPadRight.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
-        dPadLeft.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
+        dPadLeft.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
+        dPadRight.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
         dPadUp.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
         rightBumper.onTrue(
                 new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
