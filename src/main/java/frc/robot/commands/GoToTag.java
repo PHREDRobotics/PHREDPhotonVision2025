@@ -68,6 +68,11 @@ public class GoToTag extends Command {
 
   }
 
+
+  /*
+   * The fact that this is the execute code seems a little overkill
+   * Seems like there could be a better way to do this.
+   */
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
