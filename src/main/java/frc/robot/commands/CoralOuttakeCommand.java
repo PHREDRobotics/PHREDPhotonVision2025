@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /** An Intake command that uses an Intake subsystem. */
 public class CoralOuttakeCommand extends Command {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+  @SuppressWarnings("unused")
   private final CoralSubsystem coralSubsystem;
 
   /**

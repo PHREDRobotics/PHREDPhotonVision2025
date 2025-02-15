@@ -110,7 +110,7 @@ public class Constants {
         public static final int kXBtn = Button.kX.value;
         public static final double kAlgaeSpeed = 0.75;
         public static final double kAlgaeTime = 2;
-      }
+      } 
 
       public static final class PneumaticsConstants {
         public static final int kPneumaticsCANID = 40;
