@@ -18,14 +18,11 @@ public class VisionSubsystem extends SubsystemBase {
   double tx = m_table.getEntry("tx").getDouble(0);
   double ty = m_table.getEntry("ty").getDouble(0);
   double ta = m_table.getEntry("ta").getDouble(0);
-  public double tid = m_table.getEntry("tid").getDouble(0);
+  double tid = m_table.getEntry("tid").getDouble(0);
 
   double kP = 0.9;
   double kI = 0.01;
   double kD = 0.01;
-
-  public VisionSubsystem() {
-  }
 
   /**
    * Example command factory method.
@@ -62,23 +59,24 @@ public class VisionSubsystem extends SubsystemBase {
   // }
 
   // public double getTargetDistance() {
-  //   double angleToGoalDegrees = VisionConstants.kLimelightMountAngleDegrees + ty;
-  //   double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-  //   double d = (VisionConstants.kAmpOrSourceHeightInches - VisionConstants.kLimelightLensHeightInches)
-  //       / Math.tan(angleToGoalRadians);
-  //   return d;
-  //   // 14.75 against amp
-  //   // 27.1 = 18.75
-  //   // 36=32
-  //   // 47.8~=49.75
+  // double angleToGoalDegrees = VisionConstants.kLimelightMountAngleDegrees + ty;
+  // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+  // double d = (VisionConstants.kAmpOrSourceHeightInches -
+  // VisionConstants.kLimelightLensHeightInches)
+  // / Math.tan(angleToGoalRadians);
+  // return d;
+  // // 14.75 against amp
+  // // 27.1 = 18.75
+  // // 36=32
+  // // 47.8~=49.75
   // }
 
   // public double getRoughTargetDistance() {
-  //   double angleToGoalDegrees = VisionConstants.kLimelightMountAngleDegrees + ty;
-  //   double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-  //   double hyp = VisionConstants.kAreaToCentimeters / ta;
-  //   double d = hyp * Math.cos(angleToGoalRadians);
-  //   return d;
+  // double angleToGoalDegrees = VisionConstants.kLimelightMountAngleDegrees + ty;
+  // double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+  // double hyp = VisionConstants.kAreaToCentimeters / ta;
+  // double d = hyp * Math.cos(angleToGoalRadians);
+  // return d;
   // }
 
   public double getTargetArea() {
@@ -89,9 +87,7 @@ public class VisionSubsystem extends SubsystemBase {
     return tx;
   }
 
-  public void goToDistance(double distance) {
-
-  }
+  public void goToDistance(double distance) {}
 
   public double getTargetID() {
     return m_table.getEntry("tid").getDouble(0);
@@ -134,7 +130,8 @@ public class VisionSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Limelight y value.", ty);
     SmartDashboard.putNumber("Limelight x value.", tx);
     // SmartDashboard.putNumber("Estimated Distance", getTargetDistance());
-    // SmartDashboard.putNumber("Estimated Rough Distance", getRoughTargetDistance());
+    // SmartDashboard.putNumber("Estimated Rough Distance",
+    // getRoughTargetDistance());
     // SmartDashboard.putNumber("Limelight v value.", tv);
     SmartDashboard.putBoolean("Is the target in range?", m_LimelightHasValidTarget);
     SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);
