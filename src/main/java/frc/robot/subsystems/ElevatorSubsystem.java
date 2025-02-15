@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-@SuppressWarnings("unused")
 public class ElevatorSubsystem extends SubsystemBase {
 
     private SparkMax elevator;
