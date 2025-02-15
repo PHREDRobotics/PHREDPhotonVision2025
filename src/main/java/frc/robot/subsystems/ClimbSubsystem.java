@@ -25,7 +25,7 @@ public class ClimbSubsystem extends SubsystemBase {
      * @return value of some boolean subsystem state, such as a digital sensor.
      */
 
-    pH = new PneumaticHub(PneumaticsConstants.kPneumaticsCANID);
+    pH = new PneumaticHub(PneumaticsConstants.kPneumaticsCANId);
 
     pH.enableCompressorDigital();
 

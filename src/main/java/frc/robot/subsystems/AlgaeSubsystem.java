@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AlgaeSubsystem extends SubsystemBase {
     private static final Timer timer = new Timer();
-    public SparkMax leftAlgaeSparkMax = new SparkMax(AlgaeConstants.kLeftAlgaeControllerPort, MotorType.kBrushless);
-    public SparkMax rightAlgaeSparkMax = new SparkMax(AlgaeConstants.kRightAlgaeControllerPort, MotorType.kBrushless);
+    public SparkMax leftAlgaeSparkMax = new SparkMax(AlgaeConstants.kLeftAlgaeCANId, MotorType.kBrushless);
+    public SparkMax rightAlgaeSparkMax = new SparkMax(AlgaeConstants.kRightAlgaeCANId, MotorType.kBrushless);
     public SparkLimitSwitch forwardLimit = leftAlgaeSparkMax.getForwardLimitSwitch();
 
     public double algaeSpeed = AlgaeConstants.kAlgaeSpeed;

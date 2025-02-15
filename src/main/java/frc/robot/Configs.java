@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -169,9 +170,6 @@ public final class Configs {
         public static final SparkMaxConfig motorConfig = new SparkMaxConfig();
 
         static {
-            // Use module constants to calculate conversion factors and feed forward gain.
-            double elevatorFF = 1 / Constants.ElevatorConstants.kElevatorFreeSpeedRps;
-
             motorConfig
                     .idleMode(IdleMode.kBrake)
                     .smartCurrentLimit(50)
@@ -180,8 +178,8 @@ public final class Configs {
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
                     .pid(1.0, 0, 0)
-                    .velocityFF(elevatorFF)
-                    .outputRange(-1, 1);
+                    .outputRange(-1, 1)
+                    .apply(new MAXMotionConfig().maxVelocity(Constants.ElevatorConstants.kMaxMotorSpeed));
         }
     }
 }

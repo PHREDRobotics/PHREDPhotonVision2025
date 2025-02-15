@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private double voltage;
 
     public ElevatorSubsystem() {
-        elevator = new SparkMax(Constants.ElevatorConstants.kElevatorSparkMaxCanID, MotorType.kBrushless);
+        elevator = new SparkMax(Constants.ElevatorConstants.kElevatorCANId, MotorType.kBrushless);
 
         encoder = elevator.getEncoder();
 
@@ -111,7 +111,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Encoder Ticks", getEncoder());
         SmartDashboard.putNumber("Centimeters", getEncoder() * Constants.ElevatorConstants.kEncoderTicksToCentimeters);
        // SmartDashboard.putBoolean("Is top Limit switch triggered", topForwardLimit.isPressed());
-        // SmartDashboard.putBoolean("Is bottom Limit switch triggered", bottomForwardLimit.isPressed());
+ 
+       // SmartDashboard.putBoolean("Is bottom Limit switch triggered", bottomForwardLimit.isPressed());
         SmartDashboard.putBoolean("Is bottom Limit switch triggered", isLimitSwitchPressed());
+
+        SmartDashboard.putNumber("Elevator Motor RPM", encoder.getVelocity());
     }
 }

@@ -11,7 +11,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class CoralSubsystem extends SubsystemBase {
   private static final Timer timer = new Timer();
-  public SparkMax coralMotorSparkMax = new SparkMax(CoralConstants.kCoralSparkMaxCanID, MotorType.kBrushless);
+  public SparkMax coralMotorSparkMax = new SparkMax(CoralConstants.kCoralCANId, MotorType.kBrushless);
   public SparkLimitSwitch forwardLimit = coralMotorSparkMax.getForwardLimitSwitch();
   
   

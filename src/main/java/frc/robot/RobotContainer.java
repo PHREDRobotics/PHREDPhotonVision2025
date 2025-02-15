@@ -18,6 +18,7 @@ import frc.robot.commands.AlgaeOuttakeCommand;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.ElevatorManualLift;
 import frc.robot.commands.ResetElevator;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
@@ -35,7 +36,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class RobotContainer {
     SwerveSubsystem m_swerveSubsystem;
     AlgaeSubsystem m_algaeSubsystem;
-    ClimbSubsystem m_climbSubsystem;
+    //ClimbSubsystem m_climbSubsystem;
     CoralSubsystem m_coralSubsystem;
     ElevatorSubsystem m_elevatorSubsystem;
     VisionSubsystem m_visionSubsystem;
@@ -54,7 +55,7 @@ public class RobotContainer {
         m_swerveSubsystem = new SwerveSubsystem();
         m_algaeSubsystem = new AlgaeSubsystem();
         m_coralSubsystem = new CoralSubsystem();
-        m_climbSubsystem = new ClimbSubsystem();
+        //m_climbSubsystem = new ClimbSubsystem();
         m_elevatorSubsystem = new ElevatorSubsystem();
         m_visionSubsystem = new VisionSubsystem();
 
@@ -108,8 +109,8 @@ public class RobotContainer {
         aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
         xButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
         yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
-        startButton.onTrue(new ExtendLift(m_climbSubsystem));
-        backButton.onTrue(new RetractLift(m_climbSubsystem));
+        //startButton.onTrue(new ExtendLift(m_climbSubsystem));
+        //backButton.onTrue(new RetractLift(m_climbSubsystem));
         leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));
         dPadDown.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
         dPadLeft.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
@@ -117,6 +118,8 @@ public class RobotContainer {
         dPadUp.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
         rightBumper.onTrue(
                 new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
+        
+        m_elevatorSubsystem.setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
 
         // Joystick
         m_swerveSubsystem.setDefaultCommand(new DriveCommand(

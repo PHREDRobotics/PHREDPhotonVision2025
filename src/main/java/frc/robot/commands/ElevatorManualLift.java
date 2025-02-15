@@ -3,7 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ElevatorManualLift extends Command {
@@ -33,7 +33,7 @@ public class ElevatorManualLift extends Command {
         //Cube it
         speed = speed * Math.abs(speed) * Math.abs(speed);
 
-        if (Math.abs(speed) < OIConstants.kDeadband) {
+        if (Math.abs(speed) < Constants.ControllerConstants.kXboxDeadband) {
             speed = 0;
         }
 
