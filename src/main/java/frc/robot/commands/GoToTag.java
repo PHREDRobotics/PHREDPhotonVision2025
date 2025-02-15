@@ -6,11 +6,6 @@ import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -56,14 +51,13 @@ public class GoToTag extends Command {
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
     targetTag = target_tag;
-    //vision_subsystem.getTargetID();
 
     if (targetTag == -1) {
       isFinished = true;
     }
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(vision_subsystem);
+    addRequirements(m_vision_subsystem);
     addRequirements(swerve_subsystem);
   }
 

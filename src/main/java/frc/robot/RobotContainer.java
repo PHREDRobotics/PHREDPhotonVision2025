@@ -18,7 +18,6 @@ import frc.robot.commands.AlgaeOuttakeCommand;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorManualLift;
 import frc.robot.commands.ResetElevator;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
