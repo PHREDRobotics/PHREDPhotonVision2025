@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class CoralIntakeCommand extends Command {
   /** An Intake command that uses an Intake subsystem. */
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
+  // PMD.UnusedPrivateField and PMD.SingularField also work but we can just use "unused"
+  @SuppressWarnings("unused")
   private final CoralSubsystem coralSubsystem;
 
   public CoralIntakeCommand(CoralSubsystem subsystem) {
