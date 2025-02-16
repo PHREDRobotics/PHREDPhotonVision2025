@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
 import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -20,8 +23,7 @@ public class CoralSubsystem extends SubsystemBase {
   public double outtakeSpeed = CoralConstants.kCoralOuttakeSpeed;
 
   public CoralSubsystem() {
-    super();
-    SmartDashboard.putString("Outtake Speed: ", String.valueOf(outtakeSpeed));
+    coralMotorSparkMax.configure(Configs.CoralMotor.motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public void startOuttake() {
@@ -37,7 +39,6 @@ public class CoralSubsystem extends SubsystemBase {
       return inSpeed;
     //}
   }
-  
   public void stop() {
     coralMotorSparkMax.set(0);
   }

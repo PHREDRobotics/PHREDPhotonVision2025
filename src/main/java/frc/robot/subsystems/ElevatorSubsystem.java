@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -22,10 +23,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     private SparkMax elevator;
     private RelativeEncoder encoder;
     private SparkClosedLoopController m_pidController;
-    // private SparkLimitSwitch bottomForwardLimit;
-    private DigitalInput bottomForwardLimit = new DigitalInput(1);
+    private SparkLimitSwitch bottomForwardLimit;
+    //private DigitalInput bottomForwardLimit = new DigitalInput(1);
 
     private double voltage;
+  // 😏
 
     public ElevatorSubsystem() {
         elevator = new SparkMax(Constants.ElevatorConstants.kElevatorCANId, MotorType.kBrushless);
@@ -37,7 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevator.configure(Configs.ElevatorMotor.motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //topForwardLimit = elevator.getReverseLimitSwitch();
-       // bottomForwardLimit = elevator.();
+       bottomForwardLimit = elevator.getReverseLimitSwitch();
 
        moveToPosition(Constants.ElevatorConstants.kCoralLevel2);
     }
@@ -48,8 +50,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         // }else{
         //     return false;
         // }
-        if(bottomForwardLimit.get()){
-            resetEncoders();
+        if(bottomForwardLimit.isPressed()){
+           // resetEncoders();
 
             return true;
         }
@@ -63,7 +65,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getEncoder() {
-        return -encoder.getPosition();
+        return encoder.getPosition();
     }
 
     /**
@@ -89,7 +91,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void moveToPosition(double positionTicks) {
 
-        m_pidController.setReference(positionTicks, SparkBase.ControlType.kPosition);
+        m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl);
 
         SmartDashboard.putNumber("Position ticks moveToPosition()", positionTicks);
     }
@@ -108,7 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // return m_limit_switch.get();
     // }
     public void periodic() {
-        SmartDashboard.putNumber("Encoder Ticks", getEncoder());
+        SmartDashboard.putNumber("Elevator Encoder Ticks", getEncoder());
         SmartDashboard.putNumber("Centimeters", getEncoder() * Constants.ElevatorConstants.kEncoderTicksToCentimeters);
        // SmartDashboard.putBoolean("Is top Limit switch triggered", topForwardLimit.isPressed());
  

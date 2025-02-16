@@ -107,7 +107,7 @@ public class RobotContainer {
         // Xbox
         bButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
         aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
-        xButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
+        xButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
         yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
         //startButton.onTrue(new ExtendLift(m_climbSubsystem));
         //backButton.onTrue(new RetractLift(m_climbSubsystem));

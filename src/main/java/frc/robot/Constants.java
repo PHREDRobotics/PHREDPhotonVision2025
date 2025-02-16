@@ -84,17 +84,17 @@ public class Constants {
     }
 
     public static final class CoralConstants {
-        public static final int kCoralCANId = 6;
+        public static final int kCoralCANId = 46;
 
-        public static final double kCoralIntakeSpeed = -0.5;
+        public static final double kCoralIntakeSpeed = 0.5;
         public static final double kCoralIntakeTime = 1.0;
-        public static final double kCoralOuttakeSpeed = 0.5;
+        public static final double kCoralOuttakeSpeed = -0.02;
         public static final double kCoralOuttakeTime = 1.0;
     }
 
     public static final class AlgaeConstants {
-        public static final int kLeftAlgaeCANId = 8;
-        public static final int kRightAlgaeCANId = 9;
+        public static final int kLeftAlgaeCANId = 42;
+        public static final int kRightAlgaeCANId = 41;
 
         public static final double kAlgaeSpeed = 0.75;
         public static final double kAlgaeTime = 2;
@@ -112,13 +112,15 @@ public class Constants {
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 
+        public static final double kVelocityFF = 20;
+
         public static final int kElevatorCANId = 32;
 
         public static final double kCoralLevel1 = 0;
         public static final double kCoralLevel2 = 3.23;
         public static final double kCoralLevel3 = 13.4;
         public static final double kCoralLevel4 = 28;
-        public static final double kHumanPlayerStationLevel = 3.23;
+        public static final double kHumanPlayerStationLevel = 7.45;
 
         // Physical constants
         public static final double kEncoderTicksPerRotation = 42;
@@ -136,7 +138,8 @@ public class Constants {
         // Need to double check this value
         public static final double kVoltageMultiplier = 1.5;
 
-        public static final double kMaxMotorSpeed = 30;
+        public static final double kMaxMotorSpeed = 1500;
+        public static final double kMaxAcceleration = 1000;
     }
 
     public final static class NeoMotorConstants {
