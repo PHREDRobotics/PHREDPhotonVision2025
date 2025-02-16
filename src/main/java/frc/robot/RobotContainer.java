@@ -105,10 +105,10 @@ public class RobotContainer {
         // Assign Commands
 
         // Xbox
-        bButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
-        aButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
-        xButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
-        yButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
+        xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
+        yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
+        aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
+        bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
         //startButton.onTrue(new ExtendLift(m_climbSubsystem));
         //backButton.onTrue(new RetractLift(m_climbSubsystem));
         leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));
