@@ -7,6 +7,7 @@ import frc.robot.Configs;
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLimitSwitch;
@@ -91,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void moveToPosition(double positionTicks) {
 
-        m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl);
+        m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, Constants.ElevatorConstants.kArbFF);
 
         SmartDashboard.putNumber("Position ticks moveToPosition()", positionTicks);
     }

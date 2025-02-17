@@ -112,7 +112,8 @@ public class Constants {
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 
-        public static final double kVelocityFF = 0.045;
+        public static final double kVelocityFF = 0.0;
+        public static final double kArbFF = 1.0;
 
         public static final double kClosedLoopError = 0.15;
 
