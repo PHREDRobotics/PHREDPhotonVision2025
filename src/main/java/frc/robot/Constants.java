@@ -112,9 +112,9 @@ public class Constants {
         public static final double kI = 0.0;
         public static final double kD = 0.0;
 
-        public static final double kVelocityFF = 0.0;
+        public static final double kVelocityFF = 0.045;
 
-        public static final double kClosedLoopError = 0;
+        public static final double kClosedLoopError = 0.15;
 
         public static final int kElevatorCANId = 32;
 
