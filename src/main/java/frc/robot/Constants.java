@@ -88,7 +88,7 @@ public class Constants {
 
         public static final double kCoralIntakeSpeed = 0.5;
         public static final double kCoralIntakeTime = 1.0;
-        public static final double kCoralOuttakeSpeed = -0.02;
+        public static final double kCoralOuttakeSpeed = -0.08; // SLOW = -0.065 L1, L2, L3     FAST = 
         public static final double kCoralOuttakeTime = 1.0;
     }
 
@@ -121,9 +121,9 @@ public class Constants {
 
         public static final double kCoralLevel1 = 0;
         public static final double kCoralLevel2 = 3.23;
-        public static final double kCoralLevel3 = 13.4;
-        public static final double kCoralLevel4 = 28;
-        public static final double kHumanPlayerStationLevel = 7.45;
+        public static final double kCoralLevel3 = 11.07;
+        public static final double kCoralLevel4 = 30.7;
+        public static final double kHumanPlayerStationLevel = 0;
 
         // Physical constants
         public static final double kEncoderTicksPerRotation = 42;
