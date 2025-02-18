@@ -11,6 +11,8 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnField;
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralAlgaeStack;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -31,6 +33,8 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   private final SendableChooser<RobotContainer.AutoSwitcher> autoChooser = new SendableChooser<>();
+
+  Thread m_visionThread;
 
   String trajectoryJSON = "pathplanner/paths/offtheline.json";
   Trajectory trajectory = new Trajectory();
@@ -53,6 +57,9 @@ public class Robot extends TimedRobot {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory", ex.getStackTrace());
     }
+
+    CameraServer.startAutomaticCapture();
+
   }
 
   @Override
@@ -62,6 +69,8 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Bottom Coral Right", RobotContainer.AutoSwitcher.BottomCoralRight);
     autoChooser.addOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
     SmartDashboard.putData("Auto mode", autoChooser);
+
+
   }
 
   @Override
