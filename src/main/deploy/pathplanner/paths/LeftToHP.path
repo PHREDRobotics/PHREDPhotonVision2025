@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.65625,
-        "y": 6.3942499999999995
+        "x": 3.603346661414169,
+        "y": 5.827854645987252
       },
       "isLocked": false,
       "linkedName": "LeftCoral"
@@ -20,8 +20,8 @@
         "y": 6.95
       },
       "prevControl": {
-        "x": 2.6812492429114148,
-        "y": 6.784243453541478
+        "x": 2.1295267727758587,
+        "y": 6.546550066109114
       },
       "nextControl": null,
       "isLocked": false,

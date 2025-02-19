@@ -35,6 +35,6 @@ public class CoralIntakeCommand extends Command {
   @Override
   public boolean isFinished() {
     // return coralSubsystem.isCoralLoaded();
-    return false;
+    return false; //Only for whileTrue for RobotContainer
   }
 }

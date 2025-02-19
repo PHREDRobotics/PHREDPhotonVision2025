@@ -18,7 +18,7 @@ public class AlgaeSubsystem extends SubsystemBase {
     public double algaeSpeed = AlgaeConstants.kAlgaeSpeed;
 
     public void Intake() {
-        timer.reset();
+        //timer.reset();
         leftAlgaeSparkMax.set(speedConvert(algaeSpeed)); // In last years code this was similar to pickUpNote() in IntakeSubsystem.
         rightAlgaeSparkMax.set(speedConvert(-algaeSpeed));
     }
