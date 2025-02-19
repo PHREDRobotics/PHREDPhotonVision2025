@@ -96,7 +96,7 @@ public class Constants {
         public static final int kLeftAlgaeCANId = 42;
         public static final int kRightAlgaeCANId = 41;
 
-        public static final double kAlgaeSpeed = 0.75;
+        public static final double kAlgaeSpeed = 0.5;
         public static final double kAlgaeTime = 2;
     }
 

@@ -105,7 +105,7 @@ public class RobotContainer {
         // Assign Commands
 
         // Xbox
-        xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
+        xButton.whileTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
         yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
         aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
         bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));

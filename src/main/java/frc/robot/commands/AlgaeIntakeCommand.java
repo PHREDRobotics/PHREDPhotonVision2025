@@ -34,7 +34,9 @@ public class AlgaeIntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return cmdSubsystem.isAlgaeLoaded();
+        // return cmdSubsystem.isAlgaeLoaded();
+
+        return false; // Only for whileTrue for RobotContainer
          /**
           * isFinished() will return isAlgaeLoaded() which checks if the limit switch (or beam break) for the algae is pressed.
           */
