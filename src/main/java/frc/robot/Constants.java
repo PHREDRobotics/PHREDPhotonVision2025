@@ -75,7 +75,7 @@ public class Constants {
 
     public static final class ControllerConstants {
         public static final double kFlightStickXDeadband = 0.25;
-        public static final double kFlightStickYDeadband = 0.1;
+        public static final double kFlightStickYDeadband = 0.15;
         public static final double kFlightStickZDeadband = 0.15;
 
         public static final double kXboxDeadband = 0.15;

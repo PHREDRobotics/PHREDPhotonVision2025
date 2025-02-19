@@ -36,19 +36,25 @@ public class DriveCommand extends Command {
 
     @Override
     public void execute() {
-        double adjustedThrottle = Math.pow(throttle.getAsDouble(), 2) * Constants.ControllerConstants.kThrottleMultiplier;
+        double adjustedThrottle = throttle.getAsDouble() * Constants.ControllerConstants.kThrottleMultiplier;
 
         // Deadzone
-        double ySpeedAdjusted = MathUtil.applyDeadband(ySpeed.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickYDeadband);
-        double xSpeedAdjusted = MathUtil.applyDeadband(xSpeed.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickXDeadband);
-        double rotAdjusted = MathUtil.applyDeadband(rot.getAsDouble() * adjustedThrottle, Constants.ControllerConstants.kFlightStickZDeadband);
+        double ySpeedAdjusted = MathUtil.applyDeadband(
+                (ySpeed.getAsDouble() * Math.abs(ySpeed.getAsDouble())) * adjustedThrottle,
+                Constants.ControllerConstants.kFlightStickYDeadband);
+        double xSpeedAdjusted = MathUtil.applyDeadband(
+                (xSpeed.getAsDouble() * Math.abs(xSpeed.getAsDouble())) * adjustedThrottle,
+                Constants.ControllerConstants.kFlightStickXDeadband);
+        double rotAdjusted = MathUtil.applyDeadband(
+                (rot.getAsDouble() * Math.abs(rot.getAsDouble())) * adjustedThrottle,
+                Constants.ControllerConstants.kFlightStickZDeadband);
 
         swerveDrive.drive(
-            () -> ySpeedAdjusted,
-            () -> -xSpeedAdjusted,
-            () -> -rotAdjusted,
-            fieldOriented);
-        
+                () -> ySpeedAdjusted,
+                () -> -xSpeedAdjusted,
+                () -> -rotAdjusted,
+                fieldOriented);
+
         SmartDashboard.putNumber("Joystick/Y", ySpeedAdjusted);
         SmartDashboard.putNumber("Joystick/X", xSpeedAdjusted);
         SmartDashboard.putNumber("Joystick/Z", rotAdjusted);
