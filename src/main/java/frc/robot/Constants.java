@@ -18,8 +18,11 @@ public class Constants {
         public static final double kBumperLength = 32;
         public static final double kTrackLength = 24;
 
-        public static final double kMaxSpeed = 2 * Math.floor(Math.PI); // 6
+        public static final double kMaxSpeed = 6;
         public static final double kMaxAngularSpeed = 6;
+
+        public static final double kMaxAcceleration = 3;
+        public static final double kMaxAngularAcceleration = 3;
     }
 
     public static final class SwerveConstants {
@@ -81,6 +84,9 @@ public class Constants {
         public static final double kXboxDeadband = 0.15;
 
         public static final double kThrottleMultiplier = 1;
+
+        public static final double kMaxThrottle = 5;
+        public static final double kMinThrottle = 2.5;
     }
 
     public static final class CoralConstants {
