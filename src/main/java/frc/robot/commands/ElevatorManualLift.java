@@ -6,15 +6,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
+/**
+ * A command that manually controls the elevator.
+ */
 public class ElevatorManualLift extends Command {
     DoubleSupplier power;
     ElevatorSubsystem elevator_subsystem;
 
     /**
-     * 
-     * @param leftLiftPower  power for the left lift motor
-     * @param rightLiftPower power for the right lift motor
-     * @param liftSubsystem
+     * Creates a new ElevatorManualLift.
+     * @param power Power for the left lift motor
+     * @param elevatorSubsystem the elevator subsystem
      */
     public ElevatorManualLift(DoubleSupplier power, ElevatorSubsystem elevatorSubsystem) {
         this.power = power;

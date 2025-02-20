@@ -7,19 +7,19 @@ package frc.robot.commands;
 import frc.robot.subsystems.ClimbSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+/**
+ * Command for retracting the lift.
+ */
 public class RetractLift extends Command {
-  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final ClimbSubsystem m_subsystem;
-
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new RetractLift command
    *
-   * @param subsystem The subsystem used by this command.
+   * @param subsystem Climb Subsystem
    */
   public RetractLift(ClimbSubsystem subsystem) {
     m_subsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
+    
     addRequirements(subsystem);
   }
 
@@ -27,16 +27,6 @@ public class RetractLift extends Command {
   @Override
   public void initialize() {
     m_subsystem.retractPneumaticClimber();
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
   }
 
   // Returns true when the command should end.

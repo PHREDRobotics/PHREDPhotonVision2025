@@ -9,12 +9,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Subsystem for controlling the vision system.
+ */
 public class VisionSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
   public boolean m_LimelightHasValidTarget = false;
   public boolean m_IsLimeLightCentered = false;
   NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight_phred");
-  // double tv = m_table.getEntry("tv").getDouble(0);
+  double tv = m_table.getEntry("tv").getDouble(0);
   double tx = m_table.getEntry("tx").getDouble(0);
   double ty = m_table.getEntry("ty").getDouble(0);
   double ta = m_table.getEntry("ta").getDouble(0);
@@ -105,17 +107,6 @@ public class VisionSubsystem extends SubsystemBase {
     return m_table.getEntry("ta").getDouble(0);
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a
-   * digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
   @Override
   public void periodic() {
     m_table = NetworkTableInstance.getDefault().getTable("limelight_phred");
@@ -135,21 +126,5 @@ public class VisionSubsystem extends SubsystemBase {
     // SmartDashboard.putNumber("Limelight v value.", tv);
     SmartDashboard.putBoolean("Is the target in range?", m_LimelightHasValidTarget);
     SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);
-
-    // This method will be called once per scheduler run
-    // It should be able to recognize the april tags, which allows us to push a
-    // button so it lines itself
-    // up and scores in the amp or speaker based on which and where the april tag is
-
-    // SmartDashboard.put variable type ("name", what you want it to display);
-
-    // now get the network table that corresponds to the SmartDashboard class of
-    // WPILib
-
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }

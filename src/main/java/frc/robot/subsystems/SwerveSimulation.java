@@ -28,6 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
+/**
+ * Subsystem for controlling swerve simulation
+ */
 public class SwerveSimulation {
   private final SelfControlledSwerveDriveSimulation m_swerveSimulation;
   private final Field2d m_field;

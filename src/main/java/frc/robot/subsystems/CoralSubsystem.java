@@ -12,18 +12,23 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+/**
+ * Subsystem for controlling the coral intake and outtake
+ */
 public class CoralSubsystem extends SubsystemBase {
   private static final Timer timer = new Timer();
   public SparkMax coralMotorSparkMax = new SparkMax(CoralConstants.kCoralCANId, MotorType.kBrushless);
   public SparkLimitSwitch forwardLimit = coralMotorSparkMax.getForwardLimitSwitch();
-  
-  
 
   public double intakeSpeed = CoralConstants.kCoralIntakeSpeed;
   public double outtakeSpeed = CoralConstants.kCoralOuttakeSpeed;
 
+  /**
+   * Creates a new CoralSubsystem.
+   */
   public CoralSubsystem() {
-    coralMotorSparkMax.configure(Configs.CoralMotor.motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralMotorSparkMax.configure(Configs.CoralMotor.motorConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 
   public void startOuttake() {
@@ -33,19 +38,16 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public double speedConvert(double inSpeed) {
-    //if (inSpeed < 0.2 && inSpeed > -0.2) {
-    //  return 0.0;
-    //} else {
-      return inSpeed;
-    //}
+    return inSpeed;
   }
+
   public void stop() {
     coralMotorSparkMax.set(0);
   }
 
- public void startIntake(){
-  coralMotorSparkMax.set(intakeSpeed);
- }
+  public void startIntake() {
+    coralMotorSparkMax.set(intakeSpeed);
+  }
 
   public boolean isCoralLoaded() {
     return !forwardLimit.isPressed();
@@ -53,7 +55,6 @@ public class CoralSubsystem extends SubsystemBase {
 
   public static boolean outtakeIsTimeDone() {
     return timer.hasElapsed(Constants.CoralConstants.kCoralOuttakeTime);
-
   }
 
   @Override
@@ -61,16 +62,11 @@ public class CoralSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Pressed?", isCoralLoaded());
     SmartDashboard.putBoolean("Manual Override Press", SmartDashboard.getBoolean("Manual Override Press", false));
     SmartDashboard.putBoolean("Is Limit Switch Triggered?", !forwardLimit.isPressed());
-    
 
-  // Slider things VARIABLES
-  outtakeSpeed=SmartDashboard.getNumber("Outtake Speed", outtakeSpeed);
-  intakeSpeed=SmartDashboard.getNumber("Intake Speed", intakeSpeed);
-  SmartDashboard.putNumber("Outtake Speed", outtakeSpeed);
-  SmartDashboard.putNumber("Intake Speed", intakeSpeed);
-  // This method will be called once per scheduler run
-  // We will have a pull in fast and slow and a push out fast and slow
-  // When we pull in we will use the beam break sensor to stop the motor
+    // Slider things VARIABLES
+    outtakeSpeed = SmartDashboard.getNumber("Outtake Speed", outtakeSpeed);
+    intakeSpeed = SmartDashboard.getNumber("Intake Speed", intakeSpeed);
+    SmartDashboard.putNumber("Outtake Speed", outtakeSpeed);
+    SmartDashboard.putNumber("Intake Speed", intakeSpeed);
   }
-
 }

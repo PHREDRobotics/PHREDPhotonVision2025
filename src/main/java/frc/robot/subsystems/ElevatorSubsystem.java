@@ -15,10 +15,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Subsystem for controlling the elevator
+ */
 public class ElevatorSubsystem extends SubsystemBase {
 
     private SparkMax elevator;
@@ -28,8 +30,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     //private DigitalInput bottomForwardLimit = new DigitalInput(1);
 
     private double voltage;
-  // 😏
 
+    /**
+     * Creates a new elevator subsystem.
+     */
     public ElevatorSubsystem() {
         elevator = new SparkMax(Constants.ElevatorConstants.kElevatorCANId, MotorType.kBrushless);
 

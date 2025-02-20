@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
 
+/**
+ * A command that allows the robot to be driven with a joystick.
+ */
 public class DriveCommand extends Command {
     private SwerveSubsystem swerveDrive;
     private DoubleSupplier ySpeed;
@@ -22,6 +25,15 @@ public class DriveCommand extends Command {
     private SlewRateLimiter yLimiter;
     private SlewRateLimiter zLimiter;
 
+    /**
+     * Creates a new DriveCommand.
+     * @param swerveDrive The swerve subsystem
+     * @param ySpeed Forward speed
+     * @param xSpeed Sideways speed
+     * @param rot Rotational speed
+     * @param throttle Speed control
+     * @param fieldOriented Whether the robot should drive oriented to itself or the field
+     */
     public DriveCommand(
             SwerveSubsystem swerveDrive,
             DoubleSupplier ySpeed,

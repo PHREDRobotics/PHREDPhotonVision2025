@@ -11,13 +11,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Voltage;
 
+/**
+ * Constants for the robot
+ */
 public class Constants {
   public static final class AlgaeConstants {
     public static final int kLeftAlgaeCANId = 42;
     public static final int kRightAlgaeCANId = 41;
 
     public static final double kAlgaeSpeed = 0.5;
-    public static final double kAlgaeTime = 2;
+    public static final double kAlgaeTime = 1;
   }
 
   public static final class ControllerConstants {
@@ -157,6 +160,16 @@ public class Constants {
         Constants.SwerveConstants.kBackRightLocationMeters);
   }
 
+  public static final class UltrasonicConstants {
+    public static final int kUltrasonicPingPort = 1;
+    public static final int kUltrasonicEchoPort = 0;
+
+    public static final int kMedianFilterSize = 5;
+
+    public static final double kTargetDistanceFromReef = 6;
+    public static final double kTargetDistanceFromCoralStation = 6;
+  }
+
   public static final class VisionConstants {
     public static final double kLimelightMountAngleDegrees = 0.0;
     public static final double kLimelightLensHeightInches = 0.0;
@@ -211,5 +224,10 @@ public class Constants {
         new Rotation2d(0 * k2pi / 360));
     public static final Pose2d kAprilTag22 = new Pose2d(193.10 * 0.0254, 130.17 * 0.0254,
         new Rotation2d(300 * k2pi / 360));
+
+        public static final Pose2d[] kAprilTags = {kAprilTag1, kAprilTag2, kAprilTag3, kAprilTag4,
+            kAprilTag5, kAprilTag6, kAprilTag7, kAprilTag8, kAprilTag9, kAprilTag10, kAprilTag11,
+            kAprilTag12, kAprilTag13, kAprilTag14, kAprilTag15, kAprilTag16, kAprilTag17, kAprilTag18,
+            kAprilTag19, kAprilTag20, kAprilTag21, kAprilTag22};
   }
 }

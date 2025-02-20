@@ -12,11 +12,14 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Configs;
 
+/**
+ * A swerve module that uses Spark MAX controllers.
+ */
 public class SparkSwerveModule implements SwerveModule {
   private final SparkMax m_driveMotor;
   private final SparkMax m_turnMotor;
@@ -32,16 +35,10 @@ public class SparkSwerveModule implements SwerveModule {
    *
    * @param driveMotorChannel PWM output for the drive motor.
    * @param turningMotorChannel PWM output for the turning motor.
-   * @param driveEncoderChannelA DIO input for the drive encoder channel A
-   * @param driveEncoderChannelB DIO input for the drive encoder channel B
-   * @param turningEncoderChannelA DIO input for the turning encoder channel A
-   * @param turningEncoderChannelB DIO input for the turning encoder channel B
    */
   public SparkSwerveModule(
       int driveMotorChannel,
-      int turnMotorChannel,
-      SparkMaxConfig driveConfig,
-      SparkMaxConfig turnConfig) {
+      int turnMotorChannel) {
     m_driveMotor = new SparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turnMotor = new SparkMax(turnMotorChannel, MotorType.kBrushless);
 
@@ -51,8 +48,8 @@ public class SparkSwerveModule implements SwerveModule {
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turnPIDController = m_turnMotor.getClosedLoopController();
 
-    m_driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_driveMotor.configure(Configs.SwerveConfig.drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_turnMotor.configure(Configs.SwerveConfig.turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     m_driveEncoder.setPosition(0);
   }

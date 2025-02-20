@@ -11,16 +11,6 @@ public class ResetElevator extends Command {
     }
 
     @Override
-    public void initialize() {
-        //elevator_subsystem.setRawPower(-0.3);
-    }
-
-    @Override
-    public void execute() {
-        // nothing for now, this will run periodically..
-    }
-
-    @Override
     public void end(boolean interrupted) {
         m_elevatorSubsystem.resetEncoders();
     }
