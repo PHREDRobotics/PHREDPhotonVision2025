@@ -72,6 +72,7 @@ public class RobotContainer {
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
     NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("CoralIntakeCommand", new CoralIntakeCommand(m_coralSubsystem));
 
     configureBindings();
   }
