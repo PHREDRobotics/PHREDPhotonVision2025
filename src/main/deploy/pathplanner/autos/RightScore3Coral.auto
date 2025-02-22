@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftStartToFarLeftCoral"
+                  "pathName": "RightToFarCoral"
                 }
               },
               {
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftFarCoralToHP"
+                  "pathName": "RightFarCoralToHP"
                 }
               },
               {
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftHPToLeftCloseCoral"
+                  "pathName": "RightHPToCloseCoral"
                 }
               },
               {
@@ -98,7 +98,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftCloseCoralToHP"
+                  "pathName": "RightCloseCoralToHP"
                 }
               },
               {
@@ -123,7 +123,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftHPToLeftCloseCoral"
+                  "pathName": "RightHPToCloseCoral"
                 }
               },
               {

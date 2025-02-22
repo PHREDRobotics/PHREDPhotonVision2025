@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "BottomCoralLeft"
+                  "pathName": "LeftStartToFarLeftCoral"
                 }
               },
               {
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "LeftToHP"
+                  "pathName": "LeftFarCoralToHP"
                 }
               },
               {
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "HPToLeft"
+                  "pathName": "LeftHPToLeftCloseCoral"
                 }
               },
               {
