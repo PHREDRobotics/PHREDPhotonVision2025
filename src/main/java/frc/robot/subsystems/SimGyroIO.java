@@ -16,6 +16,10 @@ public class SimGyroIO implements GyroIO {
         m_gyro = new GyroSimulation(2, 2);
     }
 
+    
+    /** 
+     * @return Rotation2d
+     */
     @Override
     public Rotation2d getRotation2d() {
         return m_gyro.getGyroReading();

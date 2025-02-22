@@ -73,6 +73,14 @@ public class SwerveSimulation {
     SimulatedArena.getInstance().addDriveTrainSimulation(m_swerveSimulation.getDriveTrainSimulation());
   }
 
+  
+  /** 
+   * @param xSpeed
+   * @param ySpeed
+   * @param rot
+   * @param fieldOriented
+   * @param gyroRotation
+   */
   public void update(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot, BooleanSupplier fieldOriented, Rotation2d gyroRotation) {
     //m_gyro.setRotation(gyroRotation);
 

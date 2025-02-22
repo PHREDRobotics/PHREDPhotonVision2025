@@ -45,10 +45,14 @@ public class CoralOuttakeCommand extends Command {
     coralSubsystem.stop();
   }
 
+  
+  /** 
+   * @return boolean
+   */
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return CoralSubsystem.outtakeIsTimeDone();
+    return CoralSubsystem.isTimeDone();
    //return true;
   }
 

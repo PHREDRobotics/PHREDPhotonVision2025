@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  * Algae outtake command that uses a timer to stop the outtake after a certain time.
  */
 public class AlgaeOuttakeCommand extends Command {
-    private final AlgaeSubsystem cmdSubsystem;
+    private final AlgaeSubsystem m_AlgaeSubsystem;
 
     private static final Timer timer = new Timer();
 
@@ -19,7 +19,7 @@ public class AlgaeOuttakeCommand extends Command {
      * @param subsystem Algae subsystem
      */
     public AlgaeOuttakeCommand(AlgaeSubsystem subsystem) {
-        cmdSubsystem = subsystem;
+        m_AlgaeSubsystem = subsystem;
         addRequirements(subsystem);
     }
 
@@ -27,12 +27,12 @@ public class AlgaeOuttakeCommand extends Command {
     public void initialize() {
         timer.start();
         timer.reset();
-        cmdSubsystem.Outtake();
+        m_AlgaeSubsystem.Outtake();
     }
 
     @Override
     public void end(boolean interrupted) {
-        cmdSubsystem.stop();
+        m_AlgaeSubsystem.stop();
     }
 
     @Override

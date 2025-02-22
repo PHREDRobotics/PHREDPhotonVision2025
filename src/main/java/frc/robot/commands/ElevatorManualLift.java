@@ -42,6 +42,10 @@ public class ElevatorManualLift extends Command {
         this.elevator_subsystem.setSpeed(speed);
     }
 
+    
+    /** 
+     * @return boolean
+     */
     @Override
     public boolean isFinished(){
         return false; //elevator_subsystem.isLimitSwitchPressed();

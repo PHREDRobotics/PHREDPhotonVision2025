@@ -29,6 +29,10 @@ public class RetractLift extends Command {
     m_subsystem.retractPneumaticClimber();
   }
 
+  
+  /** 
+   * @return boolean
+   */
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

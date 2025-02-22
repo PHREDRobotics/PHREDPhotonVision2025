@@ -1,14 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * Command for moving the elevator
  */
-public class AutoElevatorCommand extends Command {
+public class PullGrenadePin extends Command {
     private final ElevatorSubsystem m_ElevatorSubsystem;
-    private final Double m_elevator_pos;
 
     /**
      * Creates a new auto elevator command.
@@ -16,19 +16,17 @@ public class AutoElevatorCommand extends Command {
      * @param elevatorPos Default elevator positions can be found in the Constants
      * @param elevator    Elevator subsystem
      */
-    public AutoElevatorCommand(Double elevatorPos, ElevatorSubsystem elevator) {
-        m_elevator_pos = elevatorPos;
+    public PullGrenadePin(ElevatorSubsystem elevator) {
         m_ElevatorSubsystem = elevator;
         addRequirements(m_ElevatorSubsystem);
     }
 
     @Override
-    public void execute() {
-        m_ElevatorSubsystem.moveToPosition(m_elevator_pos);
+    public void initialize() {
+        m_ElevatorSubsystem.moveToPosition(Constants.ElevatorConstants.kCoralLevel2);
     }
 
-    
-    /** 
+    /**
      * @return boolean
      */
     @Override

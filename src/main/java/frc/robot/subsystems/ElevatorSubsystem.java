@@ -27,7 +27,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private RelativeEncoder encoder;
     private SparkClosedLoopController m_pidController;
     private SparkLimitSwitch bottomForwardLimit;
-    //private DigitalInput bottomForwardLimit = new DigitalInput(1);
+    // private DigitalInput bottomForwardLimit = new DigitalInput(1);
 
     private double voltage;
     private int level;
@@ -42,28 +42,29 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         // initialize the PID controller
         m_pidController = elevator.getClosedLoopController();
-        elevator.configure(Configs.ElevatorMotor.motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        elevator.configure(Configs.ElevatorMotor.motorConfig, ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters);
 
-        //topForwardLimit = elevator.getReverseLimitSwitch();
-       bottomForwardLimit = elevator.getReverseLimitSwitch();
-
-       moveToPosition(Constants.ElevatorConstants.kCoralLevel2);
+        // topForwardLimit = elevator.getReverseLimitSwitch();
+        bottomForwardLimit = elevator.getReverseLimitSwitch();
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isLimitSwitchPressed() {
         // if(bottomForwardLimit.isPressed() /*|| topForwardLimit.isPressed()*/){
-        //     return true;
+        // return true;
         // }else{
-        //     return false;
+        // return false;
         // }
-        if(bottomForwardLimit.isPressed()){
-           // resetEncoders();
+        if (bottomForwardLimit.isPressed()) {
+            // resetEncoders();
 
             return true;
         }
         return false;
     }
-
 
     public void resetEncoders() {
         encoder.setPosition(0);
@@ -77,13 +78,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     /**
      * Set the power of the left lift motor
      * 
-     * @param left_power Value between 0 and 1
+     * @param power Value between 0 and 1
      */
 
     public void moveElevator(DoubleSupplier power) {
         elevator.set(power.getAsDouble());
     }
-
 
     // public static final double kEncoderTicksPerRotation = 42;
     // public static final double kElevatorGearRatio = (1 / 4);
@@ -93,11 +93,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     // public static final double kGearDiameter = 0;
     // public static final double kChainDistancePerRevolution = 0;
 
-
-
     public void moveToPosition(double positionTicks) {
 
-        m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0, Constants.ElevatorConstants.kArbFF);
+        m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl,
+                ClosedLoopSlot.kSlot0, Constants.ElevatorConstants.kArbFF);
 
         SmartDashboard.putNumber("Position ticks moveToPosition()", positionTicks);
         
@@ -121,7 +120,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
-        //double vroom = speed.getAsDouble();
+        // double vroom = speed.getAsDouble();
         elevator.set(speed);
     }
 
@@ -131,9 +130,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Elevator Encoder Ticks", getEncoder());
         SmartDashboard.putNumber("Centimeters", getEncoder() * Constants.ElevatorConstants.kEncoderTicksToCentimeters);
-       // SmartDashboard.putBoolean("Is top Limit switch triggered", topForwardLimit.isPressed());
- 
-       // SmartDashboard.putBoolean("Is bottom Limit switch triggered", bottomForwardLimit.isPressed());
+        // SmartDashboard.putBoolean("Is top Limit switch triggered",
+        // topForwardLimit.isPressed());
+
+        // SmartDashboard.putBoolean("Is bottom Limit switch triggered",
+        // bottomForwardLimit.isPressed());
         SmartDashboard.putBoolean("Is bottom Limit switch triggered", isLimitSwitchPressed());
 
         SmartDashboard.putNumber("Elevator Motor RPM", encoder.getVelocity());

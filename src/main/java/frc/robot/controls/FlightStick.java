@@ -61,6 +61,11 @@ public abstract class FlightStick extends Joystick {
     return getRawButton(button);
   }
 
+  
+  /** 
+   * @param getSmartDashboardType(
+   * @return double
+   */
   /* Abstract Methods */
   // Roll is low to the left and high to the right.
   // Yaw is low to the left and high to the right.

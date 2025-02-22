@@ -19,6 +19,10 @@ public class CoralAutoIntakeCommand extends Command {
     coralSubsystem.startIntake();
   }
 
+  
+  /** 
+   * @param interrupted
+   */
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

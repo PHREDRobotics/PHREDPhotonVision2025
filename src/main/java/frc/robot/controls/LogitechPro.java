@@ -33,6 +33,10 @@ public class LogitechPro extends FlightStick {
     }
   }
 
+  
+  /** 
+   * @return double
+   */
   // @Override
   public double getPitch() {
     return -getAxis(PITCH_AXIS);

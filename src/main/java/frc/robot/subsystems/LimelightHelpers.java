@@ -485,6 +485,11 @@ public class LimelightHelpers {
      */
     static boolean profileJSON = false;
 
+    
+    /** 
+     * @param name
+     * @return String
+     */
     static final String sanitizeName(String name) {
         if (name == "" || name == null) {
             return "limelight";
