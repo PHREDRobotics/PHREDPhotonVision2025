@@ -80,7 +80,7 @@ public class Constants {
 
         public static final double kXboxDeadband = 0.15;
 
-        public static final double kThrottleMultiplier = 1;
+        public static final double kThrottleMultiplier = 5;
     }
 
     public static final class CoralConstants {
