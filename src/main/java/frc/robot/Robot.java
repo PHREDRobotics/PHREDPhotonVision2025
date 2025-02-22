@@ -63,10 +63,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    autoChooser.setDefaultOption("Right Coral Left", RobotContainer.AutoSwitcher.BottomCoralLeft);
-    autoChooser.addOption("Bottom Coral Center", RobotContainer.AutoSwitcher.BottomCoralCenter);
-    autoChooser.addOption("Bottom Coral Right", RobotContainer.AutoSwitcher.BottomCoralRight);
-    autoChooser.addOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
+    autoChooser.setDefaultOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
+
+    autoChooser.addOption("Left Score 1", RobotContainer.AutoSwitcher.LeftScore1);
+    autoChooser.addOption("Left Score 2", RobotContainer.AutoSwitcher.LeftScore2);
+    autoChooser.addOption("Left Score 3", RobotContainer.AutoSwitcher.LeftScore3);
+    autoChooser.addOption("Center Score 1", RobotContainer.AutoSwitcher.CenterScore1);
+    autoChooser.addOption("Right Score 1", RobotContainer.AutoSwitcher.RightScore1);
+    autoChooser.addOption("Right Score 2", RobotContainer.AutoSwitcher.RightScore2);
+    autoChooser.addOption("Right Score 3", RobotContainer.AutoSwitcher.RightScore3);
+
     SmartDashboard.putData("Auto mode", autoChooser);
 
   }
