@@ -36,7 +36,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
   AlgaeSubsystem m_algaeSubsystem;
-  // ClimbSubsystem m_climbSubsystem;
+  ClimbSubsystem m_climbSubsystem;
   CoralSubsystem m_coralSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   VisionSubsystem m_visionSubsystem;
@@ -55,7 +55,7 @@ public class RobotContainer {
     m_swerveSubsystem = new SwerveSubsystem();
     m_algaeSubsystem = new AlgaeSubsystem();
     m_coralSubsystem = new CoralSubsystem();
-    // m_climbSubsystem = new ClimbSubsystem();
+    m_climbSubsystem = new ClimbSubsystem();
     m_elevatorSubsystem = new ElevatorSubsystem();
     m_visionSubsystem = new VisionSubsystem();
 

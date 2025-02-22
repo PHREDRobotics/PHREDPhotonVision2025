@@ -180,6 +180,8 @@ public class Constants {
     public static final double kLimelightLensHeightInches = 0.0;
     public static final double kAreaToCentimeters = 150;
     public static final double kMetersFromAprilTag = 2;
+    public static final double kMetersSideReefAprilTag = 6.47*0.0254; // the distance between prongs is 12.94 so divide by 2 and convert to meters.
+    public static final double kMetersFromLoadingStation = 14*0.0254; // 14 inches to meters
 
     public static final double k2pi = Math.PI * 2;
 
