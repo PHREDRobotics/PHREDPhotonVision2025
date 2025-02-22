@@ -41,7 +41,10 @@ public class Constants {
 
     public static final double kCoralIntakeSpeed = 0.5;
     public static final double kCoralIntakeTime = 1.0;
-    public static final double kCoralOuttakeSpeed = -0.08; // SLOW = -0.065 L1, L2, L3 FAST = -0.08
+    public static final double kCoralOuttakeSpeedL1 = -0.065; // SLOW = -0.065 L1, L2, L3 FAST = -0.08
+    public static final double kCoralOuttakeSpeedL2 = -0.065;
+    public static final double kCoralOuttakeSpeedL3 = -0.065;
+    public static final double kCoralOuttakeSpeedL4 = -0.08;
     public static final double kCoralOuttakeTime = 1.0;
   }
 
@@ -164,8 +167,10 @@ public class Constants {
   }
 
   public static final class UltrasonicConstants {
-    public static final int kUltrasonicPingPort = 1;
-    public static final int kUltrasonicEchoPort = 0;
+    public static final int kUltrasonicPingPortLeft = 1;
+    public static final int kUltrasonicEchoPortLeft = 0;
+    public static final int kUltrasonicPingPortRight = 2;
+    public static final int kUltrasonicEchoPortRight = 3;
 
     public static final int kMedianFilterSize = 5;
 
@@ -178,6 +183,8 @@ public class Constants {
     public static final double kLimelightLensHeightInches = 0.0;
     public static final double kAreaToCentimeters = 150;
     public static final double kMetersFromAprilTag = 2;
+    public static final double kMetersSideReefAprilTag = 6.47*0.0254; // the distance between prongs is 12.94 so divide by 2 and convert to meters.
+    public static final double kMetersFromLoadingStation = 14*0.0254; // 14 inches to meters
 
     public static final double k2pi = Math.PI * 2;
 

@@ -63,7 +63,7 @@ public class RobotContainer {
     m_driverJoystick = new LogitechPro(0);
     m_xboxController = new CommandXboxController(1);
 
-    //ResetElevatorCommand is the same as the trough
+    // ResetElevatorCommand is the same as the trough
     NamedCommands.registerCommand("ResetElevatorCommand",
         new ResetElevator(m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL2Command",
@@ -73,7 +73,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
-    NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("CoralOuttakeCommand",
+        new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand", new CoralIntakeCommand(m_coralSubsystem));
 
     configureBindings();
@@ -111,20 +112,20 @@ public class RobotContainer {
     xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
     aButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
-    bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
+    bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     // startButton.onTrue(new ExtendLift(m_climbSubsystem));
     // backButton.onTrue(new RetractLift(m_climbSubsystem));
 
     dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem)));
 
     dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));
 
     dPadRight.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     dPadUp.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     m_elevatorSubsystem
         .setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
@@ -141,8 +142,7 @@ public class RobotContainer {
     resetTrigger.onTrue(new SwerveReset(m_swerveSubsystem));
   }
 
-  
-  /** 
+  /**
    * @param autoMode
    * @return Command
    */

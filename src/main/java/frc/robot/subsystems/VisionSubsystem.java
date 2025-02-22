@@ -22,9 +22,9 @@ public class VisionSubsystem extends SubsystemBase {
   double ta = m_table.getEntry("ta").getDouble(0);
   double tid = m_table.getEntry("tid").getDouble(0);
 
-  double kP = 0.9;
-  double kI = 0.01;
-  double kD = 0.01;
+  // double kP = 0.9;
+  // double kI = 0.01;
+  // double kD = 0.01;
 
   /**
    * Example command factory method.
@@ -95,8 +95,8 @@ public class VisionSubsystem extends SubsystemBase {
 
   public void goToDistance(double distance) {}
 
-  public double getTargetID() {
-    return m_table.getEntry("tid").getDouble(0);
+  public int getTargetID() {
+    return (int) m_table.getEntry("tid").getInteger(0);
   }
 
   public double getTargetX() {

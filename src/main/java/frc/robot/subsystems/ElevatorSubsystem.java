@@ -30,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // private DigitalInput bottomForwardLimit = new DigitalInput(1);
 
     private double voltage;
+    private int level;
 
     /**
      * Creates a new elevator subsystem.
@@ -98,6 +99,19 @@ public class ElevatorSubsystem extends SubsystemBase {
                 ClosedLoopSlot.kSlot0, Constants.ElevatorConstants.kArbFF);
 
         SmartDashboard.putNumber("Position ticks moveToPosition()", positionTicks);
+        
+        if (positionTicks == Constants.ElevatorConstants.kCoralLevel1) {
+            level = 1;
+        } else if (positionTicks == Constants.ElevatorConstants.kCoralLevel2) {
+            level = 2;
+        } else if (positionTicks == Constants.ElevatorConstants.kCoralLevel3) {
+            level = 3;
+        } else if (positionTicks == Constants.ElevatorConstants.kCoralLevel4) {
+            level = 4;
+        }
+    }
+    public int getLevel() {
+        return level;
     }
 
     public void setRawPower(double power) {
