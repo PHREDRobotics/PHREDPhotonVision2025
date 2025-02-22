@@ -67,9 +67,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Bottom Coral Center", RobotContainer.AutoSwitcher.BottomCoralCenter);
     autoChooser.addOption("Bottom Coral Right", RobotContainer.AutoSwitcher.BottomCoralRight);
     autoChooser.addOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
-    auto
     SmartDashboard.putData("Auto mode", autoChooser);
-
 
   }
 
