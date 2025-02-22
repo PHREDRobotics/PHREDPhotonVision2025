@@ -161,8 +161,10 @@ public class Constants {
   }
 
   public static final class UltrasonicConstants {
-    public static final int kUltrasonicPingPort = 1;
-    public static final int kUltrasonicEchoPort = 0;
+    public static final int kUltrasonicPingPortLeft = 1;
+    public static final int kUltrasonicEchoPortLeft = 0;
+    public static final int kUltrasonicPingPortRight = 2;
+    public static final int kUltrasonicEchoPortRight = 3;
 
     public static final int kMedianFilterSize = 5;
 
