@@ -6,6 +6,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -75,79 +76,12 @@ public class GoToTag extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         // 1. get current pos
         Pose2d currentPose2d = m_swerve_subsystem.getPose();
         // 2. get target pos off of current targeted apriltag
         Pose2d targetPose2d = new Pose2d(); // just in case of errors
-        switch (targetTag) {
-            case 1:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag1);
-                break;
-            case 2:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag2);
-                break;
-            case 3:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag3);
-                break;
-            case 4:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag4);
-                break;
-            case 5:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag5);
-                break;
-            case 6:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag6);
-                break;
-            case 7:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag7);
-                break;
-            case 8:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag8);
-                break;
-            case 9:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag9);
-                break;
-            case 10:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag10);
-                break;
-            case 11:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag11);
-                break;
-            case 12:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag12);
-                break;
-            case 13:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag13);
-                break;
-            case 14:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag14);
-                break;
-            case 15:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag15);
-                break;
-            case 16:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag16);
-                break;
-            case 17:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag17);
-                break;
-            case 18:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag18);
-                break;
-            case 19:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag19);
-                break;
-            case 20:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag20);
-                break;
-            case 21:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag21);
-                break;
-            case 22:
-                targetPose2d = getTargetPose(VisionConstants.kAprilTag22);
-                break;
-        }
+
+        targetPose2d = getTargetPose(VisionConstants.kAprilTags[targetTag - 1]);
 
         TrapezoidProfile.State targetxState = new TrapezoidProfile.State(targetPose2d.getX(), 0);
         TrapezoidProfile.State targetyState = new TrapezoidProfile.State(targetPose2d.getY(), 0);
@@ -159,15 +93,11 @@ public class GoToTag extends Command {
         xSpeed = omegaController.calculate(currentPose2d.getRotation().getRadians(), targetomegaState,
                 OMEGA_CONSTRAINTS);
         // 4. make chassis speeds
-        // ChassisSpeeds chassisSpeeds;
-        // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        // xSpeed, ySpeed, turningSpeed, m_swerve_subsystem.getRotation2d());
-        // // 5. Convert chassis speeds to individual module states
-        // SwerveModuleState[] moduleStates =
-        // DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        // // state.angle.getRadians());
-        // // 6. Output each module states to wheels
-        // m_swerve_subsystem.setModuleStates(moduleStates);
+        ChassisSpeeds chassisSpeeds;
+        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed, ySpeed, turningSpeed, m_swerve_subsystem.getPose().getRotation());
+        // 5. Output each module states to wheels
+        m_swerve_subsystem.drive(chassisSpeeds, () -> false);
 
         // Smart dash varibs. The string ones proably work
         SmartDashboard.putNumber("X-Speed", xSpeed);

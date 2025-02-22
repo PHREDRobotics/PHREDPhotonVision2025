@@ -6,6 +6,9 @@ import org.ironmaple.simulation.drivesims.GyroSimulation;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
+/**
+ * Implements the simulation side of the GyroIO interface
+ */
 public class SimGyroIO implements GyroIO {
     private final GyroSimulation m_gyro;
 

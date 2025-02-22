@@ -62,6 +62,8 @@ public class RobotContainer {
     m_driverJoystick = new LogitechPro(0);
     m_xboxController = new CommandXboxController(1);
 
+    NamedCommands.registerCommand("ResetELevatorCommand",
+        new ResetElevator(m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL1Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL2Command",
@@ -72,6 +74,7 @@ public class RobotContainer {
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
     NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("CoralIntakeCommand", new CoralIntakeCommand(m_coralSubsystem));
 
     configureBindings();
   }

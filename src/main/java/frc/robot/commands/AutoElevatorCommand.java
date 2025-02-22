@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
- * A command for moving the arm
+ * Command for moving the elevator
  */
 public class AutoElevatorCommand extends Command {
     private final ElevatorSubsystem m_ElevatorSubsystem;
     private final Double m_elevator_pos;
 
     /**
-     * Operate the arm subsystem
+     * Creates a new auto elevator command.
      * 
-     * @param armPos Default positions can be found in the Constants
-     * @param arm
+     * @param elevatorPos Default elevator positions can be found in the Constants
+     * @param elevator    Elevator subsystem
      */
     public AutoElevatorCommand(Double elevatorPos, ElevatorSubsystem elevator) {
         m_elevator_pos = elevatorPos;
@@ -31,6 +31,4 @@ public class AutoElevatorCommand extends Command {
     public boolean isFinished() {
         return false;
     }
-
- 
 }

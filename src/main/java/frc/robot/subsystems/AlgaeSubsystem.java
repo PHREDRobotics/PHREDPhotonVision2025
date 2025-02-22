@@ -8,7 +8,9 @@ import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
+/**
+ * Subsystem for controlling algae intake and outtake.
+ */
 public class AlgaeSubsystem extends SubsystemBase {
     private static final Timer timer = new Timer();
     public SparkMax leftAlgaeSparkMax = new SparkMax(AlgaeConstants.kLeftAlgaeCANId, MotorType.kBrushless);
