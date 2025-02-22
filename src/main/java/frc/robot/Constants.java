@@ -41,7 +41,10 @@ public class Constants {
 
     public static final double kCoralIntakeSpeed = 0.5;
     public static final double kCoralIntakeTime = 1.0;
-    public static final double kCoralOuttakeSpeed = -0.08; // SLOW = -0.065 L1, L2, L3 FAST = -0.08
+    public static final double kCoralOuttakeSpeedL1 = -0.065; // SLOW = -0.065 L1, L2, L3 FAST = -0.08
+    public static final double kCoralOuttakeSpeedL2 = -0.065;
+    public static final double kCoralOuttakeSpeedL3 = -0.065;
+    public static final double kCoralOuttakeSpeedL4 = -0.08;
     public static final double kCoralOuttakeTime = 1.0;
   }
 

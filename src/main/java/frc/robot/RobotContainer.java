@@ -73,7 +73,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
 
-    NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("CoralOuttakeCommand", new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand", new CoralIntakeCommand(m_coralSubsystem));
 
     configureBindings();
@@ -111,7 +111,7 @@ public class RobotContainer {
     xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
     aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
-    bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
+    bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     // startButton.onTrue(new ExtendLift(m_climbSubsystem));
     // backButton.onTrue(new RetractLift(m_climbSubsystem));
     leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));

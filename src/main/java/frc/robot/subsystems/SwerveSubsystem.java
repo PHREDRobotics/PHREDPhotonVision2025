@@ -213,7 +213,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     boolean doRejectUpdate = false;
 
-    LimelightHelpers.SetRobotOrientation("limelight",
+    LimelightHelpers.SetRobotOrientation("limelight_phred",
         m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
     if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per
