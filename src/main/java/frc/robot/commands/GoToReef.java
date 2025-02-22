@@ -134,11 +134,11 @@ public class GoToReef extends Command {
     private Pose2d getTargetPoseLeft(Pose2d tag) {
         Pose2d targetPose = new Pose2d(
                 tag.getX()
-                        + VisionConstants.kMetersFromAprilTag * Math.cos(tag.getRotation().getRadians())
+                        + VisionConstants.kMetersFromReef * Math.cos(tag.getRotation().getRadians())
                         + VisionConstants.kMetersSideReefAprilTag
                                 * Math.cos(tag.getRotation().getRadians() + Math.PI / 2),
                 tag.getY()
-                        + VisionConstants.kMetersFromAprilTag * Math.sin(tag.getRotation().getRadians())
+                        + VisionConstants.kMetersFromReef * Math.sin(tag.getRotation().getRadians())
                         + VisionConstants.kMetersSideReefAprilTag
                                 * Math.sin(tag.getRotation().getRadians() + Math.PI / 2),
                 tag.getRotation().rotateBy(new Rotation2d(Math.PI)));
@@ -149,11 +149,11 @@ public class GoToReef extends Command {
     private Pose2d getTargetPoseRight(Pose2d tag) {
         Pose2d targetPose = new Pose2d(
                 tag.getX()
-                        + VisionConstants.kMetersFromAprilTag * Math.cos(tag.getRotation().getRadians())
+                        + VisionConstants.kMetersFromReef * Math.cos(tag.getRotation().getRadians())
                         - VisionConstants.kMetersSideReefAprilTag
                                 * Math.cos(tag.getRotation().getRadians() + Math.PI / 2),
                 tag.getY()
-                        + VisionConstants.kMetersFromAprilTag * Math.sin(tag.getRotation().getRadians())
+                        + VisionConstants.kMetersFromReef * Math.sin(tag.getRotation().getRadians())
                         - VisionConstants.kMetersSideReefAprilTag
                                 * Math.sin(tag.getRotation().getRadians() + Math.PI / 2),
                 tag.getRotation().rotateBy(new Rotation2d(Math.PI)));
@@ -164,9 +164,9 @@ public class GoToReef extends Command {
     private Pose2d getTargetPose(Pose2d tag) {
         Pose2d targetPose = new Pose2d(
                 tag.getX()
-                        + VisionConstants.kMetersFromAprilTag * Math.cos(tag.getRotation().getRadians()),
+                        + VisionConstants.kMetersFromReef * Math.cos(tag.getRotation().getRadians()),
                 tag.getY()
-                        + VisionConstants.kMetersFromAprilTag * Math.sin(tag.getRotation().getRadians()),
+                        + VisionConstants.kMetersFromReef * Math.sin(tag.getRotation().getRadians()),
                 tag.getRotation().rotateBy(new Rotation2d(Math.PI)));
 
         return targetPose;
