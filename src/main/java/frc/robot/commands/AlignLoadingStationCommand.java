@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Creates a new VisionCommand.
+ * Creates a new AlignLoadingStationCommand.
  *
  * @param subsystem The subsystem used by this command.
  */
@@ -21,13 +21,13 @@ public class AlignLoadingStationCommand extends Command {
     private VisionSubsystem m_vision_subsystem;
     private SwerveSubsystem m_swerve_subsystem;
 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxAngularSpeed, VisionConstants.kMaxAngularAcceleration);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, Y_CONSTRAINTS);
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kRP, VisionConstants.kRI, VisionConstants.kRI, OMEGA_CONSTRAINTS);
 
     private double xSpeed;
     private double ySpeed;
@@ -42,13 +42,14 @@ public class AlignLoadingStationCommand extends Command {
     // new Translation3d(1.0, 0.0, 0.0),
     // new Rotation3d(0.0, 0.0, Math.PI));
 
+
     public AlignLoadingStationCommand(VisionSubsystem vision_subsystem, SwerveSubsystem swerve_subsystem) {
         m_vision_subsystem = vision_subsystem;
         m_swerve_subsystem = swerve_subsystem;
 
-        xController.setTolerance(0.2);
-        yController.setTolerance(0.2);
-        omegaController.setTolerance(Units.degreesToRadians(3));
+        xController.setTolerance(VisionConstants.kPositionTolerance);
+        yController.setTolerance(VisionConstants.kPositionTolerance);
+        omegaController.setTolerance(Units.degreesToRadians(VisionConstants.kAngleTolerance));
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         targetTag = vision_subsystem.getTargetID();

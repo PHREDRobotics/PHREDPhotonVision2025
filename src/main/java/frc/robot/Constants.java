@@ -183,6 +183,22 @@ public class Constants {
     public static final double kMetersSideReefAprilTag = 6.47*0.0254; // the distance between prongs is 12.94 so divide by 2 and convert to meters.
     public static final double kMetersFromLoadingStation = 14*0.0254; // 14 inches to meters
 
+    public static final double kPositionTolerance = 0.2;//TWEAK
+    public static final double kAngleTolerance = 3;//TWEAK
+
+    public static final double kMaxSpeed = 3;//TWEAK
+    public static final double kMaxAcceleration = 2;//TWEAK
+    public static final double kMaxAngularSpeed = 8;//TWEAK
+    public static final double kMaxAngularAcceleration = 8;//TWEAK
+
+    public static final double kXYP = 3;//TWEAK
+    public static final double kXYI = 0;//TWEAK
+    public static final double kXYD = 0;//TWEAK
+
+    public static final double kRP = 3;//TWEAK
+    public static final double kRI = 0;//TWEAK
+    public static final double kRD = 0;//TWEAK
+
     public static final double k2pi = Math.PI * 2;
 
     public static final Pose2d kAprilTag1 = new Pose2d(657.37 * 0.0254, 25.80 * 0.0254,

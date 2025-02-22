@@ -21,13 +21,13 @@ public class GoToReef extends Command {
     private VisionSubsystem m_vision_subsystem;
     private SwerveSubsystem m_swerve_subsystem;
 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxAngularSpeed, VisionConstants.kMaxAngularAcceleration);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, Y_CONSTRAINTS);
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kRP, VisionConstants.kRI, VisionConstants.kRI, OMEGA_CONSTRAINTS);
 
     private double xSpeed;
     private double ySpeed;
@@ -44,13 +44,19 @@ public class GoToReef extends Command {
     // new Translation3d(1.0, 0.0, 0.0),
     // new Rotation3d(0.0, 0.0, Math.PI));
 
+    /**
+   * Creates a new GoToReef command.
+   *
+   * @param direction This determines if the robot will go to the left or right side of the reef.
+   */
+
     public GoToReef(VisionSubsystem vision_subsystem, SwerveSubsystem swerve_subsystem, String direction) {
         m_vision_subsystem = vision_subsystem;
         m_swerve_subsystem = swerve_subsystem;
 
-        xController.setTolerance(0.2);
-        yController.setTolerance(0.2);
-        omegaController.setTolerance(Units.degreesToRadians(3));
+        xController.setTolerance(VisionConstants.kPositionTolerance);
+        yController.setTolerance(VisionConstants.kPositionTolerance);
+        omegaController.setTolerance(Units.degreesToRadians(VisionConstants.kAngleTolerance));
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         targetTag = m_vision_subsystem.getTargetID();
