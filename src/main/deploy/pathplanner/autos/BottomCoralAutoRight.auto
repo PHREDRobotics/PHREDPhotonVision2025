@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorResetCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PullGrenadePin"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [

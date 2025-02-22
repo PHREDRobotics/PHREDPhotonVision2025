@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -26,6 +27,7 @@ import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
 import frc.robot.commands.GoToReef;
 import frc.robot.commands.GoToTag;
+import frc.robot.commands.PullGrenadePin;
 import frc.robot.commands.RetractLift;
 import frc.robot.commands.SwerveReset;
 import frc.robot.controls.LogitechPro;
@@ -75,10 +77,12 @@ public class RobotContainer {
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
-
     NamedCommands.registerCommand("CoralOuttakeCommand",
         new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
-    NamedCommands.registerCommand("CoralIntakeCommand", new CoralIntakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("CoralIntakeCommand",
+        new CoralIntakeCommand(m_coralSubsystem));
+    NamedCommands.registerCommand("PullGrenadePin",
+        new PullGrenadePin(m_elevatorSubsystem));
 
     configureBindings();
   }
@@ -88,7 +92,7 @@ public class RobotContainer {
     Trigger trigger = new Trigger(() -> m_driverJoystick.getTrigger());
     Trigger maryButton = new Trigger(() -> m_driverJoystick.getRawButton(2));
     Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
-    Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));    
+    Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));
     Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
     Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
     Trigger button7 = new Trigger(() -> m_driverJoystick.getRawButton(7));

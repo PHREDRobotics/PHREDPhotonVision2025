@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ElevatorResetCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PullGrenadePin"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -80,53 +92,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RightToHP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorResetCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "CoralIntakeCommand"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "HPToLeft"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorL2Command"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralOuttakeCommand"
+            "name": "ElevatorResetCommand"
           }
         }
       ]
