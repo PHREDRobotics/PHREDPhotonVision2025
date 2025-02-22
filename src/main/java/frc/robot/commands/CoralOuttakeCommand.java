@@ -3,10 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
 import frc.robot.subsystems.CoralSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
-
 
 /** An Intake command that uses an Intake subsystem. */
 public class CoralOuttakeCommand extends Command {
@@ -14,9 +14,9 @@ public class CoralOuttakeCommand extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
 
   /**
-   * Creates a new OuttakeCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * 
+   * @param coralSubsystem    The coral subsystem this command uses.
+   * @param elevatorSubsystem The elevator subsystem ths command uses.
    */
   public CoralOuttakeCommand(CoralSubsystem coralSubsystem, ElevatorSubsystem elevatorSubsystem) {
     this.coralSubsystem = coralSubsystem;
@@ -36,24 +36,24 @@ public class CoralOuttakeCommand extends Command {
   @Override
   public void execute() {
   }
-//   @Override
-//   public void superShoot() {
-//   }
+
+  // @Override
+  // public void superShoot() {
+  // }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     coralSubsystem.stop();
   }
 
-  
-  /** 
+  /**
    * @return boolean
    */
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return CoralSubsystem.isTimeDone();
-   //return true;
+    // return true;
   }
 
 }

@@ -13,9 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Creates a new VisionCommand.
- *
- * @param subsystem The subsystem used by this command.
+ * Command to align to the loading station
  */
 public class AlignLoadingStationCommand extends Command {
     private VisionSubsystem m_vision_subsystem;
@@ -42,6 +40,12 @@ public class AlignLoadingStationCommand extends Command {
     // new Translation3d(1.0, 0.0, 0.0),
     // new Rotation3d(0.0, 0.0, Math.PI));
 
+    /**
+     * Create new AlignLoadingStationCommand
+     * 
+     * @param vision_subsystem The vision subsystem used for this command.
+     * @param swerve_subsystem The swerve subsystem used for this command.
+     */
     public AlignLoadingStationCommand(VisionSubsystem vision_subsystem, SwerveSubsystem swerve_subsystem) {
         m_vision_subsystem = vision_subsystem;
         m_swerve_subsystem = swerve_subsystem;

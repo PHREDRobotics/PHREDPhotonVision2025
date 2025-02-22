@@ -5,16 +5,14 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
- * Command for moving the elevator
+ * Command for moving the elevator in order to pull the grenade pin
  */
 public class PullGrenadePin extends Command {
     private final ElevatorSubsystem m_ElevatorSubsystem;
 
     /**
-     * Creates a new auto elevator command.
      * 
-     * @param elevatorPos Default elevator positions can be found in the Constants
-     * @param elevator    Elevator subsystem
+     * @param elevator The elevator subsystem this command uses.
      */
     public PullGrenadePin(ElevatorSubsystem elevator) {
         m_ElevatorSubsystem = elevator;
