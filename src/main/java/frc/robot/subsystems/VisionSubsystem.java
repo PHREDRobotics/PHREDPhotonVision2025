@@ -85,6 +85,10 @@ public class VisionSubsystem extends SubsystemBase {
     return ta;
   }
 
+  
+  /** 
+   * @return double
+   */
   public double getTargetXDegrees() {
     return tx;
   }

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.Constants.AlgaeConstants;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLimitSwitch;
@@ -20,9 +21,10 @@ public class AlgaeSubsystem extends SubsystemBase {
     public double algaeSpeed = AlgaeConstants.kAlgaeSpeed;
 
     public void Intake() {
-        //timer.reset();
+        timer.reset();
         leftAlgaeSparkMax.set(speedConvert(algaeSpeed)); // In last years code this was similar to pickUpNote() in IntakeSubsystem.
         rightAlgaeSparkMax.set(speedConvert(-algaeSpeed));
+        timer.start();
     }
 
     public void Outtake() {
@@ -32,12 +34,20 @@ public class AlgaeSubsystem extends SubsystemBase {
         timer.start();
     }
 
+    
+    /** 
+     * @param inSpeed
+     * @return double
+     */
     public double speedConvert(double inSpeed) {
         if (inSpeed < 0.2 && inSpeed > -0.2) {
             return 0.0;
         }
         return inSpeed;
     }
+      public static boolean isTimeDone() {
+    return timer.hasElapsed(Constants.AlgaeConstants.kAlgaeTime);
+  }
     
     public void stop() {
         leftAlgaeSparkMax.set(0);

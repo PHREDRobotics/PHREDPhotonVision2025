@@ -13,9 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Creates a new VisionCommand.
- *
- * @param subsystem The subsystem used by this command.
+ * Command that makes the robot go to a tag idiot;
  */
 public class GoToTag extends Command {
     private VisionSubsystem m_vision_subsystem;
@@ -42,6 +40,13 @@ public class GoToTag extends Command {
     // new Translation3d(1.0, 0.0, 0.0),
     // new Rotation3d(0.0, 0.0, Math.PI));
 
+    /**
+     * Creates a new VisionCommand.
+     *
+     * @param vision_subsystem Vision subsystem
+     * @param swerve_subsystem Swerve subsystem
+     * @param target_tag       The tag id to drive to
+     */
     public GoToTag(VisionSubsystem vision_subsystem, SwerveSubsystem swerve_subsystem, int target_tag) {
         m_vision_subsystem = vision_subsystem;
         m_swerve_subsystem = swerve_subsystem;
@@ -107,6 +112,9 @@ public class GoToTag extends Command {
         SmartDashboard.putString("Current-Pose", currentPose2d.toString());
     }
 
+    /**
+     * @param interrupted
+     */
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {

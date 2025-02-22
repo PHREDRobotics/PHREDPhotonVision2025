@@ -31,10 +31,11 @@ public class SparkSwerveModule implements SwerveModule {
   private final SparkClosedLoopController m_turnPIDController;
 
   /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
+   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
+   * and turning encoder.
    *
    * @param driveMotorChannel PWM output for the drive motor.
-   * @param turningMotorChannel PWM output for the turning motor.
+   * @param turnMotorChannel  PWM output for the turning motor.
    */
   public SparkSwerveModule(
       int driveMotorChannel,
@@ -48,8 +49,10 @@ public class SparkSwerveModule implements SwerveModule {
     m_drivePIDController = m_driveMotor.getClosedLoopController();
     m_turnPIDController = m_turnMotor.getClosedLoopController();
 
-    m_driveMotor.configure(Configs.SwerveConfig.drivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_turnMotor.configure(Configs.SwerveConfig.turningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_driveMotor.configure(Configs.SwerveConfig.drivingConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
+    m_turnMotor.configure(Configs.SwerveConfig.turningConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
 
     m_driveEncoder.setPosition(0);
   }
@@ -76,6 +79,9 @@ public class SparkSwerveModule implements SwerveModule {
         m_driveEncoder.getPosition(), new Rotation2d(m_turnEncoder.getPosition()));
   }
 
+  /**
+   * @return double
+   */
   @Override
   public double getDriveTemp() {
     return m_driveMotor.getMotorTemperature();
@@ -98,8 +104,10 @@ public class SparkSwerveModule implements SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     desiredState.optimize(encoderRotation);
 
-    // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
-    // direction of travel that can occur when modules change directions. This results in smoother
+    // Scale speed by cosine of angle error. This scales down movement perpendicular
+    // to the desired
+    // direction of travel that can occur when modules change directions. This
+    // results in smoother
     // driving.
     desiredState.cosineScale(encoderRotation);
 

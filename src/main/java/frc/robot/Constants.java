@@ -57,6 +57,9 @@ public class Constants {
 
     public static final int kElevatorCANId = 32;
 
+    //The speed to go down to 0 to reset the elevator. Might need to be adjusted later
+    public static final double kElevatorResetSpeed = -0.01;
+
     public static final double kCoralLevel1 = 0;
     public static final double kCoralLevel2 = 3.23;
     public static final double kCoralLevel3 = 11.07;

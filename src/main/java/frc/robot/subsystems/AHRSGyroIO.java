@@ -19,6 +19,10 @@ public class AHRSGyroIO implements GyroIO {
         m_gyro = new AHRS(comType);
     }
 
+    
+    /** 
+     * @return Rotation2d
+     */
     @Override
     public Rotation2d getRotation2d() {
         return m_gyro.getRotation2d();

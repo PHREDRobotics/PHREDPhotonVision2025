@@ -30,6 +30,10 @@ public class ExtendLift extends Command {
     m_subsystem.extendPneumaticClimber();
   }
 
+  
+  /** 
+   * @return boolean
+   */
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

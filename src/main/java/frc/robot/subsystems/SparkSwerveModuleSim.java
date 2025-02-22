@@ -21,22 +21,21 @@ public class SparkSwerveModuleSim implements SwerveModule {
   private final SparkMaxSim m_driveMotor;
   private final SparkMaxSim m_turnMotor;
 
-
   private final SparkRelativeEncoderSim m_driveEncoder;
   private final SparkAbsoluteEncoderSim m_turnEncoder;
 
   /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
+   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
+   * and turning encoder.
    *
    * @param driveMotorChannel PWM output for the drive motor.
-   * @param turningMotorChannel PWM output for the turning motor.
+   * @param turnMotorChannel  PWM output for the turning motor.
    */
   public SparkSwerveModuleSim(
       int driveMotorChannel,
       int turnMotorChannel) {
     m_driveMotor = new SparkMaxSim(new SparkMax(driveMotorChannel, MotorType.kBrushless), DCMotor.getNEO(1));
     m_turnMotor = new SparkMaxSim(new SparkMax(turnMotorChannel, MotorType.kBrushless), DCMotor.getNEO(1));
-
 
     m_driveEncoder = m_driveMotor.getRelativeEncoderSim();
     m_turnEncoder = m_turnMotor.getAbsoluteEncoderSim();
@@ -66,6 +65,9 @@ public class SparkSwerveModuleSim implements SwerveModule {
         m_driveMotor.getPosition(), new Rotation2d(m_turnMotor.getPosition()));
   }
 
+  /**
+   * @return double
+   */
   @Override
   public double getDriveTemp() {
     return 0;
@@ -88,8 +90,10 @@ public class SparkSwerveModuleSim implements SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     desiredState.optimize(encoderRotation);
 
-    // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
-    // direction of travel that can occur when modules change directions. This results in smoother
+    // Scale speed by cosine of angle error. This scales down movement perpendicular
+    // to the desired
+    // direction of travel that can occur when modules change directions. This
+    // results in smoother
     // driving.
     desiredState.cosineScale(encoderRotation);
 

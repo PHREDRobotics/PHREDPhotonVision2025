@@ -129,6 +129,13 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Pose estimation field", m_poseEstimatorField);
   }
 
+  
+  /** 
+   * @param xSpeed
+   * @param ySpeed
+   * @param rot
+   * @param fieldOriented
+   */
   public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot,
       BooleanSupplier fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(

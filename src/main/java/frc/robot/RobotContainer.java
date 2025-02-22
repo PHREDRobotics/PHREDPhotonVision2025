@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -62,10 +63,9 @@ public class RobotContainer {
     m_driverJoystick = new LogitechPro(0);
     m_xboxController = new CommandXboxController(1);
 
-    NamedCommands.registerCommand("ResetELevatorCommand",
+    //ResetElevatorCommand is the same as the trough
+    NamedCommands.registerCommand("ResetElevatorCommand",
         new ResetElevator(m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorL1Command",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL2Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL3Command",
@@ -82,7 +82,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Triggers
     Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
-    Trigger resetTrigger = new Trigger(() -> m_driverJoystick.getRawButton(1));
+    Trigger resetTrigger = new Trigger(() -> m_driverJoystick.getRawButton(2));
 
     Trigger bButton = m_xboxController.b();
     Trigger aButton = m_xboxController.a();
@@ -110,17 +110,21 @@ public class RobotContainer {
     // Xbox
     xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
-    aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
+    aButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
     bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem));
     // startButton.onTrue(new ExtendLift(m_climbSubsystem));
     // backButton.onTrue(new RetractLift(m_climbSubsystem));
-    leftBumper.onTrue(new ResetElevator(m_elevatorSubsystem));
-    dPadDown.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
-    dPadLeft.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
-    dPadRight.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
-    dPadUp.onTrue(new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
-    rightBumper.onTrue(
-        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
+
+    dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem)));
+
+    dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));
+
+    dPadRight.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+
+    dPadUp.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     m_elevatorSubsystem
         .setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
@@ -137,6 +141,11 @@ public class RobotContainer {
     resetTrigger.onTrue(new SwerveReset(m_swerveSubsystem));
   }
 
+  
+  /** 
+   * @param autoMode
+   * @return Command
+   */
   public Command getAutonomousCommand(AutoSwitcher autoMode) {
     switch (autoMode) {
       default:

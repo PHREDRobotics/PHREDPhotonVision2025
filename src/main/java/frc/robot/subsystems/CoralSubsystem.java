@@ -37,6 +37,11 @@ public class CoralSubsystem extends SubsystemBase {
     timer.start();
   }
 
+  
+  /** 
+   * @param inSpeed
+   * @return double
+   */
   public double speedConvert(double inSpeed) {
     return inSpeed;
   }
@@ -46,14 +51,16 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void startIntake() {
+    timer.reset();
     coralMotorSparkMax.set(intakeSpeed);
+    timer.start();
   }
 
   public boolean isCoralLoaded() {
     return !forwardLimit.isPressed();
   }
 
-  public static boolean outtakeIsTimeDone() {
+  public static boolean isTimeDone() {
     return timer.hasElapsed(Constants.CoralConstants.kCoralOuttakeTime);
   }
 
