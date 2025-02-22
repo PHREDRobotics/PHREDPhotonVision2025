@@ -19,13 +19,19 @@ public class GoToReef extends Command {
         private VisionSubsystem m_vision_subsystem;
         private SwerveSubsystem m_swerve_subsystem;
 
-        private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-        private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 2);
-        private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(8, 8);
+        private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                        VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+        private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                        VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+        private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                        VisionConstants.kMaxAngularSpeed, VisionConstants.kMaxAngularAcceleration);
 
-        private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, X_CONSTRAINTS);
-        private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, Y_CONSTRAINTS);
-        private final ProfiledPIDController omegaController = new ProfiledPIDController(2, 0, 0, OMEGA_CONSTRAINTS);
+        private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kXYP,
+                        VisionConstants.kXYI, VisionConstants.kXYI, X_CONSTRAINTS);
+        private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kXYP,
+                        VisionConstants.kXYI, VisionConstants.kXYI, Y_CONSTRAINTS);
+        private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kRP,
+                        VisionConstants.kRI, VisionConstants.kRI, OMEGA_CONSTRAINTS);
 
         private double xSpeed;
         private double ySpeed;
@@ -43,6 +49,13 @@ public class GoToReef extends Command {
         // new Rotation3d(0.0, 0.0, Math.PI));
 
         /**
+         * Creates a new GoToReef command.
+         *
+         * @param direction This determines if the robot will go to the left or right
+         *                  side of the reef.
+         */
+
+        /**
          * Creates new GoToReef command
          * 
          * @param vision_subsystem The vision subsystem this command uses.
@@ -53,9 +66,9 @@ public class GoToReef extends Command {
                 m_vision_subsystem = vision_subsystem;
                 m_swerve_subsystem = swerve_subsystem;
 
-                xController.setTolerance(0.2);
-                yController.setTolerance(0.2);
-                omegaController.setTolerance(Units.degreesToRadians(3));
+                xController.setTolerance(VisionConstants.kPositionTolerance);
+                yController.setTolerance(VisionConstants.kPositionTolerance);
+                omegaController.setTolerance(Units.degreesToRadians(VisionConstants.kAngleTolerance));
                 omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
                 targetTag = m_vision_subsystem.getTargetID();
@@ -134,13 +147,13 @@ public class GoToReef extends Command {
         private Pose2d getTargetPoseLeft(Pose2d tag) {
                 Pose2d targetPose = new Pose2d(
                                 tag.getX()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.cos(tag.getRotation().getRadians())
                                                 + VisionConstants.kMetersSideReefAprilTag
                                                                 * Math.cos(tag.getRotation().getRadians()
                                                                                 + Math.PI / 2),
                                 tag.getY()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.sin(tag.getRotation().getRadians())
                                                 + VisionConstants.kMetersSideReefAprilTag
                                                                 * Math.sin(tag.getRotation().getRadians()
@@ -153,13 +166,13 @@ public class GoToReef extends Command {
         private Pose2d getTargetPoseRight(Pose2d tag) {
                 Pose2d targetPose = new Pose2d(
                                 tag.getX()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.cos(tag.getRotation().getRadians())
                                                 - VisionConstants.kMetersSideReefAprilTag
                                                                 * Math.cos(tag.getRotation().getRadians()
                                                                                 + Math.PI / 2),
                                 tag.getY()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.sin(tag.getRotation().getRadians())
                                                 - VisionConstants.kMetersSideReefAprilTag
                                                                 * Math.sin(tag.getRotation().getRadians()
@@ -172,10 +185,10 @@ public class GoToReef extends Command {
         private Pose2d getTargetPose(Pose2d tag) {
                 Pose2d targetPose = new Pose2d(
                                 tag.getX()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.cos(tag.getRotation().getRadians()),
                                 tag.getY()
-                                                + VisionConstants.kMetersFromAprilTag
+                                                + VisionConstants.kMetersFromReef
                                                                 * Math.sin(tag.getRotation().getRadians()),
                                 tag.getRotation().rotateBy(new Rotation2d(Math.PI)));
 

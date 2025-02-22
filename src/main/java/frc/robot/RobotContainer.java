@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.AlgaeIntakeCommand;
 import frc.robot.commands.AlgaeOuttakeCommand;
+import frc.robot.commands.AlignLoadingStationCommand;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
@@ -23,6 +24,8 @@ import frc.robot.commands.ElevatorManualLift;
 import frc.robot.commands.ResetElevator;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
+import frc.robot.commands.GoToReef;
+import frc.robot.commands.GoToTag;
 import frc.robot.commands.RetractLift;
 import frc.robot.commands.SwerveReset;
 import frc.robot.controls.LogitechPro;
@@ -82,8 +85,18 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Triggers
-    Trigger fieldOrientedTrigger = new Trigger(() -> m_driverJoystick.getTrigger());
-    Trigger resetTrigger = new Trigger(() -> m_driverJoystick.getRawButton(2));
+    Trigger trigger = new Trigger(() -> m_driverJoystick.getTrigger());
+    Trigger maryButton = new Trigger(() -> m_driverJoystick.getRawButton(2));
+    Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
+    Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));    
+    Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
+    Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
+    Trigger button7 = new Trigger(() -> m_driverJoystick.getRawButton(7));
+    Trigger button8 = new Trigger(() -> m_driverJoystick.getRawButton(8));
+    Trigger button9 = new Trigger(() -> m_driverJoystick.getRawButton(9));
+    Trigger button10 = new Trigger(() -> m_driverJoystick.getRawButton(10));
+    Trigger button11 = new Trigger(() -> m_driverJoystick.getRawButton(11));
+    Trigger button12 = new Trigger(() -> m_driverJoystick.getRawButton(12));
 
     Trigger bButton = m_xboxController.b();
     Trigger aButton = m_xboxController.a();
@@ -137,9 +150,13 @@ public class RobotContainer {
         strafeAxis,
         turnAxis,
         throttleAxis,
-        () -> !fieldOrientedTrigger.getAsBoolean())); // will be robot-centric if held down
+        () -> !trigger.getAsBoolean())); // will be robot-centric if held down
 
-    resetTrigger.onTrue(new SwerveReset(m_swerveSubsystem));
+    maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
+    button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "left"));
+    button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
+    button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
+    button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 
   /**
