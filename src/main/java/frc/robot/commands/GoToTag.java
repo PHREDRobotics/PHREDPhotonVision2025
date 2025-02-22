@@ -41,7 +41,7 @@ public class GoToTag extends Command {
     // new Rotation3d(0.0, 0.0, Math.PI));
 
     /**
-     * Creates a new VisionCommand.
+     * Creates a new GoToTag.
      *
      * @param vision_subsystem Vision subsystem
      * @param swerve_subsystem Swerve subsystem
