@@ -42,7 +42,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
   AlgaeSubsystem m_algaeSubsystem;
-  // ClimbSubsystem m_climbSubsystem;
+  ClimbSubsystem m_climbSubsystem;
   CoralSubsystem m_coralSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   VisionSubsystem m_visionSubsystem;
@@ -66,7 +66,7 @@ public class RobotContainer {
     m_swerveSubsystem = new SwerveSubsystem();
     m_algaeSubsystem = new AlgaeSubsystem();
     m_coralSubsystem = new CoralSubsystem();
-    // m_climbSubsystem = new ClimbSubsystem();
+    m_climbSubsystem = new ClimbSubsystem();
     m_elevatorSubsystem = new ElevatorSubsystem();
     m_visionSubsystem = new VisionSubsystem();
 
@@ -98,12 +98,12 @@ public class RobotContainer {
     Trigger maryButton = new Trigger(() -> m_driverJoystick.getRawButton(2));
     Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
     Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));
-    Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
-    Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
-    Trigger button7 = new Trigger(() -> m_driverJoystick.getRawButton(7));
-    Trigger button8 = new Trigger(() -> m_driverJoystick.getRawButton(8));
-    Trigger button9 = new Trigger(() -> m_driverJoystick.getRawButton(9));
-    Trigger button10 = new Trigger(() -> m_driverJoystick.getRawButton(10));
+    // Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
+    // Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
+    // Trigger button7 = new Trigger(() -> m_driverJoystick.getRawButton(7));
+    // Trigger button8 = new Trigger(() -> m_driverJoystick.getRawButton(8));
+    // Trigger button9 = new Trigger(() -> m_driverJoystick.getRawButton(9));
+    // Trigger button10 = new Trigger(() -> m_driverJoystick.getRawButton(10));
     Trigger button11 = new Trigger(() -> m_driverJoystick.getRawButton(11));
     Trigger button12 = new Trigger(() -> m_driverJoystick.getRawButton(12));
 
@@ -113,8 +113,8 @@ public class RobotContainer {
     Trigger xButton = m_xboxController.x();
     Trigger startButton = m_xboxController.start();
     Trigger backButton = m_xboxController.back();
-    Trigger leftBumper = m_xboxController.leftBumper();
-    Trigger rightBumper = m_xboxController.rightBumper();
+    // Trigger leftBumper = m_xboxController.leftBumper();
+    // Trigger rightBumper = m_xboxController.rightBumper();
 
     // Axes
     DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
@@ -135,8 +135,8 @@ public class RobotContainer {
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
     aButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
     bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
-    // startButton.onTrue(new ExtendLift(m_climbSubsystem));
-    // backButton.onTrue(new RetractLift(m_climbSubsystem));
+    startButton.onTrue(new ExtendLift(m_climbSubsystem));
+    backButton.onTrue(new RetractLift(m_climbSubsystem));
 
     dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
     new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
