@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticsConstants;
 
@@ -13,18 +14,18 @@ import frc.robot.Constants.PneumaticsConstants;
  * Subsytem for controlling the climber
  */
 public class ClimbSubsystem extends SubsystemBase {
-  public static PneumaticHub pH;
+  public static PneumaticsControlModule pHCM;
   public static DoubleSolenoid doubleSolenoidClimber;
 
   /**
    * Creates a new ClimbSubsystem.
    */
   public ClimbSubsystem() {
-    pH = new PneumaticHub(PneumaticsConstants.kPneumaticsCANId);
+    pHCM = new PneumaticsControlModule(PneumaticsConstants.kPneumaticsCANId);
 
-    pH.enableCompressorDigital();
+    pHCM.enableCompressorDigital();
 
-    doubleSolenoidClimber = pH.makeDoubleSolenoid(PneumaticsConstants.kSolenoidInput,
+    doubleSolenoidClimber = pHCM.makeDoubleSolenoid(PneumaticsConstants.kSolenoidInput,
         PneumaticsConstants.kSolenoidOutput);
     addChild("Double Solenoid Climber", doubleSolenoidClimber);
 
