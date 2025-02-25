@@ -138,16 +138,17 @@ public class RobotContainer {
     // startButton.onTrue(new ExtendLift(m_climbSubsystem));
     // backButton.onTrue(new RetractLift(m_climbSubsystem));
 
-    dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem)));
+    dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));
 
     dPadRight.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem)));
 
     dPadUp.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem)));
 
     m_elevatorSubsystem
         .setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));

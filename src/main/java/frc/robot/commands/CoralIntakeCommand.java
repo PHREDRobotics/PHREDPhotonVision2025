@@ -42,7 +42,7 @@ public class CoralIntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return coralSubsystem.isCoralLoaded();
-    return CoralSubsystem.isTimeDone();
+    return coralSubsystem.isCoralLoaded();
+    // return CoralSubsystem.isTimeDone();
   }
 }
