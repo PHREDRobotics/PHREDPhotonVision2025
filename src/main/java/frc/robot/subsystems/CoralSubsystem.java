@@ -5,6 +5,8 @@ import frc.robot.Configs;
 import frc.robot.Constants;
 import frc.robot.Constants.CoralConstants;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -35,20 +37,19 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void startOuttake(int level) {
     timer.reset();
-    if(level == 1) {
+    if (level == 1) {
       coralMotorSparkMax.set(outtakeSpeedL1);
-    } else if (level == 2){
+    } else if (level == 2) {
       coralMotorSparkMax.set(outtakeSpeedL2);
-    } else if (level == 3){
+    } else if (level == 3) {
       coralMotorSparkMax.set(outtakeSpeedL3);
-    } else if (level == 4){
+    } else if (level == 4) {
       coralMotorSparkMax.set(outtakeSpeedL4);
     }
     timer.start();
   }
 
-  
-  /** 
+  /**
    * @param inSpeed
    * @return double
    */
@@ -77,8 +78,9 @@ public class CoralSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // SmartDashboard.putBoolean("Pressed?", isCoralLoaded());
-    // SmartDashboard.putBoolean("Manual Override Press", SmartDashboard.getBoolean("Manual Override Press", false));
-    // SmartDashboard.putBoolean("Is Limit Switch Triggered?", !forwardLimit.isPressed());
+    // SmartDashboard.putBoolean("Manual Override Press",
+    // SmartDashboard.getBoolean("Manual Override Press", false));
+    SmartDashboard.putBoolean("Is Limit Switch Triggered?", !forwardLimit.isPressed());
 
     // Slider things VARIABLES
     // outtakeSpeed = SmartDashboard.getNumber("Outtake Speed", outtakeSpeed);

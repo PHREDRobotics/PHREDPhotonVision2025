@@ -44,6 +44,7 @@ public class CoralOuttakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     coralSubsystem.stop();
+    elevatorSubsystem.moveToPosition(elevatorSubsystem.getLevel());
   }
 
   /**
