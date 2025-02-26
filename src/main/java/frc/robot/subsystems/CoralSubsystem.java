@@ -70,7 +70,8 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public boolean isCoralLoaded() {
-    return !forwardLimit.isPressed();
+    // return !forwardLimit.isPressed();
+    return false;
   }
 
   public static boolean isTimeDone() {
