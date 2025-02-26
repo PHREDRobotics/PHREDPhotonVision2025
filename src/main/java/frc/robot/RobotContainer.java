@@ -139,7 +139,7 @@ public class RobotContainer {
     backButton.onTrue(new RetractLift(m_climbSubsystem));
 
     dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));

@@ -7,6 +7,8 @@ import frc.robot.Constants.CoralConstants;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -80,7 +82,7 @@ public class CoralSubsystem extends SubsystemBase {
     // SmartDashboard.putBoolean("Pressed?", isCoralLoaded());
     // SmartDashboard.putBoolean("Manual Override Press",
     // SmartDashboard.getBoolean("Manual Override Press", false));
-    SmartDashboard.putBoolean("Is Limit Switch Triggered?", !forwardLimit.isPressed());
+    SmartDashboard.putBoolean("Is Coral Limit Switch Triggered?", !forwardLimit.isPressed());
 
     // Slider things VARIABLES
     // outtakeSpeed = SmartDashboard.getNumber("Outtake Speed", outtakeSpeed);
