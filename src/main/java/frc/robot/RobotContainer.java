@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -86,7 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorHPCommand",
-    new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralOuttakeCommand",
         new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand",
