@@ -21,10 +21,19 @@ public class AlgaeSubsystem extends SubsystemBase {
     public double algaeSpeed = AlgaeConstants.kAlgaeSpeed;
 
     public void Intake() {
-        timer.reset();
-        leftAlgaeSparkMax.set(speedConvert(algaeSpeed)); // In last years code this was similar to pickUpNote() in IntakeSubsystem.
-        rightAlgaeSparkMax.set(speedConvert(-algaeSpeed));
-        timer.start();
+        if (!forwardLimit.isPressed()) {
+            timer.reset();
+            leftAlgaeSparkMax.set(speedConvert(algaeSpeed)); // In last years code this was similar to pickUpNote() in
+                                                             // IntakeSubsystem.
+            rightAlgaeSparkMax.set(speedConvert(-algaeSpeed));
+            timer.start();
+        }
+        // timer.reset();
+        // leftAlgaeSparkMax.set(speedConvert(algaeSpeed)); // In last years code this
+        // was similar to pickUpNote() in
+        // // IntakeSubsystem.
+        // rightAlgaeSparkMax.set(speedConvert(-algaeSpeed));
+        // timer.start();
     }
 
     public void Outtake() {
@@ -34,8 +43,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         timer.start();
     }
 
-    
-    /** 
+    /**
      * @param inSpeed
      * @return double
      */
@@ -45,10 +53,11 @@ public class AlgaeSubsystem extends SubsystemBase {
         }
         return inSpeed;
     }
-      public static boolean isTimeDone() {
-    return timer.hasElapsed(Constants.AlgaeConstants.kAlgaeTime);
-  }
-    
+
+    public static boolean isTimeDone() {
+        return timer.hasElapsed(Constants.AlgaeConstants.kAlgaeTime);
+    }
+
     public void stop() {
         leftAlgaeSparkMax.set(0);
         rightAlgaeSparkMax.set(0);
@@ -65,9 +74,9 @@ public class AlgaeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Slider variables
-        algaeSpeed = SmartDashboard.getNumber("Algae Speed", algaeSpeed);
-        SmartDashboard.putNumber("Algae Speed", algaeSpeed);
-        SmartDashboard.putBoolean("Algae Limit Switch Pressed: ", forwardLimit.isPressed());
+        algaeSpeed = SmartDashboard.getNumber("Algae/Algae Speed", algaeSpeed);
+        SmartDashboard.putNumber("Algae/Algae Speed", algaeSpeed);
+        SmartDashboard.putBoolean("Algae/Algae Limit Switch Pressed: ", forwardLimit.isPressed());
 
         // This will be called once per scheduler run
     }

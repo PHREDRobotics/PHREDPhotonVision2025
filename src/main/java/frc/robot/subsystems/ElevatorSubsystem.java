@@ -98,8 +98,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_pidController.setReference(positionTicks, SparkBase.ControlType.kMAXMotionPositionControl,
                 ClosedLoopSlot.kSlot0, Constants.ElevatorConstants.kArbFF);
 
-        SmartDashboard.putNumber("Position ticks moveToPosition()", positionTicks);
-        
+        SmartDashboard.putNumber("Elevator/Position ticks moveToPosition()", positionTicks);
+
         if (positionTicks == Constants.ElevatorConstants.kCoralLevel1) {
             level = 1;
         } else if (positionTicks == Constants.ElevatorConstants.kCoralLevel2) {
@@ -110,6 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             level = 4;
         }
     }
+
     public int getLevel() {
         return level;
     }
@@ -128,15 +129,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     // return m_limit_switch.get();
     // }
     public void periodic() {
-        SmartDashboard.putNumber("Elevator Encoder Ticks", getEncoder());
-        SmartDashboard.putNumber("Centimeters", getEncoder() * Constants.ElevatorConstants.kEncoderTicksToCentimeters);
+        SmartDashboard.putNumber("Elevator/Elevator Encoder Ticks", getEncoder());
+        SmartDashboard.putNumber("Elevator/Centimeters",
+                getEncoder() * Constants.ElevatorConstants.kEncoderTicksToCentimeters);
         // SmartDashboard.putBoolean("Is top Limit switch triggered",
         // topForwardLimit.isPressed());
 
         // SmartDashboard.putBoolean("Is bottom Limit switch triggered",
         // bottomForwardLimit.isPressed());
-        SmartDashboard.putBoolean("Is bottom Limit switch triggered", isLimitSwitchPressed());
+        SmartDashboard.putBoolean("Elevator/Is bottom Limit switch triggered", isLimitSwitchPressed());
 
-        SmartDashboard.putNumber("Elevator Motor RPM", encoder.getVelocity());
+        SmartDashboard.putNumber("Elevator/Elevator Motor RPM", encoder.getVelocity());
     }
 }

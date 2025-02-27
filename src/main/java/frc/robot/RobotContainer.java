@@ -35,6 +35,7 @@ import frc.robot.controls.LogitechPro;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.DistanceSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
   CoralSubsystem m_coralSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
   VisionSubsystem m_visionSubsystem;
+  DistanceSubsystem m_distanceSubsystem;
 
   LogitechPro m_driverJoystick;
   CommandXboxController m_xboxController;
@@ -69,6 +71,7 @@ public class RobotContainer {
     m_climbSubsystem = new ClimbSubsystem();
     m_elevatorSubsystem = new ElevatorSubsystem();
     m_visionSubsystem = new VisionSubsystem();
+    m_distanceSubsystem = new DistanceSubsystem();
 
     m_driverJoystick = new LogitechPro(0);
     m_xboxController = new CommandXboxController(1);

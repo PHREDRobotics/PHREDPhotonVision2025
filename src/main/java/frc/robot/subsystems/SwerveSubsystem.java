@@ -215,6 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPose(pose);
+    m_poseEstimator.resetPose(pose);
   }
 
   public void updateOdometry() {

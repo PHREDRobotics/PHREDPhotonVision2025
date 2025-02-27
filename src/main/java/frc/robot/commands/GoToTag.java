@@ -19,13 +19,19 @@ public class GoToTag extends Command {
     private VisionSubsystem m_vision_subsystem;
     private SwerveSubsystem m_swerve_subsystem;
 
-    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
-    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
-    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.kMaxAngularSpeed, VisionConstants.kMaxAngularAcceleration);
+    private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            VisionConstants.kMaxSpeed, VisionConstants.kMaxAcceleration);
+    private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            VisionConstants.kMaxAngularSpeed, VisionConstants.kMaxAngularAcceleration);
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, X_CONSTRAINTS);
-    private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kXYP, VisionConstants.kXYI, VisionConstants.kXYI, Y_CONSTRAINTS);
-    private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kRP, VisionConstants.kRI, VisionConstants.kRI, OMEGA_CONSTRAINTS);
+    private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kXYP,
+            VisionConstants.kXYI, VisionConstants.kXYI, X_CONSTRAINTS);
+    private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kXYP,
+            VisionConstants.kXYI, VisionConstants.kXYI, Y_CONSTRAINTS);
+    private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kRP,
+            VisionConstants.kRI, VisionConstants.kRI, OMEGA_CONSTRAINTS);
 
     private double xSpeed;
     private double ySpeed;
@@ -95,21 +101,21 @@ public class GoToTag extends Command {
         // 3. set speeds using pid
         xSpeed = xController.calculate(currentPose2d.getX(), targetxState, X_CONSTRAINTS);
         ySpeed = yController.calculate(currentPose2d.getY(), targetyState, Y_CONSTRAINTS);
-        xSpeed = omegaController.calculate(currentPose2d.getRotation().getRadians(), targetomegaState,
+        turningSpeed = omegaController.calculate(currentPose2d.getRotation().getRadians(), targetomegaState,
                 OMEGA_CONSTRAINTS);
-        // 4. make chassis speeds
-        ChassisSpeeds chassisSpeeds;
-        chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeed, ySpeed, turningSpeed, m_swerve_subsystem.getPose().getRotation());
-        // 5. Output each module states to wheels
-        m_swerve_subsystem.drive(chassisSpeeds, () -> false);
+        // 4. Output speeds to wheels
+        m_swerve_subsystem.drive(
+                () -> xSpeed,
+                () -> ySpeed,
+                () -> turningSpeed,
+                () -> false);
 
         // Smart dash varibs. The string ones proably work
-        SmartDashboard.putNumber("X-Speed", xSpeed);
-        SmartDashboard.putNumber("Y-Speed", ySpeed);
-        SmartDashboard.putNumber("Turn-Speed", turningSpeed);
-        SmartDashboard.putString("Target-Pose", targetPose2d.toString());
-        SmartDashboard.putString("Current-Pose", currentPose2d.toString());
+        SmartDashboard.putNumber("Automove/X-Speed", xSpeed);
+        SmartDashboard.putNumber("Automove/Y-Speed", ySpeed);
+        SmartDashboard.putNumber("Automove/Turn-Speed", turningSpeed);
+        SmartDashboard.putString("Automove/Target-Pose", targetPose2d.toString());
+        SmartDashboard.putString("Automove/Current-Pose", currentPose2d.toString());
     }
 
     /**

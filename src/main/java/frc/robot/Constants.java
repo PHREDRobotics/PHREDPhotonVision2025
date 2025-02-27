@@ -44,10 +44,11 @@ public class Constants {
                 public static final double kCoralOuttakeSpeedL1 = -0.5; // SLOW = -0.065 L1, L2, L3 FAST = -0.08
                 public static final double kCoralOuttakeSpeedL2 = -0.5;
                 public static final double kCoralOuttakeSpeedL3 = -0.5;
-                public static final double kCoralOuttakeSpeedL4 = -0.08;
+                public static final double kCoralOuttakeSpeedL4 = -0.55;
                 public static final double kCoralOuttakeTime = 1.0;
         }
 
+        // 19.75 20.25 inches away from base for L4 for distance sensor
         public static final class ElevatorConstants {
                 public static final double kP = 1.0;
                 public static final double kI = 0.0;
@@ -65,10 +66,10 @@ public class Constants {
                 public static final double kElevatorResetSpeed = -0.01;
 
                 public static final double kCoralLevel1 = 0.0001;
-                public static final double kCoralLevel2 = 3.23;
+                public static final double kCoralLevel2 = 4.35;
                 public static final double kCoralLevel3 = 11.07;
-                public static final double kCoralLevel4 = 30.7;
-                public static final double kHumanPlayerStationLevel = 0;
+                public static final double kCoralLevel4 = 28.61;
+                public static final double kHumanPlayerStationLevel = 4.35;
 
                 // Physical constants
                 public static final double kEncoderTicksPerRotation = 42;
@@ -168,10 +169,10 @@ public class Constants {
         }
 
         public static final class UltrasonicConstants {
-                public static final int kUltrasonicPingPortLeft = 1;
-                public static final int kUltrasonicEchoPortLeft = 0;
-                public static final int kUltrasonicPingPortRight = 2;
-                public static final int kUltrasonicEchoPortRight = 3;
+                public static final int kUltrasonicPingPortLeft = 6;
+                public static final int kUltrasonicEchoPortLeft = 7;
+                public static final int kUltrasonicPingPortRight = 4;
+                public static final int kUltrasonicEchoPortRight = 5;
 
                 public static final int kMedianFilterSize = 5;
 

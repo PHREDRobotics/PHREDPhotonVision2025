@@ -85,15 +85,15 @@ public class VisionSubsystem extends SubsystemBase {
     return ta;
   }
 
-  
-  /** 
+  /**
    * @return double
    */
   public double getTargetXDegrees() {
     return tx;
   }
 
-  public void goToDistance(double distance) {}
+  public void goToDistance(double distance) {
+  }
 
   public int getTargetID() {
     return (int) m_table.getEntry("tid").getInteger(0);
@@ -119,16 +119,16 @@ public class VisionSubsystem extends SubsystemBase {
     ty = m_table.getEntry("ty").getDouble(0);
     ta = m_table.getEntry("ta").getDouble(0);
     tid = m_table.getEntry("tid").getDouble(0);
-    SmartDashboard.putBoolean("Sees target?", !(tid == -1.0));
-    SmartDashboard.putNumber("Target:", tid);
-    SmartDashboard.putNumber("Limelight a value.", ta);
-    SmartDashboard.putNumber("Limelight y value.", ty);
-    SmartDashboard.putNumber("Limelight x value.", tx);
+    SmartDashboard.putBoolean("Limelight/Sees target?", !(tid == -1.0));
+    SmartDashboard.putNumber("Limelight/Target:", tid);
+    SmartDashboard.putNumber("Limelight/Limelight a value.", ta);
+    SmartDashboard.putNumber("Limelight/Limelight y value.", ty);
+    SmartDashboard.putNumber("Limelight/Limelight x value.", tx);
     // SmartDashboard.putNumber("Estimated Distance", getTargetDistance());
     // SmartDashboard.putNumber("Estimated Rough Distance",
     // getRoughTargetDistance());
     // SmartDashboard.putNumber("Limelight v value.", tv);
-    SmartDashboard.putBoolean("Is the target in range?", m_LimelightHasValidTarget);
-    SmartDashboard.putBoolean("Is the target centered", m_IsLimeLightCentered);
+    SmartDashboard.putBoolean("Limelight/Is the target in range?", m_LimelightHasValidTarget);
+    SmartDashboard.putBoolean("Limelight/Is the target centered", m_IsLimeLightCentered);
   }
 }
