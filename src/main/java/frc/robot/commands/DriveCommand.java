@@ -28,6 +28,7 @@ public class DriveCommand extends Command {
         private double ySpeed;
         private double xSpeed;
         private double rot;
+        private double adjThrottle;
 
         /**
          * Creates a new DriveCommand.
@@ -63,35 +64,38 @@ public class DriveCommand extends Command {
 
         @Override
         public void execute() {
-                double adjustedThrottle = ((-(Constants.ControllerConstants.kMaxThrottle
-                                - Constants.ControllerConstants.kMinThrottle) / 2) * throttle.getAsDouble())
-                                + (Constants.ControllerConstants.kMinThrottle
-                                                + Constants.ControllerConstants.kMaxThrottle) / 2;
+                // double adjustedThrottle = ((-(Constants.ControllerConstants.kMaxThrottle
+                // - Constants.ControllerConstants.kMinThrottle) / 2) * throttle.getAsDouble())
+                // + (Constants.ControllerConstants.kMinThrottle
+                // + Constants.ControllerConstants.kMaxThrottle) / 2;
+
+                adjThrottle = (throttle.getAsDouble() + 0.1) * 0.9;
 
                 ySpeed = MathUtil.applyDeadband(ySpeedFunc.getAsDouble(),
                                 Constants.ControllerConstants.kFlightStickYDeadband);
-                xSpeed = MathUtil.applyDeadband(-xSpeedFunc.getAsDouble(),
+                xSpeed = MathUtil.applyDeadband(xSpeedFunc.getAsDouble(),
                                 Constants.ControllerConstants.kFlightStickXDeadband);
-                rot = MathUtil.applyDeadband(-rotFunc.getAsDouble(),
+                rot = MathUtil.applyDeadband(rotFunc.getAsDouble(),
                                 Constants.ControllerConstants.kFlightStickZDeadband);
 
                 ySpeed = ySpeed * Math.abs(ySpeed);
                 xSpeed = xSpeed * Math.abs(xSpeed);
                 rot = rot * Math.abs(rot);
 
-                ySpeed = yLimiter.calculate(ySpeed) * adjustedThrottle;
-                xSpeed = xLimiter.calculate(xSpeed) * adjustedThrottle;
+                ySpeed = yLimiter.calculate(ySpeed) * adjThrottle;
+                xSpeed = xLimiter.calculate(xSpeed) * adjThrottle;
                 rot = zLimiter.calculate(rot);
 
                 swerveDrive.drive(
-                                () -> ySpeed,
+                                () -> -ySpeed,
                                 () -> xSpeed,
-                                () -> rot,
+                                () -> -rot,
                                 fieldOriented);
 
                 SmartDashboard.putNumber("Joystick/Y", ySpeed);
                 SmartDashboard.putNumber("Joystick/X", xSpeed);
                 SmartDashboard.putNumber("Joystick/Z", rot);
-                // SmartDashboard.putNumber("Joystick/T", adjustedThrottle);
+                SmartDashboard.putNumber("Joystick/T", adjThrottle);
+                SmartDashboard.putNumber("Joystick/TR", throttle.getAsDouble());
         }
 }

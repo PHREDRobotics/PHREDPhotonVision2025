@@ -119,7 +119,7 @@ public class RobotContainer {
     // Axes
     DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
     DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
-    DoubleSupplier turnAxis = () -> m_driverJoystick.getYaw();
+    DoubleSupplier turnAxis = () -> -m_driverJoystick.getYaw();
     DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
 
     // D-Pad Buttons
@@ -133,13 +133,13 @@ public class RobotContainer {
     // Xbox con
     xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
-    aButton.onTrue(new CoralIntakeCommand(m_coralSubsystem));
+    aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
     bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     startButton.onTrue(new ExtendLift(m_climbSubsystem));
     backButton.onTrue(new RetractLift(m_climbSubsystem));
 
     dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-    new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs;
 import frc.robot.Constants;
 
 /**
@@ -56,13 +57,21 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveSubsystem() {
     if (RobotBase.isReal()) {
       m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-          Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
+          Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
+          Configs.FrontLeftConfig.drivingConfig,
+          Configs.FrontLeftConfig.turningConfig);
       m_frontRight = new SparkSwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-          Constants.SwerveConstants.kFrontRightTurnMotorCANId);
+          Constants.SwerveConstants.kFrontRightTurnMotorCANId,
+          Configs.FrontRightConfig.drivingConfig,
+          Configs.FrontRightConfig.turningConfig);
       m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-          Constants.SwerveConstants.kBackLeftTurnMotorCANId);
+          Constants.SwerveConstants.kBackLeftTurnMotorCANId,
+          Configs.BackLeftConfig.drivingConfig,
+          Configs.BackLeftConfig.turningConfig);
       m_backRight = new SparkSwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-          Constants.SwerveConstants.kBackRightTurnMotorCANId);
+          Constants.SwerveConstants.kBackRightTurnMotorCANId,
+          Configs.BackRightConfig.drivingConfig,
+          Configs.BackRightConfig.turningConfig);
 
       m_swerveSimulation = null;
 
@@ -129,8 +138,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Pose estimation field", m_poseEstimatorField);
   }
 
-  
-  /** 
+  /**
    * @param xSpeed
    * @param ySpeed
    * @param rot
