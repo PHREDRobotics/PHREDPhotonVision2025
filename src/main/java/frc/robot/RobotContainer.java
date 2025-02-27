@@ -79,12 +79,14 @@ public class RobotContainer {
     // ResetElevatorCommand is the same as the trough
     NamedCommands.registerCommand("ResetElevatorCommand",
         new ResetElevator(m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorL2Command",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorL1Command",
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL3Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorHPCommand",
+    new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralOuttakeCommand",
         new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand",
@@ -133,7 +135,7 @@ public class RobotContainer {
 
     // Assign Commands
 
-    // Xbox
+    // Xbox con
     xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
     yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
     aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));

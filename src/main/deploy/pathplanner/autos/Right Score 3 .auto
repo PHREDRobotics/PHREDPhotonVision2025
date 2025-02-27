@@ -29,7 +29,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorL3Command"
+                  "name": "ElevatorL2Command"
                 }
               }
             ]
@@ -54,57 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ElevatorResetCommand"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralIntakeCommand"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RightHPToCloseCoral"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorL3Command"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralOuttakeCommand"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "RightCloseCoralToHP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ElevatorResetCommand"
+                  "name": "ElevatorHPCommand"
                 }
               }
             ]
@@ -130,6 +80,56 @@
                 "type": "named",
                 "data": {
                   "name": "ElevatorL2Command"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttakeCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightCloseCoralToHP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorHPCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralIntakeCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightHPToCloseCoralClose"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorResetCommand"
                 }
               }
             ]

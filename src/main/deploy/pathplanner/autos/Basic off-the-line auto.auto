@@ -5,6 +5,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "PullGrenadePin"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorResetCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Move off of line"
