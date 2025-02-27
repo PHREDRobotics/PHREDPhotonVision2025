@@ -218,6 +218,10 @@ public class SwerveSubsystem extends SubsystemBase {
     m_poseEstimator.resetPose(pose);
   }
 
+  public void resetGyro() {
+    m_gyro.reset();
+  }
+
   public void updateOdometry() {
     m_odometry.update(
         m_gyro.getRotation2d(),

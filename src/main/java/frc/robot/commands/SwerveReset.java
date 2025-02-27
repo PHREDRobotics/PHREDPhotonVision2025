@@ -21,6 +21,6 @@ public class SwerveReset extends Command {
 
     @Override
     public void initialize() {
-        m_swerveSubsystem.resetOdometry(new Pose2d());
+        m_swerveSubsystem.resetGyro();
     }
 }
