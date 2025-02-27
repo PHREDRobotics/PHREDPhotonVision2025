@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Algae intake command that uses the limit switch to stop the intake when the algae is loaded.
+ * Algae intake command that uses the limit switch to stop the intake when the
+ * algae is loaded.
  */
 public class AlgaeIntakeCommand extends Command {
     private final AlgaeSubsystem m_AlgaeSubsystem;
@@ -34,8 +35,7 @@ public class AlgaeIntakeCommand extends Command {
         // Periodically runs; nothing for now.
     }
 
-    
-    /** 
+    /**
      * @param interrupted
      */
     @Override
@@ -45,11 +45,12 @@ public class AlgaeIntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        // return cmdSubsystem.isAlgaeLoaded();
+        return m_AlgaeSubsystem.isAlgaeLoaded();
 
-        return timer.hasElapsed(Constants.AlgaeConstants.kAlgaeTime);
-         /**
-          * isFinished() will return isAlgaeLoaded() which checks if the limit switch (or beam break) for the algae is pressed.
-          */
+        // return timer.hasElapsed(Constants.AlgaeConstants.kAlgaeTime);
+        /**
+         * isFinished() will return isAlgaeLoaded() which checks if the limit switch (or
+         * beam break) for the algae is pressed.
+         */
     }
-} 
+}

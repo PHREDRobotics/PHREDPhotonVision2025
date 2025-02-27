@@ -19,7 +19,7 @@ public class Constants {
                 public static final int kLeftAlgaeCANId = 42;
                 public static final int kRightAlgaeCANId = 41;
 
-                public static final double kAlgaeSpeed = 0.5;
+                public static final double kAlgaeSpeed = 0.25;
                 public static final double kAlgaeTime = 1;
         }
 
@@ -66,7 +66,7 @@ public class Constants {
                 public static final double kElevatorResetSpeed = -0.01;
 
                 public static final double kCoralLevel1 = 0.0001;
-                public static final double kCoralLevel2 = 4.35;
+                public static final double kCoralLevel2 = 0.0001;
                 public static final double kCoralLevel3 = 11.07;
                 public static final double kCoralLevel4 = 28.61;
                 public static final double kHumanPlayerStationLevel = 4.35;
