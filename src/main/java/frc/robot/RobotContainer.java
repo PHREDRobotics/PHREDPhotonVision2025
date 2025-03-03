@@ -169,7 +169,7 @@ public class RobotContainer {
     maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
     button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "left"));
     button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
-    button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
+    //button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
     button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 

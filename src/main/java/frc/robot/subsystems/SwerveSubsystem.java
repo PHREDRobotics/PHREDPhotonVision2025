@@ -211,10 +211,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
+    //return m_odometry.getPoseMeters();
   }
 
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPose(pose);
+    //m_odometry.resetPose(pose);
     m_poseEstimator.resetPose(pose);
   }
 
@@ -288,9 +289,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    // updateOdometry();
+    updateOdometry();
 
-    m_poseEstimatorField.setRobotPose(m_poseEstimator.getEstimatedPosition());
+    m_poseEstimatorField.setRobotPose(getPose());
 
     SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
 
@@ -314,6 +315,5 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // updateOdometry();
   }
 }
