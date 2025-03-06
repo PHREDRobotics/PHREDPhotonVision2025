@@ -63,7 +63,7 @@ public class SwerveSimulation {
         () -> new SwerveModuleSimulation(moduleConfig));
 
     m_swerveSimulation = new SelfControlledSwerveDriveSimulation(
-      new SwerveDriveSimulation(
+     new SwerveDriveSimulation(
         driveTrainConfig,
         new Pose2d(8.1, 7, new Rotation2d())));
     
@@ -71,6 +71,10 @@ public class SwerveSimulation {
     SmartDashboard.putData("Sim Robot", m_field);
 
     SimulatedArena.getInstance().addDriveTrainSimulation(m_swerveSimulation.getDriveTrainSimulation());
+  }
+
+  public Pose2d getPose() {
+      return m_swerveSimulation.getActualPoseInSimulationWorld();
   }
 
   

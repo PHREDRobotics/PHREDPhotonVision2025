@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.function.DoubleSupplier;
 
-import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -86,7 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorL4Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorHPCommand",
-    new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralOuttakeCommand",
         new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand",
@@ -170,7 +169,7 @@ public class RobotContainer {
     maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
     button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "left"));
     button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
-    button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
+    //button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
     button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 
@@ -185,7 +184,7 @@ public class RobotContainer {
         return new PathPlannerAuto("Basic off-the-line auto");
       }
       case LeftScore1: {
-        return new PathPlannerAuto("LeftScore1");
+        return new PathPlannerAuto("Left Score 1");
       }
       case LeftScore2: {
         return new PathPlannerAuto("LeftScore2");
@@ -194,10 +193,10 @@ public class RobotContainer {
         return new PathPlannerAuto("LeftScore3");
       }
       case CenterScore1: {
-        return new PathPlannerAuto("CenterScore1");
+        return new PathPlannerAuto("Center Score 1");
       }
       case RightScore1: {
-        return new PathPlannerAuto("BottomCoralAutoRight");
+        return new PathPlannerAuto("Right Score 1");
       }
       case RightScore2: {
         return new PathPlannerAuto("RightScore2");

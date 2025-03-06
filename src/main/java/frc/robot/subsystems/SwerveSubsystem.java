@@ -211,10 +211,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
+    //return m_odometry.getPoseMeters();
   }
 
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPose(pose);
+    //m_odometry.resetPose(pose);
     m_poseEstimator.resetPose(pose);
   }
 
@@ -235,8 +236,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     LimelightHelpers.SetRobotOrientation("limelight_phred",
         m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-    if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per
+    //LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight_phred");
+
+    
+    /*if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per
                                             // second,
                                             // ignore vision updates
       doRejectUpdate = true;
@@ -249,7 +252,7 @@ public class SwerveSubsystem extends SubsystemBase {
       m_poseEstimator.addVisionMeasurement(
           mt2.pose,
           mt2.timestampSeconds);
-    }
+    } */
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -288,9 +291,9 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    // updateOdometry();
+    updateOdometry();
 
-    m_poseEstimatorField.setRobotPose(m_poseEstimator.getEstimatedPosition());
+    m_poseEstimatorField.setRobotPose(getPose());
 
     SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
 
@@ -314,6 +317,5 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // updateOdometry();
   }
 }
