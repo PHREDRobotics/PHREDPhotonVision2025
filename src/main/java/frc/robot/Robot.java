@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    climbCamera = SmartDashboard.getBoolean("Climb Camera", false);
+    climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
 
     if (climbCamera) {
       server.setSource(camera2);
