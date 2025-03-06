@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.commands.AlgaeIntakeCommand;
-import frc.robot.commands.AlgaeOuttakeCommand;
-import frc.robot.commands.AlignLoadingStationCommand;
+
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
@@ -31,7 +29,6 @@ import frc.robot.commands.RetractLift;
 import frc.robot.commands.SwerveReset;
 import frc.robot.controls.LogitechPro;
 
-import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DistanceSubsystem;
@@ -41,7 +38,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
-  AlgaeSubsystem m_algaeSubsystem;
   ClimbSubsystem m_climbSubsystem;
   CoralSubsystem m_coralSubsystem;
   ElevatorSubsystem m_elevatorSubsystem;
@@ -65,7 +61,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_swerveSubsystem = new SwerveSubsystem();
-    m_algaeSubsystem = new AlgaeSubsystem();
     m_coralSubsystem = new CoralSubsystem();
     m_climbSubsystem = new ClimbSubsystem();
     m_elevatorSubsystem = new ElevatorSubsystem();
@@ -108,13 +103,13 @@ public class RobotContainer {
     // Trigger button8 = new Trigger(() -> m_driverJoystick.getRawButton(8));
     // Trigger button9 = new Trigger(() -> m_driverJoystick.getRawButton(9));
     // Trigger button10 = new Trigger(() -> m_driverJoystick.getRawButton(10));
-    Trigger button11 = new Trigger(() -> m_driverJoystick.getRawButton(11));
+    // Trigger button11 = new Trigger(() -> m_driverJoystick.getRawButton(11));
     Trigger button12 = new Trigger(() -> m_driverJoystick.getRawButton(12));
 
     Trigger bButton = m_xboxController.b();
     Trigger aButton = m_xboxController.a();
-    Trigger yButton = m_xboxController.y();
-    Trigger xButton = m_xboxController.x();
+    // Trigger yButton = m_xboxController.y();
+    // Trigger xButton = m_xboxController.x();
     Trigger startButton = m_xboxController.start();
     Trigger backButton = m_xboxController.back();
     // Trigger leftBumper = m_xboxController.leftBumper();
@@ -135,8 +130,6 @@ public class RobotContainer {
     // Assign Commands
 
     // Xbox con
-    xButton.onTrue(new AlgaeIntakeCommand(m_algaeSubsystem));
-    yButton.onTrue(new AlgaeOuttakeCommand(m_algaeSubsystem));
     aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
     bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
     startButton.onTrue(new ExtendLift(m_climbSubsystem));
