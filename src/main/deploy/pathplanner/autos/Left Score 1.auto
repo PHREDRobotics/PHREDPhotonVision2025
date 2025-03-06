@@ -7,7 +7,44 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ElevatorResetCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PullGrenadePin"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftStartToFarLeftCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorResetCommand"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttakeCommand"
           }
         }
       ]

@@ -184,7 +184,7 @@ public class RobotContainer {
         return new PathPlannerAuto("Basic off-the-line auto");
       }
       case LeftScore1: {
-        return new PathPlannerAuto("LeftScore1");
+        return new PathPlannerAuto("Left Score 1");
       }
       case LeftScore2: {
         return new PathPlannerAuto("LeftScore2");
@@ -196,7 +196,7 @@ public class RobotContainer {
         return new PathPlannerAuto("CenterScore1");
       }
       case RightScore1: {
-        return new PathPlannerAuto("BottomCoralAutoRight");
+        return new PathPlannerAuto("Right Score 1");
       }
       case RightScore2: {
         return new PathPlannerAuto("RightScore2");
