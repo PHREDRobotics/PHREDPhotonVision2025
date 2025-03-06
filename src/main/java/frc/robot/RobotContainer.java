@@ -193,7 +193,7 @@ public class RobotContainer {
         return new PathPlannerAuto("LeftScore3");
       }
       case CenterScore1: {
-        return new PathPlannerAuto("CenterScore1");
+        return new PathPlannerAuto("Center Score 1");
       }
       case RightScore1: {
         return new PathPlannerAuto("Right Score 1");
