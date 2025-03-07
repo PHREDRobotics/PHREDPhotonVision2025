@@ -67,6 +67,12 @@ public class CoralSubsystem extends SubsystemBase {
     timer.start();
   }
 
+  public void autoStartOuttake() {
+    timer.reset();
+    coralMotorSparkMax.set(Constants.CoralConstants.kCoralOuttakeSpeedL2);
+    timer.start();
+  }
+
   public boolean isCoralLoaded() {
     // return !forwardLimit.isPressed();
     return false;

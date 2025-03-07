@@ -19,6 +19,7 @@ import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ElevatorManualLift;
 import frc.robot.commands.ResetElevator;
+import frc.robot.commands.AutoCoralOuttake;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
 import frc.robot.commands.GoToReef;
@@ -81,7 +82,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorHPCommand",
         new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
     NamedCommands.registerCommand("CoralOuttakeCommand",
-        new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
+        new AutoCoralOuttake(m_coralSubsystem));
     NamedCommands.registerCommand("CoralIntakeCommand",
         new CoralIntakeCommand(m_coralSubsystem));
     NamedCommands.registerCommand("PullGrenadePin",
