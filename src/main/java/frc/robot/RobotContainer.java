@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
@@ -71,7 +70,7 @@ public class RobotContainer {
     m_xboxController = new CommandXboxController(1);
 
     // ResetElevatorCommand is the same as the trough
-    NamedCommands.registerCommand("ResetElevatorCommand",
+    NamedCommands.registerCommand("ElevatorResetCommand",
         new ResetElevator(m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL1Command",
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
@@ -139,7 +138,7 @@ public class RobotContainer {
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
 
     dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel2, m_elevatorSubsystem)));
+        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem)));
 
     dPadRight.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
         new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem)));
@@ -162,7 +161,8 @@ public class RobotContainer {
     maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
     button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "left"));
     button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
-    //button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem, m_swerveSubsystem));
+    // button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem,
+    // m_swerveSubsystem));
     button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 
@@ -180,10 +180,10 @@ public class RobotContainer {
         return new PathPlannerAuto("Left Score 1");
       }
       case LeftScore2: {
-        return new PathPlannerAuto("LeftScore2");
+        return new PathPlannerAuto("Left Score 2");
       }
       case LeftScore3: {
-        return new PathPlannerAuto("LeftScore3");
+        return new PathPlannerAuto("Left Score 3");
       }
       case CenterScore1: {
         return new PathPlannerAuto("Center Score 1");
@@ -192,10 +192,10 @@ public class RobotContainer {
         return new PathPlannerAuto("Right Score 1");
       }
       case RightScore2: {
-        return new PathPlannerAuto("RightScore2");
+        return new PathPlannerAuto("Right Score 2");
       }
       case RightScore3: {
-        return new PathPlannerAuto("RightScore3");
+        return new PathPlannerAuto("Right Score 3");
       }
     }
   }

@@ -210,13 +210,13 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    return m_poseEstimator.getEstimatedPosition();
-    //return m_odometry.getPoseMeters();
+    // return m_poseEstimator.getEstimatedPosition();
+    return m_odometry.getPoseMeters();
   }
 
   public void resetOdometry(Pose2d pose) {
-    //m_odometry.resetPose(pose);
-    m_poseEstimator.resetPose(pose);
+    m_odometry.resetPose(pose);
+    // m_poseEstimator.resetPose(pose);
   }
 
   public void resetGyro() {
@@ -228,31 +228,38 @@ public class SwerveSubsystem extends SubsystemBase {
         m_gyro.getRotation2d(),
         getModulePositions());
 
-    m_poseEstimator.update(
-        m_gyro.getRotation2d(),
-        getModulePositions());
+    /*
+     * m_poseEstimator.update(
+     * m_gyro.getRotation2d(),
+     * getModulePositions());
+     * 
+     * boolean doRejectUpdate = false;
+     * 
+     * LimelightHelpers.SetRobotOrientation("limelight_phred",
+     * m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0,
+     * 0, 0);
+     */
+    // LimelightHelpers.PoseEstimate mt2 =
+    // LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight_phred");
 
-    boolean doRejectUpdate = false;
-
-    LimelightHelpers.SetRobotOrientation("limelight_phred",
-        m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    //LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight_phred");
-
-    
-    /*if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per
-                                            // second,
-                                            // ignore vision updates
-      doRejectUpdate = true;
-    }
-    if (mt2.tagCount == 0) {
-      doRejectUpdate = true;
-    }
-    if (!doRejectUpdate) {
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
-      m_poseEstimator.addVisionMeasurement(
-          mt2.pose,
-          mt2.timestampSeconds);
-    } */
+    /*
+     * if (Math.abs(m_gyro.getRate()) > 720) { // if our angular velocity is greater
+     * than 720 degrees per
+     * // second,
+     * // ignore vision updates
+     * doRejectUpdate = true;
+     * }
+     * if (mt2.tagCount == 0) {
+     * doRejectUpdate = true;
+     * }
+     * if (!doRejectUpdate) {
+     * m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7,
+     * 9999999));
+     * m_poseEstimator.addVisionMeasurement(
+     * mt2.pose,
+     * mt2.timestampSeconds);
+     * }
+     */
   }
 
   public SwerveModulePosition[] getModulePositions() {

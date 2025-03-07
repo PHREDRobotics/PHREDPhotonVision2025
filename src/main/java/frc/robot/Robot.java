@@ -91,14 +91,15 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto mode", autoChooser);
 
-    SmartDashboard.putBoolean("Climb Camera", climbCamera);
+    // SmartDashboard.putBoolean("Climb Camera", climbCamera);
+    SmartDashboard.putBoolean("Camera Climb", climbCamera);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
+    climbCamera = SmartDashboard.getBoolean("Camera Climb", climbCamera);
 
     if (climbCamera) {
       server.setSource(camera2);

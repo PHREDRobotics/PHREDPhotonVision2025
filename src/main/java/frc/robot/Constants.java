@@ -24,7 +24,7 @@ public class Constants {
         }
 
         public static final class ControllerConstants {
-                public static final double kFlightStickXDeadband = 0.25;
+                public static final double kFlightStickXDeadband = 0.2;
                 public static final double kFlightStickYDeadband = 0.15;
                 public static final double kFlightStickZDeadband = 0.15;
 
@@ -67,7 +67,7 @@ public class Constants {
 
                 public static final double kCoralLevel1 = 0.0001;
                 public static final double kCoralLevel2 = 0.0001;
-                public static final double kCoralLevel3 = 11.07;
+                public static final double kCoralLevel3 = 10.7;
                 public static final double kCoralLevel4 = 28.61;
                 public static final double kHumanPlayerStationLevel = 4.35;
 

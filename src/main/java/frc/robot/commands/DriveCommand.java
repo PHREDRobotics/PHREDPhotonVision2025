@@ -84,7 +84,7 @@ public class DriveCommand extends Command {
 
                 ySpeed = yLimiter.calculate(ySpeed) * adjThrottle;
                 xSpeed = xLimiter.calculate(xSpeed) * adjThrottle;
-                rot = zLimiter.calculate(rot);
+                rot = zLimiter.calculate(rot) * adjThrottle;
 
                 swerveDrive.drive(
                                 () -> ySpeed,

@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "PullGrenadePin"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
