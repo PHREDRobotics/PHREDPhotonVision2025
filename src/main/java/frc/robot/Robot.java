@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
 
 
     // climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
-    // SmartDashboard.putBoolean("Button3IsPressed", climbCamera);
+    SmartDashboard.putBoolean("climb toggled", climbCamera);
 
     if (climbCamera) {
       switchedCamera.setSource(camera1);
