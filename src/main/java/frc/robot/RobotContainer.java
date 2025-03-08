@@ -46,6 +46,7 @@ public class RobotContainer {
 
   LogitechPro m_driverJoystick;
   CommandXboxController m_xboxController;
+  boolean switchButton = false;
 
   public enum AutoSwitcher { // enum to switch between different auto modes
     OFF_THE_LINE,
@@ -169,7 +170,10 @@ public class RobotContainer {
   }
 
   public boolean getCameraButton() {
-    return m_driverJoystick.getRawButtonPressed(3);
+    if (m_driverJoystick.getRawButtonPressed(3)) {
+      switchButton = !switchButton;
+    };
+    return switchButton;
   }
 
   /**
