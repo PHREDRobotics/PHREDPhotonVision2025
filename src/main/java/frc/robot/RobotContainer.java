@@ -95,7 +95,7 @@ public class RobotContainer {
     // Triggers
     Trigger trigger = new Trigger(() -> m_driverJoystick.getTrigger());
     Trigger maryButton = new Trigger(() -> m_driverJoystick.getRawButton(2));
-    Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
+    // Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
     Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));
     // Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
     // Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
@@ -160,11 +160,16 @@ public class RobotContainer {
         () -> !trigger.getAsBoolean())); // will be robot-centric if held down
 
     maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
-    button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "left"));
+    // button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem,
+    // "left"));
     button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
     // button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem,
     // m_swerveSubsystem));
     button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
+  }
+
+  public boolean getCameraButton() {
+    return m_driverJoystick.getRawButtonPressed(3);
   }
 
   /**

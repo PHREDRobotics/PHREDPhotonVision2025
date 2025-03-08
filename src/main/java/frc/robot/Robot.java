@@ -12,6 +12,7 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFie
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralAlgaeStack;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource;
@@ -36,12 +37,14 @@ public class Robot extends TimedRobot {
 
   private final SendableChooser<RobotContainer.AutoSwitcher> autoChooser = new SendableChooser<>();
 
-  private boolean climbCamera = false;
+  boolean climbCamera;
 
   UsbCamera camera1;
   UsbCamera camera2;
 
   VideoSink server;
+
+  MjpegServer switchedCamera;
 
   String trajectoryJSON = "pathplanner/paths/offtheline.json";
   Trajectory trajectory = new Trajectory();
@@ -65,8 +68,7 @@ public class Robot extends TimedRobot {
       DriverStation.reportError("Unable to open trajectory", ex.getStackTrace());
     }
 
-    CameraServer.startAutomaticCapture();
-
+    // CameraServer.startAutomaticCapture();
   }
 
   @Override
@@ -74,10 +76,16 @@ public class Robot extends TimedRobot {
     camera1 = CameraServer.startAutomaticCapture(0);
     camera2 = CameraServer.startAutomaticCapture(1);
 
-    server = CameraServer.addServer("Switched camera");
+    switchedCamera = CameraServer.addSwitchedCamera("switched");
 
     camera1.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
     camera2.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+
+    camera1.setResolution(240, 120);
+    camera2.setResolution(320, 240);
+
+    camera1.setFPS(20);
+    camera2.setFPS(20);
 
     autoChooser.setDefaultOption("Off-the-line", RobotContainer.AutoSwitcher.OFF_THE_LINE);
 
@@ -90,21 +98,20 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Right Score 3", RobotContainer.AutoSwitcher.RightScore3);
 
     SmartDashboard.putData("Auto mode", autoChooser);
-
-    // SmartDashboard.putBoolean("Climb Camera", climbCamera);
-    SmartDashboard.putBoolean("Camera Climb", climbCamera);
+    SmartDashboard.putBoolean("Climb Camera", climbCamera);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    climbCamera = SmartDashboard.getBoolean("Camera Climb", climbCamera);
+    climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
+    SmartDashboard.putBoolean("Climb Camera", climbCamera);
 
     if (climbCamera) {
-      server.setSource(camera2);
+      switchedCamera.setSource(camera1);
     } else {
-      server.setSource(camera1);
+      switchedCamera.setSource(camera2);
     }
   }
 
