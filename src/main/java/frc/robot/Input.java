@@ -33,7 +33,7 @@ public class Input {
   public double getDriveY() {
     return yLimiter.calculate(one_player_mode
         ? Math.signum(m_xboxController.getLeftY()) * Math.pow(m_xboxController.getLeftY(), 2)
-        : Math.signum(m_driverJoystick.getY()) * Math.pow(m_driverJoystick.getX(), 2));
+        : Math.signum(m_driverJoystick.getY()) * Math.pow(m_driverJoystick.getY(), 2));
   }
 
   public double getDriveZ() {

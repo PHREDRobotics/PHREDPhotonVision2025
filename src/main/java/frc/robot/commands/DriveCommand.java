@@ -88,7 +88,7 @@ public class DriveCommand extends Command {
 
     swerveDrive.drive(
         () -> ySpeed,
-        () -> -xSpeed,
+        () -> xSpeed,
         () -> rot,
         fieldOriented);
 
