@@ -106,7 +106,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     climbCamera = m_robotContainer.getCameraButton();
 
-
     // climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
     SmartDashboard.putBoolean("climb toggled", climbCamera);
 

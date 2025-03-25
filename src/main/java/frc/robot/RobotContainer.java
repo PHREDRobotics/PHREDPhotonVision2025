@@ -4,30 +4,23 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ElevatorManualLift;
 import frc.robot.commands.ResetElevator;
 import frc.robot.commands.AutoCoralOuttake;
 import frc.robot.commands.AutoElevatorCommand;
 import frc.robot.commands.ExtendLift;
-import frc.robot.commands.GoToReef;
 import frc.robot.commands.GoToTag;
 import frc.robot.commands.PullGrenadePin;
 import frc.robot.commands.RetractLift;
 import frc.robot.commands.SwerveReset;
-import frc.robot.controls.LogitechPro;
 
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
@@ -36,6 +29,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
+/**
+ * Calls the commands and such
+ */
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
   ClimbSubsystem m_climbSubsystem;
@@ -44,9 +40,9 @@ public class RobotContainer {
   VisionSubsystem m_visionSubsystem;
   DistanceSubsystem m_distanceSubsystem;
 
-  LogitechPro m_driverJoystick;
-  CommandXboxController m_xboxController;
-  boolean switchButton = false;
+  Input m_input;
+
+  boolean altCameraSwitch = false;
 
   public enum AutoSwitcher { // enum to switch between different auto modes
     OFF_THE_LINE,
@@ -57,7 +53,6 @@ public class RobotContainer {
     RightScore1,
     RightScore2,
     RightScore3
-
   }
 
   public RobotContainer() {
@@ -68,10 +63,42 @@ public class RobotContainer {
     m_visionSubsystem = new VisionSubsystem();
     m_distanceSubsystem = new DistanceSubsystem();
 
-    m_driverJoystick = new LogitechPro(0);
-    m_xboxController = new CommandXboxController(1);
+    m_input = new Input();
 
-    // ResetElevatorCommand is the same as the trough
+    registerPathPlannerCommands();
+    configureBindings();
+  }
+
+  private void configureBindings() {
+    // Xbox con
+    m_input.getIntake().whileTrue(new CoralIntakeCommand(m_coralSubsystem));
+    m_input.getOuttake().onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
+    m_input.getExtendLift().onTrue(new ExtendLift(m_climbSubsystem));
+    m_input.getRetractLift().onTrue(new RetractLift(m_climbSubsystem));
+
+    m_input.getL1().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
+    m_input.getL2().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem)));
+    m_input.getL3().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem)));
+    m_input.getL4().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
+        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem)));
+
+    // Joystick
+    m_swerveSubsystem.setDefaultCommand(new DriveCommand(
+        m_swerveSubsystem,
+        () -> m_input.getDriveY(),
+        () -> m_input.getDriveX(),
+        () -> m_input.getDriveZ(),
+        () -> m_input.getThrottle(),
+        () -> !m_input.getFieldOriented().getAsBoolean())); // will be robot-centric if held down
+
+    m_input.getSwerveReset().onTrue(new SwerveReset(m_swerveSubsystem));
+    m_input.getGoToTag().whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
+  }
+
+  public void registerPathPlannerCommands() {
     NamedCommands.registerCommand("ElevatorResetCommand",
         new ResetElevator(m_elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorL1Command",
@@ -88,92 +115,13 @@ public class RobotContainer {
         new CoralIntakeCommand(m_coralSubsystem));
     NamedCommands.registerCommand("PullGrenadePin",
         new PullGrenadePin(m_elevatorSubsystem));
-
-    configureBindings();
-  }
-
-  private void configureBindings() {
-    // Triggers
-    Trigger trigger = new Trigger(() -> m_driverJoystick.getTrigger());
-    Trigger maryButton = new Trigger(() -> m_driverJoystick.getRawButton(2));
-    // Trigger button3 = new Trigger(() -> m_driverJoystick.getRawButton(3));
-    Trigger button4 = new Trigger(() -> m_driverJoystick.getRawButton(4));
-    // Trigger button5 = new Trigger(() -> m_driverJoystick.getRawButton(5));
-    // Trigger button6 = new Trigger(() -> m_driverJoystick.getRawButton(6));
-    // Trigger button7 = new Trigger(() -> m_driverJoystick.getRawButton(7));
-    // Trigger button8 = new Trigger(() -> m_driverJoystick.getRawButton(8));
-    // Trigger button9 = new Trigger(() -> m_driverJoystick.getRawButton(9));
-    // Trigger button10 = new Trigger(() -> m_driverJoystick.getRawButton(10));
-    // Trigger button11 = new Trigger(() -> m_driverJoystick.getRawButton(11));
-    Trigger button12 = new Trigger(() -> m_driverJoystick.getRawButton(12));
-
-    Trigger bButton = m_xboxController.b();
-    Trigger aButton = m_xboxController.a();
-    // Trigger yButton = m_xboxController.y();
-    // Trigger xButton = m_xboxController.x();
-    Trigger startButton = m_xboxController.start();
-    Trigger backButton = m_xboxController.back();
-    // Trigger leftBumper = m_xboxController.leftBumper();
-    // Trigger rightBumper = m_xboxController.rightBumper();
-
-    // Axes
-    DoubleSupplier driveAxis = () -> m_driverJoystick.getPitch();
-    DoubleSupplier strafeAxis = () -> m_driverJoystick.getRoll();
-    DoubleSupplier turnAxis = () -> -m_driverJoystick.getYaw();
-    DoubleSupplier throttleAxis = () -> m_driverJoystick.getCorrectedThrottle();
-
-    // D-Pad Buttons
-    Trigger dPadDown = m_xboxController.povDown();
-    Trigger dPadUp = m_xboxController.povUp();
-    Trigger dPadLeft = m_xboxController.povLeft();
-    Trigger dPadRight = m_xboxController.povRight();
-
-    // Assign Commands
-
-    // Xbox con
-    aButton.whileTrue(new CoralIntakeCommand(m_coralSubsystem));
-    bButton.onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
-    startButton.onTrue(new ExtendLift(m_climbSubsystem));
-    backButton.onTrue(new RetractLift(m_climbSubsystem));
-
-    dPadDown.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
-
-    dPadLeft.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem)));
-
-    dPadRight.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem)));
-
-    dPadUp.onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem)));
-
-    m_elevatorSubsystem
-        .setDefaultCommand(new ElevatorManualLift(() -> m_xboxController.getLeftY(), m_elevatorSubsystem));
-
-    // Joystick
-    m_swerveSubsystem.setDefaultCommand(new DriveCommand(
-        m_swerveSubsystem,
-        driveAxis,
-        strafeAxis,
-        turnAxis,
-        throttleAxis,
-        () -> !trigger.getAsBoolean())); // will be robot-centric if held down
-
-    maryButton.onTrue(new SwerveReset(m_swerveSubsystem));
-    // button3.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem,
-    // "left"));
-    button4.whileTrue(new GoToReef(m_visionSubsystem, m_swerveSubsystem, "right"));
-    // button11.whileTrue(new AlignLoadingStationCommand(m_visionSubsystem,
-    // m_swerveSubsystem));
-    button12.whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 
   public boolean getCameraButton() {
-    if (m_driverJoystick.getRawButtonPressed(3)) {
-      switchButton = !switchButton;
-    };
-    return switchButton;
+    if (m_input.getCameraSwitch().getAsBoolean()) {
+      altCameraSwitch = !altCameraSwitch;
+    }
+    return altCameraSwitch;
   }
 
   /**

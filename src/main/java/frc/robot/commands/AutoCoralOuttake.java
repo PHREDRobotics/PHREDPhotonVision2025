@@ -8,41 +8,41 @@ import edu.wpi.first.wpilibj2.command.Command;
  * coral is loaded.
  */
 public class AutoCoralOuttake extends Command {
-    private final CoralSubsystem coralSubsystem;
+  private final CoralSubsystem coralSubsystem;
 
-    /**
-     * Creates a new CoralIntakeCommand.
-     * 
-     * @param subsystem Coral subsystem
-     */
-    public AutoCoralOuttake(CoralSubsystem subsystem) {
-        coralSubsystem = subsystem;
+  /**
+   * Creates a new CoralIntakeCommand.
+   * 
+   * @param subsystem Coral subsystem
+   */
+  public AutoCoralOuttake(CoralSubsystem subsystem) {
+    coralSubsystem = subsystem;
 
-        addRequirements(subsystem);
-    }
+    addRequirements(subsystem);
+  }
 
-    @Override
-    public void initialize() {
-        coralSubsystem.autoStartOuttake();
-    }
+  @Override
+  public void initialize() {
+    coralSubsystem.autoStartOuttake();
+  }
 
-    @Override
-    public void execute() {
-    }
+  @Override
+  public void execute() {
+  }
 
-    /**
-     * @param interrupted
-     */
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        coralSubsystem.stop();
-    }
+  /**
+   * @param interrupted
+   */
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    coralSubsystem.stop();
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        // return coralSubsystem.isCoralLoaded();
-        return CoralSubsystem.isTimeDone();
-    }
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    // return coralSubsystem.isCoralLoaded();
+    return CoralSubsystem.isTimeDone();
+  }
 }

@@ -9,27 +9,27 @@ import frc.robot.subsystems.ElevatorSubsystem;
  * 0's the encoder
  */
 public class ResetElevator extends Command {
-    ElevatorSubsystem m_elevatorSubsystem;
+  ElevatorSubsystem m_elevatorSubsystem;
 
-    public ResetElevator(ElevatorSubsystem elevatorSubsystem) {
-        m_elevatorSubsystem = elevatorSubsystem;
-    }
+  public ResetElevator(ElevatorSubsystem elevatorSubsystem) {
+    m_elevatorSubsystem = elevatorSubsystem;
+  }
 
-    @Override
-    public void initialize() {
-        m_elevatorSubsystem.setSpeed(Constants.ElevatorConstants.kElevatorResetSpeed);
-    }
+  @Override
+  public void initialize() {
+    m_elevatorSubsystem.setSpeed(Constants.ElevatorConstants.kElevatorResetSpeed);
+  }
 
-    /**
-     * @param interrupted
-     */
-    @Override
-    public void end(boolean interrupted) {
-        m_elevatorSubsystem.resetEncoders();
-    }
+  /**
+   * @param interrupted
+   */
+  @Override
+  public void end(boolean interrupted) {
+    m_elevatorSubsystem.resetEncoders();
+  }
 
-    @Override
-    public boolean isFinished() {
-        return m_elevatorSubsystem.isLimitSwitchPressed();
-    }
+  @Override
+  public boolean isFinished() {
+    return m_elevatorSubsystem.isLimitSwitchPressed();
+  }
 }

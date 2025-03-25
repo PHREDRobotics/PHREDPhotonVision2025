@@ -2,8 +2,10 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.CoralSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+
 /**
- * Coral intake command that uses the limit switch to stop the intake when the coral is loaded.
+ * Coral intake command that uses the limit switch to stop the intake when the
+ * coral is loaded.
  */
 public class CoralAutoIntakeCommand extends Command {
   private final CoralSubsystem coralSubsystem;
@@ -19,8 +21,7 @@ public class CoralAutoIntakeCommand extends Command {
     coralSubsystem.startIntake();
   }
 
-  
-  /** 
+  /**
    * @param interrupted
    */
   // Called once the command ends or is interrupted.

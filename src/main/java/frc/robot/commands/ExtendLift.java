@@ -20,7 +20,7 @@ public class ExtendLift extends Command {
    */
   public ExtendLift(ClimbSubsystem subsystem) {
     m_subsystem = subsystem;
-    
+
     addRequirements(subsystem);
   }
 
@@ -30,8 +30,7 @@ public class ExtendLift extends Command {
     m_subsystem.extendPneumaticClimber();
   }
 
-  
-  /** 
+  /**
    * @return boolean
    */
   // Returns true when the command should end.

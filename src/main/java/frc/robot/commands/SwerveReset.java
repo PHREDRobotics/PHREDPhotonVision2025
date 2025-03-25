@@ -7,19 +7,19 @@ import frc.robot.subsystems.SwerveSubsystem;
  * Resets the swerve odometry
  */
 public class SwerveReset extends Command {
-    private SwerveSubsystem m_swerveSubsystem;
+  private SwerveSubsystem m_swerveSubsystem;
 
-    /**
-     * Creates a new swerve reset command
-     * 
-     * @param swerveSubsystem the swerve subsystem to reset
-     */
-    public SwerveReset(SwerveSubsystem swerveSubsystem) {
-        m_swerveSubsystem = swerveSubsystem;
-    }
+  /**
+   * Creates a new swerve reset command
+   * 
+   * @param swerveSubsystem the swerve subsystem to reset
+   */
+  public SwerveReset(SwerveSubsystem swerveSubsystem) {
+    m_swerveSubsystem = swerveSubsystem;
+  }
 
-    @Override
-    public void initialize() {
-        m_swerveSubsystem.resetGyro();
-    }
+  @Override
+  public void initialize() {
+    m_swerveSubsystem.resetGyro();
+  }
 }
