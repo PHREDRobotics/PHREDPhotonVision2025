@@ -8,7 +8,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
  * A command that allows the robot to be driven with a joystick.

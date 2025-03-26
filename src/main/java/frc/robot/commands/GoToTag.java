@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

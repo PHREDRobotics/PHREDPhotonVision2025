@@ -24,9 +24,9 @@ import frc.robot.commands.SwerveReset;
 
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.DistanceSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.vision.DistanceSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
