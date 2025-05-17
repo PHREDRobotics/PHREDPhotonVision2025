@@ -10,24 +10,10 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-import frc.robot.commands.CoralIntakeCommand;
-import frc.robot.commands.CoralOuttakeCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ResetElevator;
-import frc.robot.commands.AutoCoralOuttake;
-import frc.robot.commands.AutoElevatorCommand;
-import frc.robot.commands.ExtendLift;
-import frc.robot.commands.GoToTag;
-import frc.robot.commands.PullGrenadePin;
-import frc.robot.commands.RetractLift;
 import frc.robot.commands.SwerveReset;
 
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.CoralSubsystem;
-import frc.robot.subsystems.vision.DistanceSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * Calls the commands and such
@@ -35,11 +21,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
  */
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
-  ClimbSubsystem m_climbSubsystem;
-  CoralSubsystem m_coralSubsystem;
-  ElevatorSubsystem m_elevatorSubsystem;
-  VisionSubsystem m_visionSubsystem;
-  DistanceSubsystem m_distanceSubsystem;
 
   Input m_input;
 
@@ -58,11 +39,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_swerveSubsystem = new SwerveSubsystem();
-    m_coralSubsystem = new CoralSubsystem();
-    m_climbSubsystem = new ClimbSubsystem();
-    m_elevatorSubsystem = new ElevatorSubsystem();
-    m_visionSubsystem = new VisionSubsystem();
-    m_distanceSubsystem = new DistanceSubsystem();
 
     m_input = new Input();
 
@@ -71,20 +47,6 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // Xbox con
-    m_input.getIntake().whileTrue(new CoralIntakeCommand(m_coralSubsystem));
-    m_input.getOuttake().onTrue(new CoralOuttakeCommand(m_coralSubsystem, m_elevatorSubsystem));
-    m_input.getExtendLift().onTrue(new ExtendLift(m_climbSubsystem));
-    m_input.getRetractLift().onTrue(new RetractLift(m_climbSubsystem));
-
-    m_input.getL1().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem)));
-    m_input.getL2().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem)));
-    m_input.getL3().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem)));
-    m_input.getL4().onTrue(new SequentialCommandGroup(new ResetElevator(m_elevatorSubsystem),
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem)));
 
     // Joystick
     m_swerveSubsystem.setDefaultCommand(new DriveCommand(
@@ -96,26 +58,9 @@ public class RobotContainer {
         () -> !m_input.getFieldOriented().getAsBoolean())); // will be robot-centric if held down
 
     m_input.getSwerveReset().onTrue(new SwerveReset(m_swerveSubsystem));
-    m_input.getGoToTag().whileTrue(new GoToTag(m_visionSubsystem, m_swerveSubsystem, 12));
   }
 
   public void registerPathPlannerCommands() {
-    NamedCommands.registerCommand("ElevatorResetCommand",
-        new ResetElevator(m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorL1Command",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel1, m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorL3Command",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel3, m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorL4Command",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kCoralLevel4, m_elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorHPCommand",
-        new AutoElevatorCommand(Constants.ElevatorConstants.kHumanPlayerStationLevel, m_elevatorSubsystem));
-    NamedCommands.registerCommand("CoralOuttakeCommand",
-        new AutoCoralOuttake(m_coralSubsystem));
-    NamedCommands.registerCommand("CoralIntakeCommand",
-        new CoralIntakeCommand(m_coralSubsystem));
-    NamedCommands.registerCommand("PullGrenadePin",
-        new PullGrenadePin(m_elevatorSubsystem));
   }
 
   public boolean getCameraButton() {
