@@ -111,9 +111,9 @@ public class PhotonVisionSubsystem {
             cameraToTarget = bestTarget.getBestCameraToTarget();
             robotToTarget = robotToCamera.plus(cameraToTarget);
         }
-        // Sets the currentPose using the prevPose
-        // gives global pos, ignore for now
+        // Sets the currentPose using the prevPose and sends the estimation to swerve
         currentRobotEstimation = getEstimatedGlobalPose(prevRobotPose, result);
-        currentRobotPose = currentRobotEstimation.orElse(null).estimatedPose;
+        currentRobotPose = currentRobotEstimation.orElse(null).estimatedPose;// used for testing
+
     }
 }
