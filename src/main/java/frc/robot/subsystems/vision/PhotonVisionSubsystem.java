@@ -35,6 +35,7 @@ public class PhotonVisionSubsystem {
     Transform3d robotToTarget;
     Pose3d prevRobotPose;
     Pose3d currentRobotPose;
+    public Optional<EstimatedRobotPose> currentRobotEstimation;
 
     public ProfiledPIDController pidX;
     public ProfiledPIDController pidY;
@@ -112,6 +113,7 @@ public class PhotonVisionSubsystem {
         }
         // Sets the currentPose using the prevPose
         // gives global pos, ignore for now
-        currentRobotPose = getEstimatedGlobalPose(prevRobotPose, result).orElse(null).estimatedPose;
+        currentRobotEstimation = getEstimatedGlobalPose(prevRobotPose, result);
+        currentRobotPose = currentRobotEstimation.orElse(null).estimatedPose;
     }
 }

@@ -25,11 +25,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants;
+import frc.robot.subsystems.vision.PhotonVisionSubsystem;
 
 /**
  * Subsystem for controlling swerve
  */
 public class SwerveSubsystem extends SubsystemBase {
+  PhotonVisionSubsystem photonVision;
+
   private final SwerveModule m_frontLeft;
   private final SwerveModule m_frontRight;
   private final SwerveModule m_backLeft;
@@ -37,8 +40,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private final GyroIO m_gyro;
 
-  private final SwerveDriveOdometry m_odometry;
-  private final SwerveDrivePoseEstimator m_poseEstimator;
+  // private final SwerveDriveOdometry m_odometry;
+  private final SwerveDrivePoseEstimator m_odometry;
 
   RobotConfig config;
 
@@ -53,8 +56,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Creates a new swerve subsystem
+   * 
+   * @param photonVision used for pose estimation
    */
-  public SwerveSubsystem() {
+  public SwerveSubsystem(PhotonVisionSubsystem photonVision) {
+    this.photonVision = photonVision;
+
     if (RobotBase.isReal()) {
       m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
           Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
@@ -95,12 +102,12 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
-    m_odometry = new SwerveDriveOdometry(
-        Constants.SwerveConstants.kKinematics,
-        m_gyro.getRotation2d(),
-        getModulePositions());
+    // m_odometry = new SwerveDriveOdometry(
+    // Constants.SwerveConstants.kKinematics,
+    // m_gyro.getRotation2d(),
+    // getModulePositions());
 
-    m_poseEstimator = new SwerveDrivePoseEstimator(
+    m_odometry = new SwerveDrivePoseEstimator(
         Constants.SwerveConstants.kKinematics,
         m_gyro.getRotation2d(),
         getModulePositions(),
@@ -211,7 +218,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {
     // return m_poseEstimator.getEstimatedPosition();
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
+    // getPoseMeters();
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -227,6 +235,8 @@ public class SwerveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(),
         getModulePositions());
+    m_odometry.addVisionMeasurement(photonVision.currentRobotEstimation.orElse(null).estimatedPose.toPose2d(),
+        photonVision.currentRobotEstimation.orElse(null).timestampSeconds);
 
     /*
      * m_poseEstimator.update(
@@ -292,7 +302,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public static SwerveSubsystem getInstance() {
     if (instance == null) {
-      instance = new SwerveSubsystem();
+      instance = new SwerveSubsystem(new PhotonVisionSubsystem());
     }
     return instance;
   }
