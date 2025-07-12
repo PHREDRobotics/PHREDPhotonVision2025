@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.proto.Photon;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -14,12 +16,14 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveReset;
 
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.PhotonVisionSubsystem;
 
 /**
  * Calls the commands and such
  * 🚌
  */
 public class RobotContainer {
+  PhotonVisionSubsystem m_photonVisionSubsystem;
   SwerveSubsystem m_swerveSubsystem;
 
   Input m_input;
@@ -38,7 +42,8 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    m_swerveSubsystem = new SwerveSubsystem();
+    m_photonVisionSubsystem = new PhotonVisionSubsystem();
+    m_swerveSubsystem = new SwerveSubsystem(m_photonVisionSubsystem);
 
     m_input = new Input();
 
