@@ -2,18 +2,25 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import java.io.IOException;
+
 import org.dyn4j.geometry.Transform;
 
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Voltage;
@@ -219,6 +226,11 @@ public class Constants {
                 public static final double kRI = 0;// TWEAK
                 public static final double kRD = 0;// TWEAK
 
+                public static final String kCameraName = "ArducamOV8972 1";
+
+                public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout
+                                .loadField(AprilTagFields.k2025ReefscapeWelded);
+
                 public static final double k2pi = Math.PI * 2;
 
                 public static final Pose2d kAprilTag1 = new Pose2d(657.37 * 0.0254, 25.80 * 0.0254,
@@ -273,6 +285,11 @@ public class Constants {
                                 kAprilTag12, kAprilTag13, kAprilTag14, kAprilTag15, kAprilTag16, kAprilTag17,
                                 kAprilTag18,
                                 kAprilTag19, kAprilTag20, kAprilTag21, kAprilTag22 };
+
+                public static final Transform3d kRobotToCamera1 = new Transform3d(0, 0, 0, new Rotation3d());
+
+                public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+                public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         }
 
         public static final class PhotonVisionConstants {

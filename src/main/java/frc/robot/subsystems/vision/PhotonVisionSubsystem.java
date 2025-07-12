@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Constants.PhotonVisionConstants;
+import frc.robot.Constants.VisionConstants;
 
 public class PhotonVisionSubsystem {
 
@@ -55,7 +56,7 @@ public class PhotonVisionSubsystem {
                 PhotonVisionConstants.kRP, PhotonVisionConstants.kRI, PhotonVisionConstants.kRD,
                 Constants.PhotonVisionConstants.kRControllerConstraints);
 
-        camera = new PhotonCamera("ArducamOV8972 1");
+        camera = new PhotonCamera(VisionConstants.kCameraName);
         // camera1
         robotToCamera = PhotonVisionConstants.robotToCamera1;
 
