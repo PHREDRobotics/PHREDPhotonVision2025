@@ -6,24 +6,19 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.Constants.VisionConstants;
 
-public class PhotonVisionSubsystem {
+public class VisionSubsystem {
 
     PhotonCamera camera;
     PhotonPipelineResult result;
@@ -45,7 +40,7 @@ public class PhotonVisionSubsystem {
 
     // IDK WHATS GOING ON WHY ARE THERE SO MANY TRANSFORM3D, cuz there has to be
     // Also this code is prob bad atm, but I think its needed somewhere
-    public PhotonVisionSubsystem() {
+    public VisionSubsystem() {
         // Initialize PIDs
         pidX = new ProfiledPIDController(
                 PhotonVisionConstants.kXYP, PhotonVisionConstants.kXYI, PhotonVisionConstants.kXYD,

@@ -7,38 +7,38 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.studica.frc.AHRS;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants;
-import frc.robot.subsystems.vision.PhotonVisionSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
  * Subsystem for controlling swerve
  */
 public class SwerveSubsystem extends SubsystemBase {
-  PhotonVisionSubsystem photonVision;
+  VisionSubsystem photonVision;
 
   private final SwerveModule m_frontLeft;
   private final SwerveModule m_frontRight;
   private final SwerveModule m_backLeft;
   private final SwerveModule m_backRight;
 
-  private final GyroIO m_gyro;
+  private final AHRS m_gyro;
 
   // private final SwerveDriveOdometry m_odometry;
   private final SwerveDrivePoseEstimator m_odometry;
@@ -47,65 +47,37 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private final Field2d m_poseEstimatorField;
 
-  public final SwerveSimulation m_swerveSimulation;
-
   private final StructArrayPublisher<SwerveModuleState> publisher;
-
-  // Instance of the swerve
-  private static SwerveSubsystem instance;
 
   /**
    * Creates a new swerve subsystem
    * 
    * @param photonVision used for pose estimation
    */
-  public SwerveSubsystem(PhotonVisionSubsystem photonVision) {
-    this.photonVision = photonVision;
+  public SwerveSubsystem() {
+    m_frontLeft = new SwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
+        Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
+        Configs.FrontLeftConfig.drivingConfig,
+        Configs.FrontLeftConfig.turningConfig);
+    m_frontRight = new SwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
+        Constants.SwerveConstants.kFrontRightTurnMotorCANId,
+        Configs.FrontRightConfig.drivingConfig,
+        Configs.FrontRightConfig.turningConfig);
+    m_backLeft = new SwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
+        Constants.SwerveConstants.kBackLeftTurnMotorCANId,
+        Configs.BackLeftConfig.drivingConfig,
+        Configs.BackLeftConfig.turningConfig);
+    m_backRight = new SwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
+        Constants.SwerveConstants.kBackRightTurnMotorCANId,
+        Configs.BackRightConfig.drivingConfig,
+        Configs.BackRightConfig.turningConfig);
 
-    if (RobotBase.isReal()) {
-      m_frontLeft = new SparkSwerveModule(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-          Constants.SwerveConstants.kFrontLeftTurnMotorCANId,
-          Configs.FrontLeftConfig.drivingConfig,
-          Configs.FrontLeftConfig.turningConfig);
-      m_frontRight = new SparkSwerveModule(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-          Constants.SwerveConstants.kFrontRightTurnMotorCANId,
-          Configs.FrontRightConfig.drivingConfig,
-          Configs.FrontRightConfig.turningConfig);
-      m_backLeft = new SparkSwerveModule(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-          Constants.SwerveConstants.kBackLeftTurnMotorCANId,
-          Configs.BackLeftConfig.drivingConfig,
-          Configs.BackLeftConfig.turningConfig);
-      m_backRight = new SparkSwerveModule(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-          Constants.SwerveConstants.kBackRightTurnMotorCANId,
-          Configs.BackRightConfig.drivingConfig,
-          Configs.BackRightConfig.turningConfig);
-
-      m_swerveSimulation = null;
-
-      m_gyro = new AHRSGyroIO(Constants.GyroConstants.kComType);
-    } else {
-      m_frontLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontLeftDriveMotorCANId,
-          Constants.SwerveConstants.kFrontLeftTurnMotorCANId);
-      m_frontRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kFrontRightDriveMotorCANId,
-          Constants.SwerveConstants.kFrontRightTurnMotorCANId);
-      m_backLeft = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackLeftDriveMotorCANId,
-          Constants.SwerveConstants.kBackLeftTurnMotorCANId);
-      m_backRight = new SparkSwerveModuleSim(Constants.SwerveConstants.kBackRightDriveMotorCANId,
-          Constants.SwerveConstants.kBackRightTurnMotorCANId);
-
-      m_gyro = new SimGyroIO();
-      m_swerveSimulation = new SwerveSimulation(m_gyro);
-    }
+    m_gyro = new AHRS(Constants.GyroConstants.kComType);
 
     m_gyro.reset();
 
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
-
-    // m_odometry = new SwerveDriveOdometry(
-    // Constants.SwerveConstants.kKinematics,
-    // m_gyro.getRotation2d(),
-    // getModulePositions());
 
     m_odometry = new SwerveDrivePoseEstimator(
         Constants.SwerveConstants.kKinematics,
@@ -187,10 +159,6 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Rot", rot.getAsDouble());
 
     publisher.set(swerveModuleStates);
-
-    if (RobotBase.isSimulation()) {
-      m_swerveSimulation.update(xSpeed, ySpeed, rot, fieldOriented, m_gyro.getRotation2d());
-    }
   }
 
   public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
@@ -207,13 +175,6 @@ public class SwerveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
-
-    if (RobotBase.isSimulation()) {
-      m_swerveSimulation.update(() -> speeds.vxMetersPerSecond,
-          () -> speeds.vyMetersPerSecond, () -> speeds.omegaRadiansPerSecond,
-          fieldOriented,
-          m_gyro.getRotation2d());
-    }
   }
 
   public Pose2d getPose() {
@@ -298,13 +259,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     return ChassisSpeeds.fromRobotRelativeSpeeds(
         robotRelativeSpeeds, getPose().getRotation());
-  }
-
-  public static SwerveSubsystem getInstance() {
-    if (instance == null) {
-      instance = new SwerveSubsystem(new PhotonVisionSubsystem());
-    }
-    return instance;
   }
 
   public void periodic() {
