@@ -104,7 +104,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    climbCamera = m_robotContainer.getCameraButton();
 
     // climbCamera = SmartDashboard.getBoolean("Climb Camera", climbCamera);
     SmartDashboard.putBoolean("climb toggled", climbCamera);
