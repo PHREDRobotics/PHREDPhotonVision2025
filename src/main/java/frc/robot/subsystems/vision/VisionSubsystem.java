@@ -7,41 +7,32 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.PhotonVisionConstants;
 import frc.robot.Constants.VisionConstants;
 
-public class VisionSubsystem {
+public class VisionSubsystem extends SubsystemBase {
+  private PhotonCamera camera;
+  private PhotonPipelineResult result;
+  private PhotonPoseEstimator photonPoseEstimator;
 
-  PhotonCamera camera;
-  PhotonPipelineResult result;
-  PhotonTrackedTarget bestTarget;
-  PhotonPoseEstimator photonPoseEstimator;
+  private Transform3d robotToCamera;
+  private Transform3d robotToTarget;
+  private Pose3d prevRobotPose;
 
-  Transform3d robotToCamera;
-  Transform3d cameraToTarget;
-  Transform3d robotToTarget;
-  Pose3d prevRobotPose;
-  Pose3d currentRobotPose;
-  public Optional<EstimatedRobotPose> currentRobotEstimation;
+  private ProfiledPIDController pidX;
+  private ProfiledPIDController pidY;
+  private ProfiledPIDController pidRot;
 
-  public ProfiledPIDController pidX;
-  public ProfiledPIDController pidY;
-  public ProfiledPIDController pidRot;
-
-  AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-
-  // IDK WHATS GOING ON WHY ARE THERE SO MANY TRANSFORM3D, cuz there has to be
-  // Also this code is prob bad atm, but I think its needed somewhere
+  /**
+   * Creates a vision subsystem
+   */
   public VisionSubsystem() {
-    // Initialize PIDs
     pidX = new ProfiledPIDController(
         PhotonVisionConstants.kXYP, PhotonVisionConstants.kXYI, PhotonVisionConstants.kXYD,
         Constants.PhotonVisionConstants.kXYControllerConstraints);
@@ -53,17 +44,20 @@ public class VisionSubsystem {
         Constants.PhotonVisionConstants.kRControllerConstraints);
 
     camera = new PhotonCamera(VisionConstants.kCameraName);
-    // camera1
+
     robotToCamera = PhotonVisionConstants.robotToCamera1;
 
-    // Construct PhotonPoseEstimator
     photonPoseEstimator = new PhotonPoseEstimator(
         Constants.PhotonVisionConstants.aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
         robotToCamera);
   }
 
-  // Calculates the xSpeed based off of the targets position relative to the robot
-  public double getXspeed() {
+  /**
+   * Calculates the desired x speed
+   * 
+   * @return The desired x speed
+   */
+  public double getDesiredXspeed() {
     if (result.hasTargets()) {
       return pidX.calculate(0, robotToTarget.getX());
     } else {
@@ -71,8 +65,12 @@ public class VisionSubsystem {
     }
   }
 
-  // Calculates the ySpeed based off of the targets position relative to the robot
-  public double getYspeed() {
+  /**
+   * Calculates the desired y speed
+   * 
+   * @return The desired y speed
+   */
+  public double getDesiredYspeed() {
     if (result.hasTargets()) {
       return pidY.calculate(0, robotToTarget.getY());
     } else {
@@ -80,9 +78,12 @@ public class VisionSubsystem {
     }
   }
 
-  // Calculates the rotation speed based off of the targets rotation relative to
-  // the robot
-  public double getRotSpeed() {
+  /**
+   * Calculates the desired rotation speed
+   * 
+   * @return The desired rotation speed
+   */
+  public double getDesiredRotSpeed() {
     if (result.hasTargets()) {
       return pidRot.calculate(0, robotToTarget.getRotation().getAngle());
     } else {
@@ -90,25 +91,28 @@ public class VisionSubsystem {
     }
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose3d prevEstimatedRobotPose,
-      PhotonPipelineResult result) {
-    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+  /**
+   * Gets the estimated pose of the robot relative to the field
+   * 
+   * @param prevEstimatedRobotPose The last estimated pose
+   * @param result                 The new result
+   * @return The estimated robot pose
+   */
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    photonPoseEstimator.setReferencePose(prevRobotPose);
     return photonPoseEstimator.update(result);
   }
 
-  public void update() {
-    // Sets the prevPose to the currentPose
-    prevRobotPose = currentRobotPose;
+  @Override
+  public void periodic() {
     result = camera.getAllUnreadResults().get(0);
-    // Checks if the camera has a target, then does target related operations
-    if (result.hasTargets() == true) {
-      bestTarget = result.getBestTarget();
-      cameraToTarget = bestTarget.getBestCameraToTarget();
-      robotToTarget = robotToCamera.plus(cameraToTarget);
-    }
-    // Sets the currentPose using the prevPose and sends the estimation to swerve
-    currentRobotEstimation = getEstimatedGlobalPose(prevRobotPose, result);
-    currentRobotPose = currentRobotEstimation.orElse(null).estimatedPose;// used for testing
 
+    if (result.hasTargets()) {
+      robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
+    }
+
+    if (getEstimatedGlobalPose().isPresent()) {
+      prevRobotPose = getEstimatedGlobalPose().get().estimatedPose;
+    }
   }
 }

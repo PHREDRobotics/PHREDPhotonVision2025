@@ -3,6 +3,8 @@ package frc.robot.subsystems.swerve;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.photonvision.EstimatedRobotPose;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -14,6 +16,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -40,8 +43,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private final AHRS m_gyro;
 
-  // private final SwerveDriveOdometry m_odometry;
-  private final SwerveDrivePoseEstimator m_odometry;
+  private final SwerveDriveOdometry m_odometry;
 
   RobotConfig config;
 
@@ -79,13 +81,8 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
-    m_odometry = new SwerveDrivePoseEstimator(
-        Constants.SwerveConstants.kKinematics,
-        m_gyro.getRotation2d(),
-        getModulePositions(),
-        new Pose2d(),
-        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+    m_odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kKinematics, getPose().getRotation(),
+        getModulePositions(), new Pose2d());
 
     try {
       config = RobotConfig.fromGUISettings();
@@ -178,14 +175,11 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Pose2d getPose() {
-    // return m_poseEstimator.getEstimatedPosition();
-    return m_odometry.getEstimatedPosition();
-    // getPoseMeters();
+    return m_odometry.getPoseMeters();
   }
 
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPose(pose);
-    // m_poseEstimator.resetPose(pose);
   }
 
   public void resetGyro() {
@@ -196,8 +190,15 @@ public class SwerveSubsystem extends SubsystemBase {
     m_odometry.update(
         m_gyro.getRotation2d(),
         getModulePositions());
-    m_odometry.addVisionMeasurement(photonVision.currentRobotEstimation.orElse(null).estimatedPose.toPose2d(),
-        photonVision.currentRobotEstimation.orElse(null).timestampSeconds);
+
+    EstimatedRobotPose currentPose;
+
+    if (photonVision.getEstimatedGlobalPose().isPresent()) {
+      currentPose = photonVision.getEstimatedGlobalPose().get();
+
+      
+    }
+
   }
 
   public SwerveModulePosition[] getModulePositions() {
