@@ -4,15 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
   SwerveSubsystem m_swerveSubsystem;
+  VisionSubsystem m_visionSubsystem;
 
   CommandJoystick m_joystick;
   CommandXboxController m_xboxController;
@@ -32,6 +36,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_swerveSubsystem = new SwerveSubsystem();
+    m_visionSubsystem = new VisionSubsystem();
 
     m_joystick = new CommandJoystick(0);
     m_xboxController = new CommandXboxController(1);
@@ -48,6 +53,13 @@ public class RobotContainer {
         () -> m_joystick.getZ(),
         () -> m_joystick.getThrottle(),
         () -> m_joystick.button(0).getAsBoolean())); // will be robot-centric if held down
+
+    new Trigger(() -> true) // always active, sends vision estimates to swerve
+        .onTrue(new InstantCommand(() -> {
+          m_visionSubsystem.getEstimatedGlobalPose().ifPresent(pose -> {
+            m_swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
+          });
+        }));
   }
 
   /**
@@ -55,6 +67,7 @@ public class RobotContainer {
    * @return Command
    */
   public Command getAutonomousCommand(AutoSwitcher autoMode) {
-    return new Command() {};
+    return new Command() {
+    };
   }
 }

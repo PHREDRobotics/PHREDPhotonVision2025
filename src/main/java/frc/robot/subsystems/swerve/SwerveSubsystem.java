@@ -3,39 +3,32 @@ package frc.robot.subsystems.swerve;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import org.photonvision.EstimatedRobotPose;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 /**
  * Subsystem for controlling swerve
  */
 public class SwerveSubsystem extends SubsystemBase {
-  VisionSubsystem photonVision;
-
   private final SwerveModule m_frontLeft;
   private final SwerveModule m_frontRight;
   private final SwerveModule m_backLeft;
@@ -44,10 +37,9 @@ public class SwerveSubsystem extends SubsystemBase {
   private final AHRS m_gyro;
 
   private final SwerveDriveOdometry m_odometry;
+  private final SwerveDrivePoseEstimator m_poseEstimator;
 
   RobotConfig config;
-
-  private final Field2d m_poseEstimatorField;
 
   private final StructArrayPublisher<SwerveModuleState> publisher;
 
@@ -84,6 +76,10 @@ public class SwerveSubsystem extends SubsystemBase {
     m_odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kKinematics, getPose().getRotation(),
         getModulePositions(), new Pose2d());
 
+    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getPose().getRotation(),
+        getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
+        Constants.SwerveConstants.kVisionStdDevs);
+
     try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
@@ -109,9 +105,6 @@ public class SwerveSubsystem extends SubsystemBase {
           return false;
         },
         this);
-
-    m_poseEstimatorField = new Field2d();
-    SmartDashboard.putData("Pose estimation field", m_poseEstimatorField);
   }
 
   /**
@@ -148,13 +141,6 @@ public class SwerveSubsystem extends SubsystemBase {
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
-    SmartDashboard.putString("Input/FL", swerveModuleStates[0].toString());
-    SmartDashboard.putString("Input/FR", swerveModuleStates[1].toString());
-    SmartDashboard.putString("Input/BL", swerveModuleStates[2].toString());
-    SmartDashboard.putString("Input/BR", swerveModuleStates[3].toString());
-
-    SmartDashboard.putNumber("Rot", rot.getAsDouble());
-
     publisher.set(swerveModuleStates);
   }
 
@@ -172,10 +158,16 @@ public class SwerveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
+
+    publisher.set(swerveModuleStates);
+  }
+
+  public Rotation2d getRotation() {
+    return m_gyro.getRotation2d();
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -191,14 +183,11 @@ public class SwerveSubsystem extends SubsystemBase {
         m_gyro.getRotation2d(),
         getModulePositions());
 
-    EstimatedRobotPose currentPose;
+    m_poseEstimator.update(getRotation(), getModulePositions());
+  }
 
-    if (photonVision.getEstimatedGlobalPose().isPresent()) {
-      currentPose = photonVision.getEstimatedGlobalPose().get();
-
-      
-    }
-
+  public void addVisionMeasurement(Pose2d measurement, double timestamp) {
+    m_poseEstimator.addVisionMeasurement(measurement, timestamp);
   }
 
   public SwerveModulePosition[] getModulePositions() {
@@ -231,8 +220,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void periodic() {
     updateOdometry();
-
-    m_poseEstimatorField.setRobotPose(getPose());
 
     SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
 

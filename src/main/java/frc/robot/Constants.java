@@ -179,6 +179,9 @@ public class Constants {
         Constants.SwerveConstants.kFrontRightLocationMeters,
         Constants.SwerveConstants.kBackLeftLocationMeters,
         Constants.SwerveConstants.kBackRightLocationMeters);
+
+    public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0.05, 0.05, 0.01);
+    public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
   }
 
   public static final class UltrasonicConstants {
@@ -223,7 +226,7 @@ public class Constants {
 
     public static final String kCameraName = "ArducamOV8972 1";
 
-    public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout
+    public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
         .loadField(AprilTagFields.k2025ReefscapeWelded);
 
     public static final double k2pi = Math.PI * 2;
@@ -285,27 +288,12 @@ public class Constants {
 
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-  }
 
-  public static final class PhotonVisionConstants {
     // Camera facing forward. And offset to the robot center by half a meter up and
     // half a meter forward.
     public static final Transform3d robotToCamera1 = new Transform3d(0.5, 0, 0.5, new Rotation3d());
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
         .loadField(AprilTagFields.kDefaultField);
-
-    public static final double kXYP = 3;// TWEAK
-    public static final double kXYI = 0;// TWEAK
-    public static final double kXYD = 0;// TWEAK
-
-    public static final double kRP = 3;// TWEAK
-    public static final double kRI = 0;// TWEAK
-    public static final double kRD = 0;// TWEAK
-
-    public static final double kMaxSpeed = 3;// TWEAK
-    public static final double kMaxAcceleration = 2;// TWEAK
-    public static final double kMaxAngularSpeed = 8;// TWEAK
-    public static final double kMaxAngularAcceleration = 8;// TWEAK
 
     public static final Constraints kXYControllerConstraints = new Constraints(kMaxSpeed, kMaxAcceleration);
     public static final Constraints kRControllerConstraints = new Constraints(kMaxAngularSpeed,
