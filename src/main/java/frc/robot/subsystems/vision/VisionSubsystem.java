@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
@@ -24,6 +24,8 @@ public class VisionSubsystem extends SubsystemBase {
   private ProfiledPIDController pidX;
   private ProfiledPIDController pidY;
   private ProfiledPIDController pidRot;
+
+  private PhotonPipelineResult result = new PhotonPipelineResult();
 
   /**
    * Creates a vision subsystem
@@ -45,42 +47,21 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   /**
-   * Calculates the desired x speed
+   * Gets the desired chassis speeds to get to the tag, with a {@link Pose2d}
+   * offset
    * 
-   * @return The desired x speed
+   * @param currentPose the current robot pose
+   * @param offset      an offset to the desired position in meters (we don't want to run
+   *                    into the tag)
+   * @return
    */
-  public double getDesiredXspeed() {
-    if (camera.getAllUnreadResults().hasTargets()) {
-      return pidX.calculate(0, robotToTarget.getX());
-    } else {
-      return 0;
-    }
-  }
-
-  /**
-   * Calculates the desired y speed
-   * 
-   * @return The desired y speed
-   */
-  public double getDesiredYspeed() {
+  public ChassisSpeeds getDesiredSpeeds(Pose2d currentPose, Pose2d offset) {
     if (result.hasTargets()) {
-      return pidY.calculate(0, robotToTarget.getY());
-    } else {
-      return 0;
+      return new ChassisSpeeds(pidX.calculate(currentPose.getX(), robotToTarget.getX() + offset.getX()),
+          pidY.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY()),
+          pidRot.calculate(currentPose.getRotation().getRadians(), robotToTarget.getRotation().getAngle() + offset.getRotation().getRadians()));
     }
-  }
-
-  /**
-   * Calculates the desired rotation speed
-   * 
-   * @return The desired rotation speed
-   */
-  public double getDesiredRotSpeed() {
-    if (result.hasTargets()) {
-      return pidRot.calculate(0, robotToTarget.getRotation().getAngle());
-    } else {
-      return 0;
-    }
+    return new ChassisSpeeds();
   }
 
   /**
@@ -89,7 +70,6 @@ public class VisionSubsystem extends SubsystemBase {
    * @return The estimated robot pose
    */
   public Optional<Pose2d> getEstimatedGlobalPose() {
-
     PhotonTrackedTarget target = result.getBestTarget();
 
     int id = target.getFiducialId();
@@ -107,12 +87,12 @@ public class VisionSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     var results = camera.getAllUnreadResults();
-      if (!results.isEmpty()) {
-        var result = results.get(results.size() - 1);
+    if (!results.isEmpty()) {
+      result = results.get(results.size() - 1);
 
-        if (result.hasTargets()) {
-          robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
-        }
+      if (result.hasTargets()) {
+        robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
       }
+    }
   }
 }

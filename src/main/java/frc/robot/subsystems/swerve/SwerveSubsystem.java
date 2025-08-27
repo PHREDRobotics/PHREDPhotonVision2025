@@ -1,8 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -14,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -104,6 +100,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Drives the swerves!
    * @param xSpeed
    * @param ySpeed
    * @param rot
@@ -140,6 +137,11 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(swerveModuleStates);
   }
 
+  /**
+   * Drives the swerves!
+   * @param speeds
+   * @param fieldOriented
+   */
   public void drive(ChassisSpeeds speeds, boolean fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
@@ -158,30 +160,50 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(swerveModuleStates);
   }
 
+  /**
+   * Gets the rotation from the gyro
+   * @return gyro rotation
+   */
   public Rotation2d getRotation() {
     return m_gyro.getRotation2d();
   }
 
+  /**
+   * Gets the current pose calculated by the pose estimator in meters
+   * @return the current pose
+   */
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
 
+  /**
+   * Resets the odometry on the swerves back to the provided pose
+   * @param pose The pose to reset to
+   */
   public void resetOdometry(Pose2d pose) {
     m_poseEstimator.resetPose(pose);
   }
 
+  /**
+   * Resets the gyro to 0
+   */
   public void resetGyro() {
     m_gyro.reset();
   }
 
-  public void updateOdometry() {
-    m_poseEstimator.update(getRotation(), getModulePositions());
-  }
-
+  /**
+   * Adds a vision measurement to the pose estimator
+   * @param measurement the vision measurement to add
+   * @param timestamp the time that the measurement was taken
+   */
   public void addVisionMeasurement(Pose2d measurement, double timestamp) {
     m_poseEstimator.addVisionMeasurement(measurement, timestamp);
   }
 
+  /**
+   * Gets the current positions of the swerve modules
+   * @return the positions of the modules
+   */
   public SwerveModulePosition[] getModulePositions() {
     return new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
@@ -191,6 +213,10 @@ public class SwerveSubsystem extends SubsystemBase {
     };
   }
 
+  /**
+   * Gets the current states of the modules
+   * @return the state of all the modules
+   */
   public SwerveModuleState[] getModuleStates() {
     return new SwerveModuleState[] {
         m_frontLeft.getState(),
@@ -199,6 +225,11 @@ public class SwerveSubsystem extends SubsystemBase {
         m_backRight.getState() };
   }
 
+  /**
+   * Gets the current chassis speeds of the robot
+   * @param fieldRelative whether the speeds are relative to the field or to the robot
+   * @return the current chassis speeds
+   */
   public ChassisSpeeds getSpeeds(boolean fieldRelative) {
     ChassisSpeeds robotRelativeSpeeds = Constants.SwerveConstants.kKinematics.toChassisSpeeds(getModuleStates());
 
@@ -211,7 +242,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    updateOdometry();
+    m_poseEstimator.update(getRotation(), getModulePositions());
 
     SmartDashboard.putNumber("F.L. Drive motor temp", m_frontLeft.getDriveTemp());
 
@@ -231,9 +262,5 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
     SmartDashboard.updateValues();
-  }
-
-  @Override
-  public void simulationPeriodic() {
   }
 }
