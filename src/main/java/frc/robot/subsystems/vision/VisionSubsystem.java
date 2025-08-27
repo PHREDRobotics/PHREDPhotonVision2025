@@ -10,13 +10,13 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 
 public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera camera;
-  private PhotonPipelineResult result;
 
   private Transform3d robotToCamera;
   private Transform3d robotToTarget;
@@ -50,7 +50,7 @@ public class VisionSubsystem extends SubsystemBase {
    * @return The desired x speed
    */
   public double getDesiredXspeed() {
-    if (result.hasTargets()) {
+    if (camera.getAllUnreadResults().hasTargets()) {
       return pidX.calculate(0, robotToTarget.getX());
     } else {
       return 0;
@@ -106,10 +106,13 @@ public class VisionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    result = camera.getAllUnreadResults().get(0);
+    var results = camera.getAllUnreadResults();
+      if (!results.isEmpty()) {
+        var result = results.get(results.size() - 1);
 
-    if (result.hasTargets()) {
-      robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
-    }
+        if (result.hasTargets()) {
+          robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
+        }
+      }
   }
 }

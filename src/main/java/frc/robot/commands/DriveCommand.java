@@ -87,10 +87,10 @@ public class DriveCommand extends Command {
     rot = zLimiter.calculate(rot) * adjThrottle;
 
     swerveDrive.drive(
-        () -> ySpeed,
-        () -> xSpeed,
-        () -> rot,
-        fieldOriented);
+        ySpeed,
+        xSpeed,
+        rot,
+        fieldOriented.getAsBoolean());
 
     SmartDashboard.putNumber("Joystick/Y", ySpeed);
     SmartDashboard.putNumber("Joystick/X", xSpeed);

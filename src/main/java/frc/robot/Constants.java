@@ -224,7 +224,7 @@ public class Constants {
     public static final double kRI = 0;// TWEAK
     public static final double kRD = 0;// TWEAK
 
-    public static final String kCameraName = "ArducamOV8972 1";
+    public static final String kCameraName = "ArducamOV9872 1";
 
     public static final AprilTagFieldLayout kAprilTagLayout = AprilTagFieldLayout
         .loadField(AprilTagFields.k2025ReefscapeWelded);

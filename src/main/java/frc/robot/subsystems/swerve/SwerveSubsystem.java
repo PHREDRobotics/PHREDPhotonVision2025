@@ -36,7 +36,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private final AHRS m_gyro;
 
-  private final SwerveDriveOdometry m_odometry;
   private final SwerveDrivePoseEstimator m_poseEstimator;
 
   RobotConfig config;
@@ -73,10 +72,7 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
 
-    m_odometry = new SwerveDriveOdometry(Constants.SwerveConstants.kKinematics, getPose().getRotation(),
-        getModulePositions(), new Pose2d());
-
-    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getPose().getRotation(),
+    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.SwerveConstants.kKinematics, getRotation(),
         getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
         Constants.SwerveConstants.kVisionStdDevs);
 
@@ -92,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
         () -> getSpeeds(false),
         (speeds, feedforwards) -> drive(
             speeds,
-            () -> false),
+            false),
         new PPHolonomicDriveController(
             new PIDConstants(0.6, 0.2, 0),
             new PIDConstants(1.0, 0, 0)),
@@ -113,25 +109,25 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param rot
    * @param fieldOriented
    */
-  public void drive(DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier rot,
-      BooleanSupplier fieldOriented) {
+  public void drive(double xSpeed, double ySpeed, double rot,
+      boolean fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
-            fieldOriented.getAsBoolean()
+            fieldOriented
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed.getAsDouble()
+                    xSpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed.getAsDouble()
+                    ySpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    rot.getAsDouble()
+                    rot
                         * Constants.PhysicalConstants.kMaxAngularSpeed,
                     m_gyro.getRotation2d())
                 : new ChassisSpeeds(
-                    xSpeed.getAsDouble()
+                    xSpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    ySpeed.getAsDouble()
+                    ySpeed
                         * Constants.PhysicalConstants.kMaxSpeed,
-                    rot.getAsDouble()
+                    rot
                         * Constants.PhysicalConstants.kMaxAngularSpeed),
             Constants.SwerveConstants.kDtSeconds));
 
@@ -144,10 +140,10 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(swerveModuleStates);
   }
 
-  public void drive(ChassisSpeeds speeds, BooleanSupplier fieldOriented) {
+  public void drive(ChassisSpeeds speeds, boolean fieldOriented) {
     var swerveModuleStates = Constants.SwerveConstants.kKinematics.toSwerveModuleStates(
         ChassisSpeeds.discretize(
-            fieldOriented.getAsBoolean()
+            fieldOriented
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
                     m_gyro.getRotation2d())
                 : speeds,
@@ -171,7 +167,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPose(pose);
+    m_poseEstimator.resetPose(pose);
   }
 
   public void resetGyro() {
@@ -179,10 +175,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void updateOdometry() {
-    m_odometry.update(
-        m_gyro.getRotation2d(),
-        getModulePositions());
-
     m_poseEstimator.update(getRotation(), getModulePositions());
   }
 

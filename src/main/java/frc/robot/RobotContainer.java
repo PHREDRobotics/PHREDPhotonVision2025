@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlignCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -53,6 +54,8 @@ public class RobotContainer {
         () -> m_joystick.getZ(),
         () -> m_joystick.getThrottle(),
         () -> m_joystick.button(0).getAsBoolean())); // will be robot-centric if held down
+
+    m_joystick.button(6).onTrue(new AlignCommand(m_swerveSubsystem, m_visionSubsystem));
 
     new Trigger(() -> true) // always active, sends vision estimates to swerve
         .onTrue(new InstantCommand(() -> {
