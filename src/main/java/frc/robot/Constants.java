@@ -216,13 +216,13 @@ public class Constants {
     public static final double kMaxAngularSpeed = 8;// TWEAK
     public static final double kMaxAngularAcceleration = 8;// TWEAK
 
-    public static final double kXYP = 3;// TWEAK
+    public static final double kXYP = 0.7;// TWEAK
     public static final double kXYI = 0;// TWEAK
-    public static final double kXYD = 0;// TWEAK
+    public static final double kXYD = 0.05;// TWEAK
 
-    public static final double kRP = 3;// TWEAK
+    public static final double kRP = 0.7;// TWEAK
     public static final double kRI = 0;// TWEAK
-    public static final double kRD = 0;// TWEAK
+    public static final double kRD = 0.05;// TWEAK
 
     public static final String kCameraName = "ArducamOV9872 1";
 
@@ -296,7 +296,6 @@ public class Constants {
         .loadField(AprilTagFields.kDefaultField);
 
     public static final Constraints kXYControllerConstraints = new Constraints(kMaxSpeed, kMaxAcceleration);
-    public static final Constraints kRControllerConstraints = new Constraints(kMaxAngularSpeed,
-        kMaxAngularAcceleration);
+    public static final Constraints kRControllerConstraints = new Constraints(0.5,0.25);
   }
 }

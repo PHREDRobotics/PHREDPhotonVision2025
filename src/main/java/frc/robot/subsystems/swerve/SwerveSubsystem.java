@@ -261,6 +261,8 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("States/BL", getModuleStates()[2].toString());
     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
+    SmartDashboard.putString("CurrentPose", getPose().toString());
+
     SmartDashboard.updateValues();
   }
 }

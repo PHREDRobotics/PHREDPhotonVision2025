@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
@@ -51,16 +52,26 @@ public class VisionSubsystem extends SubsystemBase {
    * offset
    * 
    * @param currentPose the current robot pose
-   * @param offset      an offset to the desired position in meters (we don't want to run
+   * @param offset      an offset to the desired position in meters (we don't want
+   *                    to run
    *                    into the tag)
    * @return
    */
   public ChassisSpeeds getDesiredSpeeds(Pose2d currentPose, Pose2d offset) {
     if (result.hasTargets()) {
-      return new ChassisSpeeds(pidX.calculate(currentPose.getX(), robotToTarget.getX() + offset.getX()),
-          pidY.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY()),
-          pidRot.calculate(currentPose.getRotation().getRadians(), robotToTarget.getRotation().getAngle() + offset.getRotation().getRadians()));
+      double xOutput = pidX.calculate(currentPose.getX(), robotToTarget.getX() + offset.getX());
+      double yOutput = pidY.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY());
+      //double rotOutput = pidRot.calculate(currentPose.getRotation().getRadians(), robotToTarget.getRotation().toRotation2d().getRadians() + offset.getRotation().getRadians());
+      double rotOutput = pidRot.calculate(currentPose.getRotation().getRadians(), 0);
+
+      ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput, yOutput);
+      
+      SmartDashboard.putString("desiredSpeeds", speeds.toString());
+      return speeds;
+
+
     }
+
     return new ChassisSpeeds();
   }
 
@@ -92,6 +103,12 @@ public class VisionSubsystem extends SubsystemBase {
 
       if (result.hasTargets()) {
         robotToTarget = robotToCamera.plus(result.getBestTarget().getBestCameraToTarget());
+        SmartDashboard.putNumber("robotToTarget/X", robotToTarget.getX());
+        SmartDashboard.putNumber("robotToTarget/Y", robotToTarget.getY());
+        SmartDashboard.putNumber("robotToTarget/Z", robotToTarget.getZ());
+        SmartDashboard.putNumber("robotToTarget/Rot", robotToTarget.getRotation().toRotation2d().getRadians());
+
+        SmartDashboard.putString("Estimated pose", getEstimatedGlobalPose().get().toString());
       }
     }
   }

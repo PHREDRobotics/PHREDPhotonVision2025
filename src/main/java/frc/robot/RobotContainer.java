@@ -53,7 +53,7 @@ public class RobotContainer {
         () -> m_joystick.getX(),
         () -> m_joystick.getZ(),
         () -> m_joystick.getThrottle(),
-        () -> m_joystick.button(0).getAsBoolean())); // will be robot-centric if held down
+        () -> m_joystick.button(1).getAsBoolean())); // will be robot-centric if held down
 
     m_joystick.button(6).onTrue(new TargetAlignCommand(m_swerveSubsystem, m_visionSubsystem));
 
