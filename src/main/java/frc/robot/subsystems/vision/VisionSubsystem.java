@@ -3,18 +3,22 @@ package frc.robot.subsystems.vision;
 import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class VisionSubsystem extends SubsystemBase {
   private PhotonCamera camera;
@@ -25,6 +29,7 @@ public class VisionSubsystem extends SubsystemBase {
   private ProfiledPIDController pidX;
   private ProfiledPIDController pidY;
   private ProfiledPIDController pidRot;
+  private ProfiledPIDController pidAlign;
 
   private PhotonPipelineResult result = new PhotonPipelineResult();
 
@@ -41,6 +46,10 @@ public class VisionSubsystem extends SubsystemBase {
     pidRot = new ProfiledPIDController(
         VisionConstants.kRP, VisionConstants.kRI, VisionConstants.kRD,
         Constants.VisionConstants.kRControllerConstraints);
+    pidRot.enableContinuousInput(-Math.PI, Math.PI);
+    pidAlign = new ProfiledPIDController(
+        VisionConstants.kAP, VisionConstants.kAI, VisionConstants.kAD,
+        Constants.VisionConstants.kAControllerConstraints);
 
     camera = new PhotonCamera(VisionConstants.kCameraName);
 
@@ -57,24 +66,41 @@ public class VisionSubsystem extends SubsystemBase {
    *                    into the tag)
    * @return
    */
-  public ChassisSpeeds getDesiredSpeeds(Pose2d currentPose, Pose2d offset) {
+  public ChassisSpeeds getDesiredAlignSpeeds(Pose2d currentPose, Pose2d offset) {
     if (result.hasTargets()) {
-      double xOutput = pidX.calculate(currentPose.getX(), robotToTarget.getX() + offset.getX());
-      double yOutput = pidY.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY());
-      //double rotOutput = pidRot.calculate(currentPose.getRotation().getRadians(), robotToTarget.getRotation().toRotation2d().getRadians() + offset.getRotation().getRadians());
-      double rotOutput = pidRot.calculate(currentPose.getRotation().getRadians(), 0);
+      double aOutput = pidAlign.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY());
+      ChassisSpeeds speeds = new ChassisSpeeds(0, 0, aOutput);
 
-      ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput, yOutput);
-      
-      SmartDashboard.putString("desiredSpeeds", speeds.toString());
+      SmartDashboard.putString("desiredAlignSpeeds", speeds.toString());
       return speeds;
-
 
     }
 
     return new ChassisSpeeds();
   }
 
+  public ChassisSpeeds getDesiredSpeeds(Pose2d currentPose, Pose2d offset) {
+    if (result.hasTargets()) {
+      double xOutput = pidX.calculate(currentPose.getX(), robotToTarget.getX() + offset.getX());
+      double yOutput = pidY.calculate(currentPose.getY(), robotToTarget.getY() + offset.getY());
+      double rotOutput = -pidRot.calculate(currentPose.getRotation().getRadians(), robotToTarget.getRotation().getAngle() + offset.getRotation().getRadians());
+      
+      ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput+rotOutput*VisionConstants.kStrafeMult, rotOutput);
+
+      SmartDashboard.putString("desiredSpeeds", speeds.toString());
+      return speeds;
+
+    }
+
+    return new ChassisSpeeds();
+  }
+public boolean hasValidTarget(){
+  if(result.hasTargets()){
+    return true;
+  } else {
+    return false;
+  }
+}
   /**
    * Gets the estimated pose of the robot relative to the field
    * 
@@ -94,7 +120,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     return Optional.ofNullable(robotPose.toPose2d());
   }
-
+  public Optional<Pose2d> getEstimatedRelativePose() {
+    PhotonTrackedTarget target = result.getBestTarget();
+    Transform3d cameraToTag = target.getBestCameraToTarget();
+    Transform3d tagToCamera = cameraToTag.inverse();
+    Pose3d cameraPose = new Pose3d(tagToCamera.getX(), tagToCamera.getY(), tagToCamera.getZ(), tagToCamera.getRotation());
+    
+    Pose3d robotPose = cameraPose.transformBy(robotToCamera.inverse());
+    SmartDashboard.putString("currentRelativePose", robotPose.toString());
+    return Optional.ofNullable(robotPose.toPose2d());
+  }
   @Override
   public void periodic() {
     var results = camera.getAllUnreadResults();

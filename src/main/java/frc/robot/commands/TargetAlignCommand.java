@@ -16,12 +16,7 @@ public class TargetAlignCommand extends Command {
 
   @Override
   public void execute() {
-    double rot;
-    rot = m_visionSubsystem.getDesiredSpeeds(this.m_swerveSubsystem.getPose(), new Pose2d()).omegaRadiansPerSecond;
-    this.m_swerveSubsystem.drive(
-        0,
-        0,
-        rot,
+    this.m_swerveSubsystem.drive(m_visionSubsystem.getDesiredAlignSpeeds(this.m_swerveSubsystem.getPose(), new Pose2d()),
         false);
   }
 }

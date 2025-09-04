@@ -180,8 +180,8 @@ public class Constants {
         Constants.SwerveConstants.kBackLeftLocationMeters,
         Constants.SwerveConstants.kBackRightLocationMeters);
 
-    public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0.05, 0.05, 0.01);
-    public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
+    public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0, 0, 0);
+    public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(1, 1, 1);
   }
 
   public static final class UltrasonicConstants {
@@ -216,11 +216,16 @@ public class Constants {
     public static final double kMaxAngularSpeed = 8;// TWEAK
     public static final double kMaxAngularAcceleration = 8;// TWEAK
 
-    public static final double kXYP = 0.7;// TWEAK
+    public static final double kXYP = 0.6;// TWEAK
     public static final double kXYI = 0;// TWEAK
     public static final double kXYD = 0.05;// TWEAK
 
-    public static final double kRP = 0.7;// TWEAK
+    // Good in current state.
+    public static final double kAP = 0.8;
+    public static final double kAI = 0;
+    public static final double kAD = 0.05;
+
+    public static final double kRP = 0.3;// TWEAK
     public static final double kRI = 0;// TWEAK
     public static final double kRD = 0.05;// TWEAK
 
@@ -296,6 +301,8 @@ public class Constants {
         .loadField(AprilTagFields.kDefaultField);
 
     public static final Constraints kXYControllerConstraints = new Constraints(kMaxSpeed, kMaxAcceleration);
+    public static final Constraints kAControllerConstraints = new Constraints(3, 2);
     public static final Constraints kRControllerConstraints = new Constraints(0.5,0.25);
+    public static final double kStrafeMult = 0.5;
   }
 }

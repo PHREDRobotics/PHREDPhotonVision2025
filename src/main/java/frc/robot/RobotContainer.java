@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TargetAlignCommand;
+import frc.robot.commands.TargetFollowCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -55,14 +60,17 @@ public class RobotContainer {
         () -> m_joystick.getThrottle(),
         () -> m_joystick.button(1).getAsBoolean())); // will be robot-centric if held down
 
-    m_joystick.button(6).onTrue(new TargetAlignCommand(m_swerveSubsystem, m_visionSubsystem));
+        m_joystick.button(6).onTrue(new TargetAlignCommand(m_swerveSubsystem, m_visionSubsystem));
+        m_joystick.button(5).onTrue(new TargetFollowCommand(m_swerveSubsystem, m_visionSubsystem));
 
     new Trigger(() -> true) // always active, sends vision estimates to swerve
         .onTrue(new InstantCommand(() -> {
-          m_visionSubsystem.getEstimatedGlobalPose().ifPresent(pose -> {
+          m_visionSubsystem.getEstimatedRelativePose().ifPresent(pose -> {
             m_swerveSubsystem.addVisionMeasurement(pose, Timer.getFPGATimestamp());
           });
         }));
+
+
   }
 
   /**
