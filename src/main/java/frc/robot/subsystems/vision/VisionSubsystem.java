@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -94,6 +95,30 @@ public class VisionSubsystem extends SubsystemBase {
 
     return new ChassisSpeeds();
   }
+
+  public ChassisSpeeds transformPosition(Pose2d currentPose, Pose2d targetPose) {
+      double xOutput = -pidX.calculate(currentPose.getX(), targetPose.getX());
+      double yOutput = -pidY.calculate(currentPose.getY(), targetPose.getY());
+      double rotOutput = pidRot.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
+      
+      ChassisSpeeds speeds = new ChassisSpeeds(xOutput, yOutput, rotOutput);
+
+      SmartDashboard.putString("desiredSpeeds", speeds.toString());
+      return speeds;
+
+    }
+
+  public Pose2d getTargetPose(Pose2d tag) {
+    Pose2d targetPose = new Pose2d(
+        tag.getX()
+            + VisionConstants.kMetersFromAprilTag * Math.cos(tag.getRotation().getRadians()),
+        tag.getY()
+            + VisionConstants.kMetersFromAprilTag * Math.sin(tag.getRotation().getRadians()),
+        tag.getRotation().rotateBy(new Rotation2d(Math.PI)));
+
+    return targetPose;
+  }
+
 public boolean hasValidTarget(){
   if(result.hasTargets()){
     return true;
@@ -101,6 +126,14 @@ public boolean hasValidTarget(){
     return false;
   }
 }
+public Transform3d getTagPose(){
+  if (!result.hasTargets()) {
+    return null;
+  }
+  Transform3d tagTransform = result.getBestTarget().getBestCameraToTarget();
+  return tagTransform;
+}
+
   /**
    * Gets the estimated pose of the robot relative to the field
    * 

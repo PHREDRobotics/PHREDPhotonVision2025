@@ -11,6 +11,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -304,5 +305,6 @@ public class Constants {
     public static final Constraints kAControllerConstraints = new Constraints(3, 2);
     public static final Constraints kRControllerConstraints = new Constraints(0.5,0.25);
     public static final double kStrafeMult = 0.5;
+    public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
   }
 }

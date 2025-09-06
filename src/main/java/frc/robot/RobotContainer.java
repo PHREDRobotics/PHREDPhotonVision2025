@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.TargetAlignCommand;
 import frc.robot.commands.TargetFollowCommand;
+import frc.robot.commands.TargetVeryLargePuppyDog;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -61,7 +62,7 @@ public class RobotContainer {
         () -> m_joystick.button(1).getAsBoolean())); // will be robot-centric if held down
 
         m_joystick.button(6).onTrue(new TargetAlignCommand(m_swerveSubsystem, m_visionSubsystem));
-        m_joystick.button(5).onTrue(new TargetFollowCommand(m_swerveSubsystem, m_visionSubsystem));
+        m_joystick.button(5).onTrue(new TargetVeryLargePuppyDog(m_swerveSubsystem, m_visionSubsystem));
 
     new Trigger(() -> true) // always active, sends vision estimates to swerve
         .onTrue(new InstantCommand(() -> {
