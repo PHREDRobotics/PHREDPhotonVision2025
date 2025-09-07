@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,6 +38,16 @@ public class SwerveSubsystem extends SubsystemBase {
   RobotConfig config;
 
   private final StructArrayPublisher<SwerveModuleState> publisher;
+
+  private final ProfiledPIDController m_xPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
+      Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
+      Constants.SwerveConstants.kXYControllerConstraints);
+  private final ProfiledPIDController m_yPID = new ProfiledPIDController(Constants.SwerveConstants.kXYPosP,
+      Constants.SwerveConstants.kXYPosI, Constants.SwerveConstants.kXYPosD,
+      Constants.SwerveConstants.kXYControllerConstraints);
+  private final ProfiledPIDController m_rotPID = new ProfiledPIDController(Constants.SwerveConstants.kRotP,
+      Constants.SwerveConstants.kRotI, Constants.SwerveConstants.kRotD,
+      Constants.SwerveConstants.kRotControllerConstraints);
 
   /**
    * Creates a new swerve subsystem
@@ -101,6 +112,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Drives the swerves!
+   * 
    * @param xSpeed
    * @param ySpeed
    * @param rot
@@ -139,6 +151,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Drives the swerves!
+   * 
    * @param speeds
    * @param fieldOriented
    */
@@ -160,8 +173,27 @@ public class SwerveSubsystem extends SubsystemBase {
     publisher.set(swerveModuleStates);
   }
 
+  public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
+    double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
+    double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
+    double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(),
+        newPose.getRotation().getRadians());
+
+    drive(xOutput, yOutput, rotOutput, false);
+  }
+
+  public void driveTo(Pose2d pose) {
+    double xOutput = -m_xPID.calculate(getPose().getX(), pose.getX());
+    double yOutput = -m_yPID.calculate(getPose().getY(), pose.getY());
+    double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
+        pose.getRotation().getRadians());
+
+    drive(xOutput, yOutput, rotOutput, false);
+  }
+
   /**
    * Gets the rotation from the gyro
+   * 
    * @return gyro rotation
    */
   public Rotation2d getRotation() {
@@ -170,6 +202,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Gets the current pose calculated by the pose estimator in meters
+   * 
    * @return the current pose
    */
   public Pose2d getPose() {
@@ -178,6 +211,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Resets the odometry on the swerves back to the provided pose
+   * 
    * @param pose The pose to reset to
    */
   public void resetOdometry(Pose2d pose) {
@@ -193,8 +227,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Adds a vision measurement to the pose estimator
+   * 
    * @param measurement the vision measurement to add
-   * @param timestamp the time that the measurement was taken
+   * @param timestamp   the time that the measurement was taken
    */
   public void addVisionMeasurement(Pose2d measurement, double timestamp) {
     m_poseEstimator.addVisionMeasurement(measurement, timestamp);
@@ -202,6 +237,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Gets the current positions of the swerve modules
+   * 
    * @return the positions of the modules
    */
   public SwerveModulePosition[] getModulePositions() {
@@ -215,6 +251,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Gets the current states of the modules
+   * 
    * @return the state of all the modules
    */
   public SwerveModuleState[] getModuleStates() {
@@ -227,7 +264,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /**
    * Gets the current chassis speeds of the robot
-   * @param fieldRelative whether the speeds are relative to the field or to the robot
+   * 
+   * @param fieldRelative whether the speeds are relative to the field or to the
+   *                      robot
    * @return the current chassis speeds
    */
   public ChassisSpeeds getSpeeds(boolean fieldRelative) {

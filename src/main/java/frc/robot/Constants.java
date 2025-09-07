@@ -11,7 +11,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -183,6 +182,16 @@ public class Constants {
 
     public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0, 0, 0);
     public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(1, 1, 1);
+
+    public static final double kXYPosP = 0.6;
+    public static final double kXYPosI = 0;
+    public static final double kXYPosD = 0.05;
+    public static final Constraints kXYControllerConstraints = new Constraints(3, 2);
+
+    public static final double kRotP = 0.8;
+    public static final double kRotI = 0;
+    public static final double kRotD = 0.05;
+    public static final Constraints kRotControllerConstraints = new Constraints(3, 2);
   }
 
   public static final class UltrasonicConstants {
@@ -211,24 +220,6 @@ public class Constants {
 
     public static final double kPositionTolerance = 0.2;// TWEAK
     public static final double kAngleTolerance = 3;// TWEAK
-
-    public static final double kMaxSpeed = 3;// TWEAK
-    public static final double kMaxAcceleration = 2;// TWEAK
-    public static final double kMaxAngularSpeed = 8;// TWEAK
-    public static final double kMaxAngularAcceleration = 8;// TWEAK
-
-    public static final double kXYP = 0.6;// TWEAK
-    public static final double kXYI = 0;// TWEAK
-    public static final double kXYD = 0.05;// TWEAK
-
-    // Good in current state.
-    public static final double kAP = 0.8;
-    public static final double kAI = 0;
-    public static final double kAD = 0.05;
-
-    public static final double kRP = 0.3;// TWEAK
-    public static final double kRI = 0;// TWEAK
-    public static final double kRD = 0.05;// TWEAK
 
     public static final String kCameraName = "ArducamOV9872 1";
 
@@ -301,9 +292,6 @@ public class Constants {
     public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout
         .loadField(AprilTagFields.kDefaultField);
 
-    public static final Constraints kXYControllerConstraints = new Constraints(kMaxSpeed, kMaxAcceleration);
-    public static final Constraints kAControllerConstraints = new Constraints(3, 2);
-    public static final Constraints kRControllerConstraints = new Constraints(0.5,0.25);
     public static final double kStrafeMult = 0.5;
     public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
   }

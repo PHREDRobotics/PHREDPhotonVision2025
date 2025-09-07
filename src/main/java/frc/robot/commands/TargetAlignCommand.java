@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -16,7 +17,8 @@ public class TargetAlignCommand extends Command {
 
   @Override
   public void execute() {
-    this.m_swerveSubsystem.drive(m_visionSubsystem.getDesiredAlignSpeeds(this.m_swerveSubsystem.getPose(), new Pose2d()),
-        false);
+    Pose2d currentPose = this.m_visionSubsystem.getEstimatedRelativePose().get();
+    this.m_swerveSubsystem.driveRelativeTo(currentPose,
+        new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(Math.PI)));
   }
 }
