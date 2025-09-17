@@ -83,6 +83,8 @@ public class SwerveSubsystem extends SubsystemBase {
         getModulePositions(), new Pose2d(), Constants.SwerveConstants.kStateStdDevs,
         Constants.SwerveConstants.kVisionStdDevs);
 
+    m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
+
     try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
@@ -176,10 +178,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
     double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
     double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
-    double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(),
-        newPose.getRotation().getRadians());
+    //double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(),
+    //    newPose.getRotation().getRadians());
+    double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
 
-    drive(xOutput, yOutput, rotOutput, false);
+    drive(0, 0, rotOutput, false);
   }
 
   public void driveTo(Pose2d pose) {
@@ -301,6 +304,13 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putString("States/BR", getModuleStates()[3].toString());
 
     SmartDashboard.putString("CurrentPose", getPose().toString());
+
+    SmartDashboard.putNumber("P", m_rotPID.getP());
+    SmartDashboard.putNumber("I", m_rotPID.getI());
+    SmartDashboard.putNumber("D", m_rotPID.getD());
+    m_rotPID.setP(SmartDashboard.getNumber("P", m_rotPID.getP()));
+    m_rotPID.setI(SmartDashboard.getNumber("I", m_rotPID.getI()));
+    m_rotPID.setD(SmartDashboard.getNumber("D", m_rotPID.getD()));
 
     SmartDashboard.updateValues();
   }
