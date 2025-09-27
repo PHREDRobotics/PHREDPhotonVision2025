@@ -183,15 +183,15 @@ public class Constants {
     public static final Matrix<N3, N1> kStateStdDevs = VecBuilder.fill(0, 0, 0);
     public static final Matrix<N3, N1> kVisionStdDevs = VecBuilder.fill(1, 1, 1);
 
-    public static final double kXYPosP = 0.2;
+    public static final double kXYPosP = 0.3;
     public static final double kXYPosI = 0;
-    public static final double kXYPosD = 0.05;
+    public static final double kXYPosD = 0.005;
     public static final Constraints kXYControllerConstraints = new Constraints(0.5, 0.5);
 
-    public static final double kRotP = 0.6;
+    public static final double kRotP = 0.4;
     public static final double kRotI = 0;
-    public static final double kRotD = 0;
-    public static final Constraints kRotControllerConstraints = new Constraints(0.5, 0.5);
+    public static final double kRotD = 0.025;
+    public static final Constraints kRotControllerConstraints = new Constraints(0.25, 0.5);
   }
 
   public static final class UltrasonicConstants {
@@ -293,6 +293,6 @@ public class Constants {
         .loadField(AprilTagFields.kDefaultField);
 
     public static final double kStrafeMult = 0.5;
-    public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(0));
+    public static final Pose2d kOffset = new Pose2d(1, 0, new Rotation2d(Math.PI));
   }
 }

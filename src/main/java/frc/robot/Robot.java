@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -99,6 +100,8 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Auto mode", autoChooser);
     SmartDashboard.putBoolean("Climb Camera", climbCamera);
+
+    DataLogManager.start();
   }
 
   @Override
