@@ -86,7 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
     m_xPID.setTolerance(0, .01);
     m_yPID.setTolerance(0, .01);
     m_rotPID.setTolerance(0, .05);
-    
+
     m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
 
     try {
@@ -186,6 +186,16 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void driveRelativeTo(Pose2d currentPose, Pose2d newPose) {
+    if (Math.abs(currentPose.getX() - newPose.getX()) < Constants.SwerveConstants.kXDeadband) {
+      currentPose = new Pose2d(newPose.getX(), currentPose.getY(), currentPose.getRotation());
+    }
+    if (Math.abs(currentPose.getY() - newPose.getY()) < Constants.SwerveConstants.kYDeadband) {
+      currentPose = new Pose2d(currentPose.getX(), newPose.getY(), currentPose.getRotation());
+    }
+    if (Math.abs(currentPose.getRotation().getRadians()
+        - newPose.getRotation().getRadians()) < Constants.SwerveConstants.kRotDeadband) {
+      currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), currentPose.getRotation());
+    }
     double xOutput = -m_xPID.calculate(currentPose.getX(), newPose.getX());
     double yOutput = -m_yPID.calculate(currentPose.getY(), newPose.getY());
     double rotOutput = m_rotPID.calculate(currentPose.getRotation().getRadians(), newPose.getRotation().getRadians());
@@ -203,7 +213,7 @@ public class SwerveSubsystem extends SubsystemBase {
     double rotOutput = m_rotPID.calculate(getPose().getRotation().getRadians(),
         pose.getRotation().getRadians());
 
-    drive(xOutput, yOutput, rotOutput, false);
+    // drive(xOutput, yOutput, rotOutput, false);
   }
 
   /**

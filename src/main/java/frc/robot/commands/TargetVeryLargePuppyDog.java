@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.struct.Pose2dStruct;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -35,13 +32,14 @@ public class TargetVeryLargePuppyDog extends Command {
     Pose2d currentPose = VisionConstants.kOffset;
     if (m_visionSubsystem.hasValidTarget()) {
       currentPose = m_visionSubsystem.getEstimatedRelativePose().get();
+
       m_swerveSubsystem.driveRelativeTo(currentPose, VisionConstants.kOffset);
-      //m_swerveSubsystem.driveRelativeTo(new Pose2d(), new Pose2d());
+      // m_swerveSubsystem.driveRelativeTo(new Pose2d(), new Pose2d());
     } else {
       m_swerveSubsystem.driveRelativeTo(VisionConstants.kOffset, VisionConstants.kOffset);
-      //m_swerveSubsystem.driveRelativeTo(new Pose2d(), new Pose2d());
+      // m_swerveSubsystem.driveRelativeTo(new Pose2d(), new Pose2d());
     }
 
-    //DataLogManager.log(currentPose.toString());
+    // DataLogManager.log(currentPose.toString());
   }
 }
